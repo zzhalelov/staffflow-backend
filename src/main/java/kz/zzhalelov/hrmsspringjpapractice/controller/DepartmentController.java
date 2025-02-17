@@ -1,8 +1,8 @@
 package kz.zzhalelov.hrmsspringjpapractice.controller;
 
 import kz.zzhalelov.hrmsspringjpapractice.model.Department;
-import kz.zzhalelov.hrmsspringjpapractice.model.DepartmentDto;
-import kz.zzhalelov.hrmsspringjpapractice.model.DepartmentMapper;
+import kz.zzhalelov.hrmsspringjpapractice.dto.DepartmentDto;
+import kz.zzhalelov.hrmsspringjpapractice.dto.DepartmentMapper;
 import kz.zzhalelov.hrmsspringjpapractice.model.Employee;
 import kz.zzhalelov.hrmsspringjpapractice.repository.DepartmentRepository;
 import kz.zzhalelov.hrmsspringjpapractice.repository.EmployeeRepository;
