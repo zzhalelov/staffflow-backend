@@ -9,15 +9,23 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "vacations")
-public class Vacation {
+@Table(name = "absences")
+public class Abscence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
+
+    @Enumerated(EnumType.STRING)
+    private AbsenceType type;
+
     private LocalDate startDate;
     private LocalDate endDate;
-    private String status = "ожидает";
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    private AbsenceStatus status = AbsenceStatus.NOT_APPROVED;
 }
