@@ -8,6 +8,7 @@ import kz.zzhalelov.hrmsspringjpapractice.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -34,6 +35,12 @@ public class AbsenceController {
     @GetMapping("find-by-employee-id/{employeeId}")
     public Absence findByEmployeeId(@PathVariable int employeeId) {
         return absenceRepository.findByEmployee_Id(employeeId);
+    }
+
+    @GetMapping("find-between-dates")
+    public List<Absence> findBetweenDates(@RequestParam LocalDate startDate,
+                                          @RequestParam LocalDate endDate) {
+        return absenceRepository.findByStartDateAfterAndEndDateBefore(startDate, endDate);
     }
 
     @PostMapping("/{employeeId}")
