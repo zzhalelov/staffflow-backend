@@ -2,6 +2,7 @@ package kz.zzhalelov.hrmsspringjpapractice.controller;
 
 import kz.zzhalelov.hrmsspringjpapractice.exception.NotFoundException;
 import kz.zzhalelov.hrmsspringjpapractice.model.Absence;
+import kz.zzhalelov.hrmsspringjpapractice.model.AbsenceStatus;
 import kz.zzhalelov.hrmsspringjpapractice.model.Employee;
 import kz.zzhalelov.hrmsspringjpapractice.repository.AbsenceRepository;
 import kz.zzhalelov.hrmsspringjpapractice.repository.EmployeeRepository;
@@ -49,5 +50,24 @@ public class AbsenceController {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         absence.setEmployee(employee);
         return absenceRepository.save(absence);
+    }
+
+    @PutMapping("/{absenceId}/status")
+    public Absence approveOrRejectAbsence(@PathVariable int absenceId,
+                                          @RequestParam String status) {
+        Absence absence = absenceRepository.findById(absenceId).orElseThrow();
+        if (status.equals("APPROVED")) {
+            absence.setStatus(AbsenceStatus.APPROVED);
+        } else if (status.equals("REJECTED")) {
+            absence.setStatus(AbsenceStatus.REJECTED);
+        } else {
+            throw new IllegalArgumentException("Статус не найден");
+        }
+        return absenceRepository.save(absence);
+    }
+
+    @DeleteMapping("/{absenceId}")
+    public void deleteAbsence(@PathVariable int absenceId) {
+        absenceRepository.deleteById(absenceId);
     }
 }
