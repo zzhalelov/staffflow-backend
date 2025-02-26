@@ -18,13 +18,4 @@ public class Employee {
     private String lastName;
     private String email;
     private String phone;
-    private LocalDate hireDate;
-
-    @ManyToOne
-    @JoinColumn(name = "department_id")
-    private Department department;
-
-    @ManyToOne
-    @JoinColumn(name = "position_id")
-    private Position position;
 }

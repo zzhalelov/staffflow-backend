@@ -33,13 +33,7 @@ public class EmployeeController {
 
     //create
     @PostMapping
-    public Employee create(@RequestParam int departmentId,
-                           @RequestParam int positionId,
-                           @RequestBody Employee employee) {
-        Department department = departmentRepository.findById(departmentId).orElseThrow();
-        Position position = positionRepository.findById(positionId).orElseThrow();
-        employee.setDepartment(department);
-        employee.setPosition(position);
+    public Employee create(@RequestBody Employee employee) {
         return employeeRepository.save(employee);
     }
 
@@ -52,7 +46,6 @@ public class EmployeeController {
         existingEmployee.setLastName(employee.getLastName());
         existingEmployee.setEmail(employee.getEmail());
         existingEmployee.setPhone(employee.getPhone());
-        existingEmployee.setHireDate(employee.getHireDate());
         return employeeRepository.save(existingEmployee);
     }
 

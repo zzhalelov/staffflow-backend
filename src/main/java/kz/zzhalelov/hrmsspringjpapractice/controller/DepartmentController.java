@@ -20,8 +20,11 @@ public class DepartmentController {
     private final DepartmentMapper departmentMapper;
 
     //create department
-    @PostMapping
-    public Department create(@RequestBody Department department) {
+    @PostMapping("/{employeeId}")
+    public Department create(@PathVariable int employeeId,
+                             @RequestBody Department department) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow();
+        department.setManager(employee);
         return departmentRepository.save(department);
     }
 
