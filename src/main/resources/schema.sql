@@ -20,3 +20,13 @@ create table departments
     name       varchar(50)                   not null,
     manager_id int references employees (id) not null
 );
+
+create table labor_contracts
+(
+    id            serial primary key,
+    employee_id   int references employees (id)   not null,
+    hire_date     date                            not null,
+    department_id int references departments (id) not null,
+    position_id   int references positions (id)   not null,
+    status        varchar(10)                     not null
+);

@@ -1,10 +1,9 @@
 package kz.zzhalelov.hrmsspringjpapractice.controller;
 
-import kz.zzhalelov.hrmsspringjpapractice.model.Department;
-import kz.zzhalelov.hrmsspringjpapractice.model.Employee;
-import kz.zzhalelov.hrmsspringjpapractice.model.Position;
+import kz.zzhalelov.hrmsspringjpapractice.model.*;
 import kz.zzhalelov.hrmsspringjpapractice.repository.DepartmentRepository;
 import kz.zzhalelov.hrmsspringjpapractice.repository.EmployeeRepository;
+import kz.zzhalelov.hrmsspringjpapractice.repository.LaborContractRepository;
 import kz.zzhalelov.hrmsspringjpapractice.repository.PositionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +17,7 @@ public class EmployeeController {
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
     private final PositionRepository positionRepository;
+    private final LaborContractRepository laborContractRepository;
 
     //find all employees
     @GetMapping
@@ -59,5 +59,20 @@ public class EmployeeController {
     @GetMapping("/find-by-firstname")
     public List<Employee> findByFirstName(String name) {
         return employeeRepository.findByFirstNameContainingIgnoreCase(name);
+    }
+
+    @PostMapping("/create-labor-contract")
+    public LaborContract createLaborContract(@RequestParam int employeeId,
+                                             @RequestParam int departmentId,
+                                             @RequestParam int positionId,
+                                             @RequestBody LaborContract laborContract) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow();
+        Department department = departmentRepository.findById(departmentId).orElseThrow();
+        Position position = positionRepository.findById(positionId).orElseThrow();
+        laborContract.setEmployee(employee);
+        laborContract.setDepartment(department);
+        laborContract.setPosition(position);
+        laborContract.setStatus(LaborContractStatus.NOT_SIGNED);
+        return laborContractRepository.save(laborContract);
     }
 }
