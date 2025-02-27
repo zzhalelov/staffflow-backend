@@ -60,19 +60,4 @@ public class EmployeeController {
     public List<Employee> findByFirstName(String name) {
         return employeeRepository.findByFirstNameContainingIgnoreCase(name);
     }
-
-    @PostMapping("/create-labor-contract")
-    public LaborContract createLaborContract(@RequestParam int employeeId,
-                                             @RequestParam int departmentId,
-                                             @RequestParam int positionId,
-                                             @RequestBody LaborContract laborContract) {
-        Employee employee = employeeRepository.findById(employeeId).orElseThrow();
-        Department department = departmentRepository.findById(departmentId).orElseThrow();
-        Position position = positionRepository.findById(positionId).orElseThrow();
-        laborContract.setEmployee(employee);
-        laborContract.setDepartment(department);
-        laborContract.setPosition(position);
-        laborContract.setStatus(LaborContractStatus.NOT_SIGNED);
-        return laborContractRepository.save(laborContract);
-    }
 }
