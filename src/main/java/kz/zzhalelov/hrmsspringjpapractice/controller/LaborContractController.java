@@ -3,8 +3,8 @@ package kz.zzhalelov.hrmsspringjpapractice.controller;
 import kz.zzhalelov.hrmsspringjpapractice.model.*;
 import kz.zzhalelov.hrmsspringjpapractice.repository.DepartmentRepository;
 import kz.zzhalelov.hrmsspringjpapractice.repository.EmployeeRepository;
-import kz.zzhalelov.hrmsspringjpapractice.repository.LaborContractRepository;
 import kz.zzhalelov.hrmsspringjpapractice.repository.PositionRepository;
+import kz.zzhalelov.hrmsspringjpapractice.service.LaborContractService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/contracts")
 public class LaborContractController {
-    private final LaborContractRepository laborContractRepository;
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
     private final PositionRepository positionRepository;
+    private final LaborContractService laborContractService;
 
     @PostMapping
     public LaborContract create(@RequestParam int employeeId,
@@ -30,11 +30,11 @@ public class LaborContractController {
         laborContract.setEmployee(employee);
         laborContract.setDepartment(department);
         laborContract.setPosition(position);
-        return laborContractRepository.save(laborContract);
+        return laborContractService.create(laborContract);
     }
 
     @GetMapping
     public List<LaborContract> findAll() {
-        return laborContractRepository.findAll();
+        return laborContractService.findAll();
     }
 }

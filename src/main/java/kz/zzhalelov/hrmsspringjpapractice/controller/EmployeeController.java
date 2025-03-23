@@ -1,10 +1,8 @@
 package kz.zzhalelov.hrmsspringjpapractice.controller;
 
 import kz.zzhalelov.hrmsspringjpapractice.model.*;
-import kz.zzhalelov.hrmsspringjpapractice.repository.DepartmentRepository;
 import kz.zzhalelov.hrmsspringjpapractice.repository.EmployeeRepository;
-import kz.zzhalelov.hrmsspringjpapractice.repository.LaborContractRepository;
-import kz.zzhalelov.hrmsspringjpapractice.repository.PositionRepository;
+import kz.zzhalelov.hrmsspringjpapractice.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,26 +13,24 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeController {
     private final EmployeeRepository employeeRepository;
-    private final DepartmentRepository departmentRepository;
-    private final PositionRepository positionRepository;
-    private final LaborContractRepository laborContractRepository;
+    private final EmployeeService employeeService;
 
     //find all employees
     @GetMapping
     public List<Employee> findAll() {
-        return employeeRepository.findAll();
+        return employeeService.findAll();
     }
 
     //find by id
     @GetMapping("/{id}")
     public Employee findById(@PathVariable int id) {
-        return employeeRepository.findById(id).orElseThrow();
+        return employeeService.findById(id);
     }
 
     //create
     @PostMapping
     public Employee create(@RequestBody Employee employee) {
-        return employeeRepository.save(employee);
+        return employeeService.create(employee);
     }
 
     //update
@@ -46,18 +42,18 @@ public class EmployeeController {
         existingEmployee.setLastName(employee.getLastName());
         existingEmployee.setEmail(employee.getEmail());
         existingEmployee.setPhone(employee.getPhone());
-        return employeeRepository.save(existingEmployee);
+        return employeeService.update(existingEmployee);
     }
 
     //delete
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
-        employeeRepository.deleteById(id);
+        employeeService.delete(id);
     }
 
     //find by first name
     @GetMapping("/find-by-firstname")
     public List<Employee> findByFirstName(String name) {
-        return employeeRepository.findByFirstNameContainingIgnoreCase(name);
+        return employeeService.findByFirstName(name);
     }
 }

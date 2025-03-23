@@ -2,6 +2,7 @@ package kz.zzhalelov.hrmsspringjpapractice.controller;
 
 import kz.zzhalelov.hrmsspringjpapractice.model.Position;
 import kz.zzhalelov.hrmsspringjpapractice.repository.PositionRepository;
+import kz.zzhalelov.hrmsspringjpapractice.service.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,21 +13,22 @@ import java.util.List;
 @RequestMapping("/positions")
 public class PositionController {
     private final PositionRepository positionRepository;
+    private final PositionService positionService;
 
     //create
     @PostMapping
     public Position create(@RequestBody Position position) {
-        return positionRepository.save(position);
+        return positionService.create(position);
     }
 
     @GetMapping
     public List<Position> findAll() {
-        return positionRepository.findAll();
+        return positionService.findAll();
     }
 
     @GetMapping("/{id}")
     public Position findById(@PathVariable int id) {
-        return positionRepository.findById(id).orElseThrow();
+        return positionService.findById(id);
     }
 
     @PutMapping("/{id}")
@@ -35,11 +37,11 @@ public class PositionController {
         Position existingPosition = positionRepository.findById(id).orElseThrow();
         existingPosition.setName(position.getName());
         existingPosition.setSalary(position.getSalary());
-        return positionRepository.save(existingPosition);
+        return positionService.update(position);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
-        positionRepository.deleteById(id);
+        positionService.delete(id);
     }
 }

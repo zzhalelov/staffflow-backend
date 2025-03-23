@@ -6,6 +6,7 @@ import kz.zzhalelov.hrmsspringjpapractice.dto.DepartmentMapper;
 import kz.zzhalelov.hrmsspringjpapractice.model.Employee;
 import kz.zzhalelov.hrmsspringjpapractice.repository.DepartmentRepository;
 import kz.zzhalelov.hrmsspringjpapractice.repository.EmployeeRepository;
+import kz.zzhalelov.hrmsspringjpapractice.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class DepartmentController {
     private final DepartmentRepository departmentRepository;
     private final EmployeeRepository employeeRepository;
     private final DepartmentMapper departmentMapper;
+    private final DepartmentService departmentService;
 
     //create department
     @PostMapping("/{employeeId}")
@@ -25,20 +27,20 @@ public class DepartmentController {
                              @RequestBody Department department) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         department.setManager(employee);
-        return departmentRepository.save(department);
+        return departmentService.create(department);
     }
 
     //find all
     @GetMapping
     public List<DepartmentDto> findAll() {
-        List<Department> departments = departmentRepository.findAll();
+        List<Department> departments = departmentService.findAll();
         return departmentMapper.toDto(departments);
     }
 
     //find by id
     @GetMapping("/{id}")
     public DepartmentDto findById(@PathVariable int id) {
-        Department department = departmentRepository.findById(id).orElseThrow();
+        Department department = departmentService.findById(id);
         return departmentMapper.toDto(department);
     }
 
@@ -51,11 +53,11 @@ public class DepartmentController {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         existingDepartment.setName(department.getName());
         existingDepartment.setManager(employee);
-        return departmentRepository.save(existingDepartment);
+        return departmentService.update(existingDepartment);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
-        departmentRepository.deleteById(id);
+        departmentService.delete(id);
     }
 }
