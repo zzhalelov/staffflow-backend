@@ -1,9 +1,9 @@
 package kz.zzhalelov.hrmsspringjpapractice.controller;
 
-import kz.zzhalelov.hrmsspringjpapractice.dto.EmployeeCreateDto;
-import kz.zzhalelov.hrmsspringjpapractice.dto.EmployeeMapper;
-import kz.zzhalelov.hrmsspringjpapractice.dto.EmployeeResponseDto;
-import kz.zzhalelov.hrmsspringjpapractice.dto.EmployeeUpdateDto;
+import kz.zzhalelov.hrmsspringjpapractice.dto.employeeDto.EmployeeCreateDto;
+import kz.zzhalelov.hrmsspringjpapractice.dto.employeeDto.EmployeeMapper;
+import kz.zzhalelov.hrmsspringjpapractice.dto.employeeDto.EmployeeResponseDto;
+import kz.zzhalelov.hrmsspringjpapractice.dto.employeeDto.EmployeeUpdateDto;
 import kz.zzhalelov.hrmsspringjpapractice.model.*;
 import kz.zzhalelov.hrmsspringjpapractice.repository.EmployeeRepository;
 import kz.zzhalelov.hrmsspringjpapractice.service.EmployeeService;

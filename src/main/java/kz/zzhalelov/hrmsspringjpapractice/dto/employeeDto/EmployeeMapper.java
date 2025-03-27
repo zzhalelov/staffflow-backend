@@ -1,4 +1,4 @@
-package kz.zzhalelov.hrmsspringjpapractice.dto;
+package kz.zzhalelov.hrmsspringjpapractice.dto.employeeDto;
 
 import kz.zzhalelov.hrmsspringjpapractice.model.Employee;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package kz.zzhalelov.hrmsspringjpapractice.dto;
+package kz.zzhalelov.hrmsspringjpapractice.dto.employeeDto;
 
 import lombok.AccessLevel;
 import lombok.Data;
