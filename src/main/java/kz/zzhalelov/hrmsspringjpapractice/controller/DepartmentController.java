@@ -1,7 +1,7 @@
 package kz.zzhalelov.hrmsspringjpapractice.controller;
 
+import kz.zzhalelov.hrmsspringjpapractice.dto.DepartmentResponseDto;
 import kz.zzhalelov.hrmsspringjpapractice.model.Department;
-import kz.zzhalelov.hrmsspringjpapractice.dto.DepartmentDto;
 import kz.zzhalelov.hrmsspringjpapractice.dto.DepartmentMapper;
 import kz.zzhalelov.hrmsspringjpapractice.model.Employee;
 import kz.zzhalelov.hrmsspringjpapractice.repository.DepartmentRepository;
@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,37 +24,38 @@ public class DepartmentController {
 
     //create department
     @PostMapping("/{employeeId}")
-    public Department create(@PathVariable int employeeId,
-                             @RequestBody Department department) {
+    public DepartmentResponseDto create(@PathVariable int employeeId,
+                                        @RequestBody Department department) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         department.setManager(employee);
-        return departmentService.create(department);
+        return departmentMapper.toResponse(departmentService.create(department));
     }
 
     //find all
     @GetMapping
-    public List<DepartmentDto> findAll() {
-        List<Department> departments = departmentService.findAll();
-        return departmentMapper.toDto(departments);
+    public List<DepartmentResponseDto> findAll() {
+        return departmentService.findAll()
+                .stream()
+                .map(departmentMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     //find by id
     @GetMapping("/{id}")
-    public DepartmentDto findById(@PathVariable int id) {
-        Department department = departmentService.findById(id);
-        return departmentMapper.toDto(department);
+    public DepartmentResponseDto findById(@PathVariable int id) {
+        return departmentMapper.toResponse(departmentService.findById(id));
     }
 
     //update
     @PutMapping
-    public Department update(@RequestParam int departmentId,
-                             @RequestParam int employeeId,
-                             @RequestBody Department department) {
+    public DepartmentResponseDto update(@RequestParam int departmentId,
+                                        @RequestParam int employeeId,
+                                        @RequestBody Department department) {
         Department existingDepartment = departmentRepository.findById(departmentId).orElseThrow();
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         existingDepartment.setName(department.getName());
         existingDepartment.setManager(employee);
-        return departmentService.update(existingDepartment);
+        return departmentMapper.toResponse(departmentService.update(existingDepartment));
     }
 
     @DeleteMapping("/{id}")

@@ -1,5 +1,9 @@
 package kz.zzhalelov.hrmsspringjpapractice.controller;
 
+import kz.zzhalelov.hrmsspringjpapractice.dto.EmployeeCreateDto;
+import kz.zzhalelov.hrmsspringjpapractice.dto.EmployeeMapper;
+import kz.zzhalelov.hrmsspringjpapractice.dto.EmployeeResponseDto;
+import kz.zzhalelov.hrmsspringjpapractice.dto.EmployeeUpdateDto;
 import kz.zzhalelov.hrmsspringjpapractice.model.*;
 import kz.zzhalelov.hrmsspringjpapractice.repository.EmployeeRepository;
 import kz.zzhalelov.hrmsspringjpapractice.service.EmployeeService;
@@ -7,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,35 +19,40 @@ import java.util.List;
 public class EmployeeController {
     private final EmployeeRepository employeeRepository;
     private final EmployeeService employeeService;
+    private final EmployeeMapper employeeMapper;
 
     //find all employees
     @GetMapping
-    public List<Employee> findAll() {
-        return employeeService.findAll();
+    public List<EmployeeResponseDto> findAll() {
+        return employeeService.findAll()
+                .stream()
+                .map(employeeMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     //find by id
     @GetMapping("/{id}")
-    public Employee findById(@PathVariable int id) {
-        return employeeService.findById(id);
+    public EmployeeResponseDto findById(@PathVariable int id) {
+        return employeeMapper.toResponse(employeeService.findById(id));
     }
 
     //create
     @PostMapping
-    public Employee create(@RequestBody Employee employee) {
-        return employeeService.create(employee);
+    public EmployeeResponseDto create(@RequestBody EmployeeCreateDto employeeCreateDto) {
+        Employee employee = employeeMapper.fromCreate(employeeCreateDto);
+        return employeeMapper.toResponse(employeeService.create(employee));
     }
 
     //update
     @PutMapping("/{id}")
-    public Employee update(@PathVariable int id,
-                           @RequestBody Employee employee) {
+    public EmployeeResponseDto update(@PathVariable int id,
+                                      @RequestBody EmployeeUpdateDto employeeUpdateDto) {
         Employee existingEmployee = employeeRepository.findById(id).orElseThrow();
-        existingEmployee.setFirstName(employee.getFirstName());
-        existingEmployee.setLastName(employee.getLastName());
-        existingEmployee.setEmail(employee.getEmail());
-        existingEmployee.setPhone(employee.getPhone());
-        return employeeService.update(existingEmployee);
+        existingEmployee.setFirstName(employeeUpdateDto.getFirstName());
+        existingEmployee.setLastName(employeeUpdateDto.getLastName());
+        existingEmployee.setEmail(employeeUpdateDto.getEmail());
+        existingEmployee.setPhone(employeeUpdateDto.getPhone());
+        return employeeMapper.toResponse(employeeService.update(existingEmployee));
     }
 
     //delete
@@ -53,7 +63,10 @@ public class EmployeeController {
 
     //find by first name
     @GetMapping("/find-by-firstname")
-    public List<Employee> findByFirstName(String name) {
-        return employeeService.findByFirstName(name);
+    public List<EmployeeResponseDto> findByFirstName(String name) {
+        return employeeService.findByFirstName(name)
+                .stream()
+                .map(employeeMapper::toResponse)
+                .collect(Collectors.toList());
     }
 }
