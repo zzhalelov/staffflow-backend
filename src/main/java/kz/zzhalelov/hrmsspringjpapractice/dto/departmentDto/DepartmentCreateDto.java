@@ -1,4 +1,4 @@
-package kz.zzhalelov.hrmsspringjpapractice.dto;
+package kz.zzhalelov.hrmsspringjpapractice.dto.departmentDto;
 
 import kz.zzhalelov.hrmsspringjpapractice.model.Employee;
 import lombok.AccessLevel;
@@ -9,5 +9,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DepartmentCreateDto {
     String name;
-    Employee managerId;
+    Integer managerId;
 }
