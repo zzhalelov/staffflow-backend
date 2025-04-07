@@ -1,5 +1,7 @@
 package kz.zzhalelov.hrmsspringjpapractice.controller;
 
+import kz.zzhalelov.hrmsspringjpapractice.dto.laborContractDto.LaborContractMapper;
+import kz.zzhalelov.hrmsspringjpapractice.dto.laborContractDto.LaborContractResponseDto;
 import kz.zzhalelov.hrmsspringjpapractice.model.*;
 import kz.zzhalelov.hrmsspringjpapractice.repository.DepartmentRepository;
 import kz.zzhalelov.hrmsspringjpapractice.repository.EmployeeRepository;
@@ -18,19 +20,20 @@ public class LaborContractController {
     private final DepartmentRepository departmentRepository;
     private final PositionRepository positionRepository;
     private final LaborContractService laborContractService;
+    private final LaborContractMapper laborContractMapper;
 
     @PostMapping
-    public LaborContract create(@RequestParam int employeeId,
-                                @RequestParam int departmentId,
-                                @RequestParam int positionId,
-                                @RequestBody LaborContract laborContract) {
+    public LaborContractResponseDto create(@RequestParam int employeeId,
+                                           @RequestParam int departmentId,
+                                           @RequestParam int positionId,
+                                           @RequestBody LaborContract laborContract) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         Department department = departmentRepository.findById(departmentId).orElseThrow();
         Position position = positionRepository.findById(positionId).orElseThrow();
         laborContract.setEmployee(employee);
         laborContract.setDepartment(department);
         laborContract.setPosition(position);
-        return laborContractService.create(laborContract);
+        return laborContractMapper.toResponse(laborContractService.create(laborContract));
     }
 
     @GetMapping
