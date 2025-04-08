@@ -24,16 +24,26 @@ public class LaborContractMapper {
         return laborContract;
     }
 
-//    public LaborContract fromUpdate(LaborContractUpdateDto laborContractUpdateDto) {
-//
-//    }
+    public LaborContract fromUpdate(LaborContractUpdateDto laborContractUpdateDto) {
+        Employee employee = new Employee();
+        employee.setId(laborContractUpdateDto.getEmployeeId());
+        Department department = new Department();
+        department.setId(laborContractUpdateDto.getDepartmentId());
+        Position position = new Position();
+        position.setId(laborContractUpdateDto.getPositionId());
+
+        LaborContract laborContract = new LaborContract();
+        laborContract.setEmployee(employee);
+        laborContract.setHireDate(laborContractUpdateDto.getHireDate().toLocalDate());
+        laborContract.setDepartment(department);
+        laborContract.setPosition(position);
+        laborContract.setStatus(laborContractUpdateDto.getLaborContractStatus());
+        return laborContract;
+    }
 
     public LaborContractResponseDto toResponse(LaborContract laborContract) {
-        Employee employee = new Employee();
-        employee.setId(employee.getId());
-
         LaborContractResponseDto laborContractResponseDto = new LaborContractResponseDto();
-        laborContractResponseDto.setEmployeeId(employee.getId());
+        laborContractResponseDto.setEmployeeId(laborContract.getEmployee().getId());
         laborContractResponseDto.setHireDate(laborContract.getHireDate().atStartOfDay());
         laborContractResponseDto.setDepartmentId(laborContract.getDepartment().getId());
         laborContractResponseDto.setPositionId(laborContract.getPosition().getId());

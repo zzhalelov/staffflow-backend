@@ -1,5 +1,6 @@
 package kz.zzhalelov.hrmsspringjpapractice.service.impl;
 
+import kz.zzhalelov.hrmsspringjpapractice.model.Department;
 import kz.zzhalelov.hrmsspringjpapractice.model.LaborContract;
 import kz.zzhalelov.hrmsspringjpapractice.repository.LaborContractRepository;
 import kz.zzhalelov.hrmsspringjpapractice.service.LaborContractService;
@@ -21,5 +22,15 @@ public class LaborContractServiceImpl implements LaborContractService {
     @Override
     public List<LaborContract> findAll() {
         return laborContractRepository.findAll();
+    }
+
+    @Override
+    public LaborContract findById(int id) {
+        return laborContractRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public LaborContract update(LaborContract laborContract) {
+        return laborContractRepository.save(laborContract);
     }
 }
