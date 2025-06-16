@@ -9,6 +9,8 @@ import lombok.experimental.FieldDefaults;
 public class EmployeeResponseDto {
     String firstName;
     String lastName;
+    String iin;
+    String gender;
     String email;
     String phone;
 }
