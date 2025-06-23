@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @Entity
@@ -16,6 +14,8 @@ public class Employee {
     private int id;
     private String firstName;
     private String lastName;
+    private String iin;
+    private String gender;
     private String email;
     private String phone;
 }
