@@ -18,4 +18,6 @@ public class Employee {
     private String gender;
     private String email;
     private String phone;
+    private String address;
+    private String citizenship;
 }

@@ -13,4 +13,6 @@ public class EmployeeUpdateDto {
     String gender;
     String email;
     String phone;
+    String address;
+    String citizenship;
 }
