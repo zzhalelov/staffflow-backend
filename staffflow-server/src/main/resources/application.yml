@@ -1,0 +1,10 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hrms-spring-jpa
+    username: postgres
+    password: postgres
+  jpa:
+    generate-ddl: true
