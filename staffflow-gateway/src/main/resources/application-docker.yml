@@ -1,0 +1,6 @@
+server:
+  port: 8080
+
+staffflow-server:
+  server:
+    url: http://staffflow-server:8081

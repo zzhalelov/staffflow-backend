@@ -1,0 +1,32 @@
+services:
+  staffflow-gateway:
+    build: staffflow-gateway/.
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - TZ=Asia/Almaty
+    depends_on:
+      - staffflow-server
+
+  staffflow-server:
+    build: staffflow-server/.
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - TZ=Asia/Almaty
+
+  staffflow-db:
+    image: postgres:15-alpine
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=hrms-spring-jpa
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - staffflow-db-data:/var/lib/postgresql/data
+
+volumes:
+  staffflow-db-data:
