@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/employees")
+@RequestMapping("/api/employees")
 public class EmployeeController {
     private final EmployeeRepository employeeRepository;
     private final EmployeeService employeeService;
@@ -37,7 +37,7 @@ public class EmployeeController {
     }
 
     //create
-    @PostMapping("/api")
+    @PostMapping()
     public EmployeeResponseDto create(@RequestBody EmployeeCreateDto employeeCreateDto) {
         Employee employee = employeeMapper.fromCreate(employeeCreateDto);
         return employeeMapper.toResponse(employeeService.create(employee));
