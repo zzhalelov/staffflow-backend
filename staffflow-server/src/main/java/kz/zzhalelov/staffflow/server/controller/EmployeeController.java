@@ -56,9 +56,9 @@ public class EmployeeController {
     }
 
     //delete
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
-        employeeService.delete(id);
+    @DeleteMapping("/{employeeId}")
+    public void delete(@PathVariable int employeeId) {
+        employeeService.delete(employeeId);
     }
 
     //find by first name

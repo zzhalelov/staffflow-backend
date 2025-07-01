@@ -30,11 +30,17 @@ public class EmployeeClient {
         return restTemplate.getForEntity("/api/employees", Object.class);
     }
 
-    public ResponseEntity<Object> delete(long emoloyeeId) {
+    public ResponseEntity<Object> delete(long employeeId) {
         return restTemplate.exchange("/api/employees/{employeeId}",
                 HttpMethod.DELETE,
                 null,
                 Object.class,
-                Map.of("employeeId", emoloyeeId));
+                Map.of("employeeId", employeeId));
+    }
+
+    public ResponseEntity<Object> findById(long employeeId) {
+        return restTemplate.getForEntity("/api/employees/{employeeId}",
+                Object.class,
+                Map.of("employeeId", employeeId));
     }
 }

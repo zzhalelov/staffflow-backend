@@ -26,4 +26,9 @@ public class EmployeeController {
     public ResponseEntity<Object> deleteById(@PathVariable long employeeId) {
         return employeeClient.delete(employeeId);
     }
+
+    @GetMapping("/{employeeId}")
+    public ResponseEntity<Object> findById(@PathVariable long employeeId) {
+        return employeeClient.findById(employeeId);
+    }
 }

@@ -1,5 +1,7 @@
 package kz.zzhalelov.staffflow.server.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
+import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import kz.zzhalelov.staffflow.server.model.Employee;
 import kz.zzhalelov.staffflow.server.repository.EmployeeRepository;
 import kz.zzhalelov.staffflow.server.service.EmployeeService;
@@ -40,6 +42,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void delete(int employeeId) {
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new NotFoundException("Сотрудник с id " + employeeId + " не найден");
+        }
         employeeRepository.deleteById(employeeId);
     }
 }
