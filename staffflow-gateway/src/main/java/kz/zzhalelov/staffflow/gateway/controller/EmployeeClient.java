@@ -31,8 +31,7 @@ public class EmployeeClient {
     }
 
     public ResponseEntity<Object> delete(long employeeId) {
-        return restTemplate.exchange("/api/employees/{employeeId}",
-                HttpMethod.DELETE,
+        return restTemplate.exchange("/api/employees/{employeeId}", HttpMethod.DELETE,
                 null,
                 Object.class,
                 Map.of("employeeId", employeeId));
