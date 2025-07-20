@@ -17,6 +17,10 @@
             <version>0.0.1-SNAPSHOT</version>
             <classifier>original</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
     </dependencies>
 
     <properties>
