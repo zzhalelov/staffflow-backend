@@ -4,6 +4,7 @@ import kz.zzhalelov.staffflow.server.dto.positionDto.PositionCreateDto;
 import kz.zzhalelov.staffflow.server.dto.positionDto.PositionMapper;
 import kz.zzhalelov.staffflow.server.dto.positionDto.PositionResponseDto;
 import kz.zzhalelov.staffflow.server.dto.positionDto.PositionUpdateDto;
+import kz.zzhalelov.staffflow.server.model.Employee;
 import kz.zzhalelov.staffflow.server.model.Position;
 import kz.zzhalelov.staffflow.server.repository.PositionRepository;
 import kz.zzhalelov.staffflow.server.service.PositionService;
@@ -15,13 +16,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/positions/api")
+@RequestMapping("/api/positions")
 public class PositionController {
     private final PositionRepository positionRepository;
     private final PositionService positionService;
     private final PositionMapper positionMapper;
 
-    //POST /positions/api
+    //POST /api/positions
     @PostMapping
     public PositionResponseDto create(@RequestBody PositionCreateDto positionCreateDto) {
         Position position = positionMapper.fromCreate(positionCreateDto);
@@ -43,19 +44,17 @@ public class PositionController {
         return positionMapper.toResponse(positionService.findById(id));
     }
 
-    //PUT /positions/{id}
-    @PutMapping("/{id}")
-    public PositionResponseDto update(@PathVariable long id,
+    //PATCH /api/positions/{positionId}
+    @PatchMapping("/{positionId}")
+    public PositionResponseDto update(@PathVariable long positionId,
                                       @RequestBody PositionUpdateDto positionUpdateDto) {
-        Position existingPosition = positionRepository.findById(id).orElseThrow();
-        existingPosition.setName(positionUpdateDto.getName());
-        existingPosition.setSalary(positionUpdateDto.getSalary());
-        return positionMapper.toResponse(positionService.update(existingPosition));
+        Position position = positionMapper.fromUpdate(positionUpdateDto);
+        return positionMapper.toResponse(positionService.update(positionId, position));
     }
 
-    //DELETE /positions/{id}
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
-        positionService.delete(id);
+    //DELETE /api/positions/{positionId}
+    @DeleteMapping("/{positionId}")
+    public void delete(@PathVariable long positionId) {
+        positionService.delete(positionId);
     }
 }

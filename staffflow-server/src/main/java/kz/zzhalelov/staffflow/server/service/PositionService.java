@@ -11,7 +11,7 @@ public interface PositionService {
 
     Position findById(long positionId);
 
-    Position update(Position position);
+    Position update(long positionId, Position position);
 
     void delete(long positionId);
 }
