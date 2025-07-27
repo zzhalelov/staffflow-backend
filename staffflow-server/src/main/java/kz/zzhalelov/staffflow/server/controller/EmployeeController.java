@@ -5,9 +5,9 @@ import kz.zzhalelov.staffflow.server.dto.employeeDto.EmployeeMapper;
 import kz.zzhalelov.staffflow.server.dto.employeeDto.EmployeeResponseDto;
 import kz.zzhalelov.staffflow.server.dto.employeeDto.EmployeeUpdateDto;
 import kz.zzhalelov.staffflow.server.model.*;
-import kz.zzhalelov.staffflow.server.repository.EmployeeRepository;
 import kz.zzhalelov.staffflow.server.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/employees")
 public class EmployeeController {
-    private final EmployeeRepository employeeRepository;
     private final EmployeeService employeeService;
     private final EmployeeMapper employeeMapper;
 
@@ -44,15 +43,12 @@ public class EmployeeController {
     }
 
     //update
-    @PutMapping("/{id}")
-    public EmployeeResponseDto update(@PathVariable long id,
+    @PatchMapping("/{employeeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeeResponseDto update(@PathVariable long employeeId,
                                       @RequestBody EmployeeUpdateDto employeeUpdateDto) {
-        Employee existingEmployee = employeeRepository.findById(id).orElseThrow();
-        existingEmployee.setFirstName(employeeUpdateDto.getFirstName());
-        existingEmployee.setLastName(employeeUpdateDto.getLastName());
-        existingEmployee.setEmail(employeeUpdateDto.getEmail());
-        existingEmployee.setPhone(employeeUpdateDto.getPhone());
-        return employeeMapper.toResponse(employeeService.update(existingEmployee));
+        Employee employee = employeeMapper.fromUpdate(employeeUpdateDto);
+        return employeeMapper.toResponse(employeeService.update(employeeId, employee));
     }
 
     //delete
@@ -61,10 +57,10 @@ public class EmployeeController {
         employeeService.delete(employeeId);
     }
 
-    //find by first name
-    @GetMapping("/find-by-firstname")
-    public List<EmployeeResponseDto> findByFirstName(String name) {
-        return employeeService.findByFirstName(name)
+    //find by last name
+    @GetMapping("/find-by-lastname/{lastName}")
+    public List<EmployeeResponseDto> findByFirstName(@PathVariable String lastName) {
+        return employeeService.findByLastNameContainingIgnoreCase(lastName)
                 .stream()
                 .map(employeeMapper::toResponse)
                 .collect(Collectors.toList());

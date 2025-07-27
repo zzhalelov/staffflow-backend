@@ -11,9 +11,9 @@ public interface EmployeeService {
 
     Employee findById(long employeeId);
 
-    Employee update(Employee employee);
-
-    List<Employee> findByFirstName(String name);
+    Employee update(long emloyeeId, Employee employee);
 
     void delete(long employeeId);
+
+    List<Employee> findByLastNameContainingIgnoreCase(String lastName);
 }

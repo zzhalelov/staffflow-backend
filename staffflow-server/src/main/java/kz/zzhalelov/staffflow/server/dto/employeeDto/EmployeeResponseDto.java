@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.dto.employeeDto;
 
+import kz.zzhalelov.staffflow.server.model.GenderType;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -11,7 +12,7 @@ public class EmployeeResponseDto {
     String firstName;
     String lastName;
     String iin;
-    String gender;
+    GenderType gender;
     String email;
     String phone;
     String address;

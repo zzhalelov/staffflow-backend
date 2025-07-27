@@ -15,7 +15,8 @@ public class Employee {
     private String firstName;
     private String lastName;
     private String iin;
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private GenderType gender;
     private String email;
     private String phone;
     private String address;
