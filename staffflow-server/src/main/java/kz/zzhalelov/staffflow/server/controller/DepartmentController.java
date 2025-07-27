@@ -41,14 +41,14 @@ public class DepartmentController {
 
     //find by id
     @GetMapping("/{id}")
-    public DepartmentResponseDto findById(@PathVariable int id) {
+    public DepartmentResponseDto findById(@PathVariable long id) {
         return departmentMapper.toResponse(departmentService.findById(id));
     }
 
     //update
     @PutMapping
-    public DepartmentResponseDto update(@RequestParam int departmentId,
-                                        @RequestParam int employeeId,
+    public DepartmentResponseDto update(@RequestParam long departmentId,
+                                        @RequestParam long employeeId,
                                         @RequestBody Department department) {
         Department existingDepartment = departmentRepository.findById(departmentId).orElseThrow();
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
@@ -58,7 +58,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable long id) {
         departmentService.delete(id);
     }
 }

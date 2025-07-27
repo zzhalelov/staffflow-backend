@@ -9,9 +9,9 @@ public interface PositionService {
 
     List<Position> findAll();
 
-    Position findById(int positionId);
+    Position findById(long positionId);
 
     Position update(Position position);
 
-    void delete(int positionId);
+    void delete(long positionId);
 }

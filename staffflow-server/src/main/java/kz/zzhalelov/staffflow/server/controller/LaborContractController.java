@@ -25,9 +25,9 @@ public class LaborContractController {
     private final LaborContractRepository laborContractRepository;
 
     @PostMapping
-    public LaborContractResponseDto create(@RequestParam int employeeId,
-                                           @RequestParam int departmentId,
-                                           @RequestParam int positionId,
+    public LaborContractResponseDto create(@RequestParam long employeeId,
+                                           @RequestParam long departmentId,
+                                           @RequestParam long positionId,
                                            @RequestBody LaborContract laborContract) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         Department department = departmentRepository.findById(departmentId).orElseThrow();
@@ -47,15 +47,15 @@ public class LaborContractController {
     }
 
     @GetMapping("/{id}")
-    public LaborContractResponseDto findById(@PathVariable int id) {
+    public LaborContractResponseDto findById(@PathVariable long id) {
         return laborContractMapper.toResponse(laborContractService.findById(id));
     }
 
     @PutMapping
-    public LaborContractResponseDto update(@RequestParam int contractId,
-                                           @RequestParam int employeeId,
-                                           @RequestParam int departmentId,
-                                           @RequestParam int positionId,
+    public LaborContractResponseDto update(@RequestParam long contractId,
+                                           @RequestParam long employeeId,
+                                           @RequestParam long departmentId,
+                                           @RequestParam long positionId,
                                            @RequestBody LaborContract laborContract) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         Department department = departmentRepository.findById(departmentId).orElseThrow();

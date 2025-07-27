@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface AbsenceRepository extends JpaRepository<Absence, Integer> {
-    Absence findByEmployee_Id(int employeeId);
+public interface AbsenceRepository extends JpaRepository<Absence, Long> {
+    Absence findByEmployee_Id(long employeeId);
 
     List<Absence> findByStartDateAfterAndEndDateBefore(LocalDate startDate, LocalDate endDate);
 }

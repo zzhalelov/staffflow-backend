@@ -9,9 +9,9 @@ public interface DepartmentService {
 
     List<Department> findAll();
 
-    Department findById(int departmentId);
+    Department findById(long departmentId);
 
     Department update(Department department);
 
-    void delete(int departmentId);
+    void delete(long departmentId);
 }

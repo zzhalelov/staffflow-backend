@@ -25,16 +25,16 @@ public class AbsenceController {
     }
 
     @GetMapping("/{id}")
-    public Absence findById(@PathVariable int id) {
+    public Absence findById(@PathVariable long id) {
         List<Absence> absences = absenceRepository.findAll();
-        if (absences.isEmpty() || !absences.contains(absences.get(id))) {
+        if (absences.isEmpty()) {
             throw new NotFoundException("Element with id not found");
         }
         return absenceRepository.findById(id).orElseThrow();
     }
 
     @GetMapping("find-by-employee-id/{employeeId}")
-    public Absence findByEmployeeId(@PathVariable int employeeId) {
+    public Absence findByEmployeeId(@PathVariable long employeeId) {
         return absenceRepository.findByEmployee_Id(employeeId);
     }
 
@@ -45,7 +45,7 @@ public class AbsenceController {
     }
 
     @PostMapping("/{employeeId}")
-    public Absence createAbsence(@PathVariable int employeeId,
+    public Absence createAbsence(@PathVariable long employeeId,
                                  @RequestBody Absence absence) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         absence.setEmployee(employee);
@@ -53,7 +53,7 @@ public class AbsenceController {
     }
 
     @PutMapping("/{absenceId}/status")
-    public Absence approveOrRejectAbsence(@PathVariable int absenceId,
+    public Absence approveOrRejectAbsence(@PathVariable long absenceId,
                                           @RequestParam String status) {
         Absence absence = absenceRepository.findById(absenceId).orElseThrow();
         if (status.equals("APPROVED")) {
@@ -67,7 +67,7 @@ public class AbsenceController {
     }
 
     @DeleteMapping("/{absenceId}")
-    public void deleteAbsence(@PathVariable int absenceId) {
+    public void deleteAbsence(@PathVariable long absenceId) {
         absenceRepository.deleteById(absenceId);
     }
 }

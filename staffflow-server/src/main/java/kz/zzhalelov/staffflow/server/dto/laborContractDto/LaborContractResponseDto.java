@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LaborContractResponseDto {
-    Integer employeeId;
+    Long employeeId;
     LocalDateTime hireDate;
-    Integer departmentId;
-    Integer positionId;
+    Long departmentId;
+    Long positionId;
     LaborContractStatus laborContractStatus;
 }

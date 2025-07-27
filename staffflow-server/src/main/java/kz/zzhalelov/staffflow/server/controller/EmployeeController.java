@@ -32,7 +32,7 @@ public class EmployeeController {
 
     //find by id
     @GetMapping("/{id}")
-    public EmployeeResponseDto findById(@PathVariable int id) {
+    public EmployeeResponseDto findById(@PathVariable long id) {
         return employeeMapper.toResponse(employeeService.findById(id));
     }
 
@@ -45,7 +45,7 @@ public class EmployeeController {
 
     //update
     @PutMapping("/{id}")
-    public EmployeeResponseDto update(@PathVariable int id,
+    public EmployeeResponseDto update(@PathVariable long id,
                                       @RequestBody EmployeeUpdateDto employeeUpdateDto) {
         Employee existingEmployee = employeeRepository.findById(id).orElseThrow();
         existingEmployee.setFirstName(employeeUpdateDto.getFirstName());
@@ -57,7 +57,7 @@ public class EmployeeController {
 
     //delete
     @DeleteMapping("/{employeeId}")
-    public void delete(@PathVariable int employeeId) {
+    public void delete(@PathVariable long employeeId) {
         employeeService.delete(employeeId);
     }
 

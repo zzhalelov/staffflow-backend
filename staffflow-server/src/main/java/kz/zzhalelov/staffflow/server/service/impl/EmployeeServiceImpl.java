@@ -26,7 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee findById(int employeeId) {
+    public Employee findById(long employeeId) {
         return employeeRepository.findById(employeeId).orElseThrow();
     }
 
@@ -41,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void delete(int employeeId) {
+    public void delete(long employeeId) {
         if (!employeeRepository.existsById(employeeId)) {
             throw new NotFoundException("Сотрудник с id " + employeeId + " не найден");
         }

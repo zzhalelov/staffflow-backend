@@ -24,7 +24,7 @@ public class LaborContractServiceImpl implements LaborContractService {
     }
 
     @Override
-    public LaborContract findById(int id) {
+    public LaborContract findById(long id) {
         return laborContractRepository.findById(id).orElseThrow();
     }
 

@@ -24,7 +24,7 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public Position findById(int positionId) {
+    public Position findById(long positionId) {
         return positionRepository.findById(positionId).orElseThrow();
     }
 
@@ -34,7 +34,7 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
-    public void delete(int positionId) {
+    public void delete(long positionId) {
         positionRepository.deleteById(positionId);
     }
 }

@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmployeeResponseDto {
-    Integer id;
+    Long id;
     String firstName;
     String lastName;
     String iin;

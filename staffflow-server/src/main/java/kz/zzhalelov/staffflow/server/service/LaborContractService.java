@@ -9,7 +9,7 @@ public interface LaborContractService {
 
     List<LaborContract> findAll();
 
-    LaborContract findById(int id);
+    LaborContract findById(long id);
 
     LaborContract update(LaborContract laborContract);
 }

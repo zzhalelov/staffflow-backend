@@ -39,13 +39,13 @@ public class PositionController {
 
     //GET /positions/{id}
     @GetMapping("/{id}")
-    public PositionResponseDto findById(@PathVariable int id) {
+    public PositionResponseDto findById(@PathVariable long id) {
         return positionMapper.toResponse(positionService.findById(id));
     }
 
     //PUT /positions/{id}
     @PutMapping("/{id}")
-    public PositionResponseDto update(@PathVariable int id,
+    public PositionResponseDto update(@PathVariable long id,
                                       @RequestBody PositionUpdateDto positionUpdateDto) {
         Position existingPosition = positionRepository.findById(id).orElseThrow();
         existingPosition.setName(positionUpdateDto.getName());
@@ -55,7 +55,7 @@ public class PositionController {
 
     //DELETE /positions/{id}
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable long id) {
         positionService.delete(id);
     }
 }
