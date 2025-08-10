@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/departments/api")
+@RequestMapping("/api/departments")
 public class DepartmentController {
     private final DepartmentRepository departmentRepository;
     private final EmployeeRepository employeeRepository;
@@ -24,7 +24,7 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     //create department
-    @PostMapping("/create")
+    @PostMapping()
     public DepartmentResponseDto create(@RequestBody DepartmentCreateDto dto) {
         Department department = departmentMapper.fromCreate(dto);
         return departmentMapper.toResponse(departmentService.create(department));

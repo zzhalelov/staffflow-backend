@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.dto.departmentDto;
 
+import kz.zzhalelov.staffflow.server.dto.employeeDto.EmployeeShortResponseDto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -8,5 +9,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DepartmentResponseDto {
     String name;
-    Long managerId;
+    EmployeeShortResponseDto manager;
 }

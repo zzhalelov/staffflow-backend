@@ -15,4 +15,11 @@ public class ErrorHandler {
         log.warn(ex.getMessage());
         return new ErrorResponse(ex.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBadRequest(BadRequestException ex) {
+        log.warn(ex.getMessage());
+        return new ErrorResponse(ex.getMessage());
+    }
 }

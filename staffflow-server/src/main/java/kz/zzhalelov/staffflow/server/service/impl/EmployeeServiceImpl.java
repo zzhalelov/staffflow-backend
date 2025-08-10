@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.service.impl;
 
+import kz.zzhalelov.staffflow.server.exception.BadRequestException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import kz.zzhalelov.staffflow.server.model.Employee;
 import kz.zzhalelov.staffflow.server.repository.EmployeeRepository;
@@ -17,6 +18,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee create(Employee employee) {
+        if (employee.getIin() == null || employee.getIin().isBlank()) {
+            throw new BadRequestException("ИИН должен быть заполнен");
+        }
+        if (employee.getIin().length() != 12) {
+            throw new BadRequestException("Длина ИИН должна быть 12 символов");
+        }
         return employeeRepository.save(employee);
     }
 
