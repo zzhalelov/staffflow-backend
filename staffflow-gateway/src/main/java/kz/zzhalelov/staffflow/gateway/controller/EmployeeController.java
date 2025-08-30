@@ -1,7 +1,8 @@
 package kz.zzhalelov.staffflow.gateway.controller;
 
 import jakarta.validation.Valid;
-import kz.zzhalelov.staffflow.server.dto.employeeDto.EmployeeCreateDto;
+import kz.zzhalelov.staffflow.gateway.client.EmployeeClient;
+import kz.zzhalelov.staffflow.gateway.dto.EmployeeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,8 @@ public class EmployeeController {
     private final EmployeeClient employeeClient;
 
     @PostMapping()
-    public ResponseEntity<Object> create(@Valid @RequestBody EmployeeCreateDto employeeCreateDto) {
-        return employeeClient.create(employeeCreateDto);
+    public ResponseEntity<Object> create(@Valid @RequestBody EmployeeDto dto) {
+        return employeeClient.create(dto);
     }
 
     @GetMapping

@@ -2,5 +2,4 @@ server:
   port: 8080
 
 staffflow-server:
-  server:
     url: http://localhost:8081

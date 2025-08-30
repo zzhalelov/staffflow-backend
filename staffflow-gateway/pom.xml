@@ -8,24 +8,10 @@
         <artifactId>staffflow-backend</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-
     <artifactId>staffflow-gateway</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>kz.zzhalelov</groupId>
-            <artifactId>staffflow-server</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <classifier>original</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-    </dependencies>
-
     <properties>
-        <maven.compiler.source>23</maven.compiler.source>
-        <maven.compiler.target>23</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
