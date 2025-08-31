@@ -57,7 +57,7 @@ public class EmployeeController {
 
     //find by last name
     @GetMapping("/find-by-lastname/{lastName}")
-    public List<EmployeeResponseDto> findByFirstName(@PathVariable String lastName) {
+    public List<EmployeeResponseDto> findByLastName(@PathVariable String lastName) {
         return employeeService.findByLastNameContainingIgnoreCase(lastName)
                 .stream()
                 .map(employeeMapper::toResponse)

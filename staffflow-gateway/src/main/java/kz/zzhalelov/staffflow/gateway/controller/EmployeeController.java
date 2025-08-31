@@ -32,4 +32,14 @@ public class EmployeeController {
     public ResponseEntity<Object> findById(@PathVariable long employeeId) {
         return employeeClient.findById(employeeId);
     }
+
+    @GetMapping("/find-by-lastname/{lastName}")
+    public ResponseEntity<Object> findByLastName(@PathVariable String lastName) {
+        return employeeClient.findByLastName(lastName);
+    }
+
+    @PatchMapping("/{employeeId}")
+    public ResponseEntity<Object> update(@PathVariable long employeeId, @RequestBody Object updatedDto) {
+        return employeeClient.update(employeeId, updatedDto);
+    }
 }

@@ -2,7 +2,7 @@ package kz.zzhalelov.staffflow.gateway.client;
 
 import kz.zzhalelov.staffflow.gateway.dto.EmployeeDto;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -16,10 +16,9 @@ public class EmployeeClient {
     private final RestTemplate restTemplate;
 
     public EmployeeClient(@Value("${staffflow-server.url}") String url,
-                          RestTemplateBuilder builder) {
-        this.restTemplate = builder
-                .uriTemplateHandler(new DefaultUriBuilderFactory(url))
-                .build();
+                          RestTemplate restTemplate) {
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(url));
+        this.restTemplate = restTemplate;
     }
 
     public ResponseEntity<Object> create(EmployeeDto dto) {
@@ -41,5 +40,21 @@ public class EmployeeClient {
         return restTemplate.getForEntity("/api/employees/{employeeId}",
                 Object.class,
                 Map.of("employeeId", employeeId));
+    }
+
+    public ResponseEntity<Object> findByLastName(String lastName) {
+        return restTemplate.getForEntity("/api/employees/find-by-lastname/{lastName}",
+                Object.class,
+                Map.of("lastName", lastName));
+    }
+
+    public ResponseEntity<Object> update(long employeeId, Object updateDto) {
+        return restTemplate.exchange(
+                "/api/employees/{employeeId}",
+                HttpMethod.PATCH,
+                new HttpEntity<>(updateDto),
+                Object.class,
+                Map.of("employeeId", employeeId)
+        );
     }
 }
