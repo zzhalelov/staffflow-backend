@@ -1,3 +1,11 @@
+# Этап сборки
+FROM maven:3.9.9-eclipse-temurin-17-alpine AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Этап рантайма
 FROM amazoncorretto:17-alpine-jdk
-COPY target/*.jar app.jar
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
