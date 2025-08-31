@@ -1,6 +1,6 @@
 services:
   staffflow-gateway:
-    build: staffflow-gateway/.
+    build: ../staffflow-gateway
     container_name: staffflow-gateway
     ports:
       - "8080:8080"
@@ -11,7 +11,7 @@ services:
       - staffflow-server
 
   staffflow-server:
-    build: staffflow-server/.
+    build: ../staffflow-server
     container_name: staffflow-server
     ports:
       - "8081:8081"
