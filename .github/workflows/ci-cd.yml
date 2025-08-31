@@ -23,14 +23,6 @@ jobs:
       - name: Build all modules (Maven)
         run: mvn -B -DskipTests package
 
-      # 🔍 Debug secrets (временно)
-      - name: Debug DockerHub secrets
-        run: |
-          echo "DockerHub username = ${{ secrets.DOCKERHUB_USERNAME }}"
-          echo "DockerHub token length = ${#DOCKERHUB_TOKEN}"
-        env:
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
