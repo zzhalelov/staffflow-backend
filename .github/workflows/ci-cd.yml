@@ -56,15 +56,16 @@ jobs:
     needs: build-and-push
 
     steps:
-      - name: SSH to VPS & deploy
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.VPS_SSH_HOST }}
-          username: ${{ secrets.VPS_SSH_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          port: 22
           script: |
             set -e
-            cd ${{ secrets.VPS_COMPOSE_DIR }}
+            cd /opt/staffflow
             docker compose pull
             docker compose up -d
             docker image prune -f
