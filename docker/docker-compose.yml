@@ -2,6 +2,13 @@ services:
   staffflow-gateway:
     build: ../staffflow-gateway
     container_name: staffflow-gateway
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     ports:
       - "8080:8080"
     environment:
@@ -13,6 +20,13 @@ services:
   staffflow-server:
     build: ../staffflow-server
     container_name: staffflow-server
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     ports:
       - "8081:8081"
     environment:
