@@ -21,7 +21,6 @@ services:
 
   staffflow-server:
     image: zzhalelov/staffflow-server:latest
-    container_name: staffflow-server
     restart: always
     ports:
       - "8081:8081"   # <- обязательно проброс на хост
