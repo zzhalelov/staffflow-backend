@@ -43,8 +43,8 @@ public class DepartmentController {
     }
 
     //update
-    @PutMapping
-    public DepartmentResponseDto update(@RequestParam long departmentId,
+    @PatchMapping("/{departmentId}")
+    public DepartmentResponseDto update(@PathVariable long departmentId,
                                         @RequestParam long employeeId,
                                         @RequestBody Department department) {
         Department existingDepartment = departmentRepository.findById(departmentId).orElseThrow();

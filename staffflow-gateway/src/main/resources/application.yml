@@ -1,5 +1,0 @@
-server:
-  port: 8080
-
-staffflow-server:
-    url: http://localhost:8081

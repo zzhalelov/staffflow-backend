@@ -23,7 +23,6 @@
     </developers>
     <modules>
         <module>staffflow-server</module>
-        <module>staffflow-gateway</module>
     </modules>
     <scm>
         <connection/>
