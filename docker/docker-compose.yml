@@ -1,6 +1,6 @@
 services:
   staffflow-gateway:
-    build: ../staffflow-gateway
+    image: zzhalelov/staffflow-gateway:latest
     container_name: staffflow-gateway
     restart: always
     healthcheck:
@@ -18,11 +18,11 @@ services:
       - staffflow-server
 
   staffflow-server:
-    build: ../staffflow-server
+    image: zzhalelov/staffflow-server:latest
     container_name: staffflow-server
     restart: always
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
