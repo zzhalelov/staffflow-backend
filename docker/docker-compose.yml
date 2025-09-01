@@ -1,16 +1,18 @@
+version: "3.9"
+
 services:
   staffflow-gateway:
     image: zzhalelov/staffflow-gateway:latest
     container_name: staffflow-gateway
     restart: always
+    ports:
+      - "8080:8080"
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 10s
-    ports:
-      - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - TZ=Asia/Almaty
@@ -22,7 +24,13 @@ services:
     container_name: staffflow-server
     restart: always
     ports:
-      - "8081:8081"
+      - "8081:8081"   # <- обязательно проброс на хост
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - TZ=Asia/Almaty
@@ -32,8 +40,9 @@ services:
   staffflow-db:
     image: postgres:15-alpine
     container_name: staffflow-db
+    restart: always
     ports:
-      - "5434:5432"
+      - "5434:5432"  # локальный порт 5434 -> контейнер 5432
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
