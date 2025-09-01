@@ -1,6 +1,7 @@
 package kz.zzhalelov.staffflow.gateway.client;
 
 import kz.zzhalelov.staffflow.gateway.dto.EmployeeDto;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,8 @@ import java.util.Map;
 public class EmployeeClient {
     private final RestTemplate restTemplate;
 
-    public EmployeeClient(RestTemplate staffflowServerRestTemplate) {
-        this.restTemplate = staffflowServerRestTemplate;
+    public EmployeeClient(@Qualifier("staffflowServerRestTemplate") RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     public ResponseEntity<Object> create(EmployeeDto dto) {
