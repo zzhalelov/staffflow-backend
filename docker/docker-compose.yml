@@ -27,8 +27,8 @@ services:
       timeout: 10s
       retries: 5
       start_period: 10s
-#    ports:
-#      - "8081:8081"
+    ports:
+      - "8081:8081"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - TZ=Asia/Almaty
@@ -38,8 +38,8 @@ services:
   staffflow-db:
     image: postgres:15-alpine
     container_name: staffflow-db
-#    ports:
-#      - "5434:5432"
+    ports:
+      - "5434:5432"
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
