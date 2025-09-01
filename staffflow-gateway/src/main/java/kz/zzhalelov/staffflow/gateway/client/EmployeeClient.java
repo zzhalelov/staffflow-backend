@@ -15,10 +15,8 @@ import java.util.Map;
 public class EmployeeClient {
     private final RestTemplate restTemplate;
 
-    public EmployeeClient(@Value("${staffflow-server.url}") String url,
-                          RestTemplate restTemplate) {
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory(url));
-        this.restTemplate = restTemplate;
+    public EmployeeClient(RestTemplate staffflowServerRestTemplate) {
+        this.restTemplate = staffflowServerRestTemplate;
     }
 
     public ResponseEntity<Object> create(EmployeeDto dto) {
