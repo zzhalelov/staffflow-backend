@@ -1,20 +1,18 @@
-version: "3.9"
+version: "3.8"
 
 services:
   staffflow-server:
     image: zzhalelov/staffflow-server:latest
+    container_name: staffflow-server
     restart: always
     ports:
-      - "8081:8081"   # <- обязательно проброс на хост
-    healthcheck:
-      test: [ "CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health || exit 1" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 10s
+      - "8081:8081"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - TZ=Asia/Almaty
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://staffflow-db:5432/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - staffflow-db
 
@@ -23,7 +21,7 @@ services:
     container_name: staffflow-db
     restart: always
     ports:
-      - "5434:5432"  # локальный порт 5434 -> контейнер 5432
+      - "5434:5432"
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
