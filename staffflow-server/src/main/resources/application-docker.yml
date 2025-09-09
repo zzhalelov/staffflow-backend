@@ -6,6 +6,12 @@ spring:
     url: jdbc:postgresql://staffflow-db:5432/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 10000
+      max-lifetime: 30000
+      connection-timeout: 10000
   jpa:
     hibernate:
       ddl-auto: update
