@@ -31,7 +31,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee findById(long employeeId) {
-        return employeeRepository.findById(employeeId).orElseThrow();
+        return employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException("Employee not found"));
     }
 
     @Override
@@ -40,7 +41,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (optionalEmployee.isPresent()) {
             Employee employee = optionalEmployee.get();
         }
-        Employee existingEmployee = employeeRepository.findById(employeeId).orElseThrow();
+        Employee existingEmployee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException("Employee not found"));
         merge(existingEmployee, updatedEmployee);
         return employeeRepository.save(existingEmployee);
     }

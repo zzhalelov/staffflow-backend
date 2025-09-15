@@ -20,6 +20,7 @@ public class EmployeeController {
 
     //find all employees
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<EmployeeResponseDto> findAll() {
         return employeeService.findAll()
                 .stream()
@@ -29,12 +30,14 @@ public class EmployeeController {
 
     //find by id
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public EmployeeResponseDto findById(@PathVariable long id) {
         return employeeMapper.toResponse(employeeService.findById(id));
     }
 
     //create
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public EmployeeResponseDto create(@RequestBody EmployeeCreateDto employeeCreateDto) {
         Employee employee = employeeMapper.fromCreate(employeeCreateDto);
         return employeeMapper.toResponse(employeeService.create(employee));
@@ -57,6 +60,7 @@ public class EmployeeController {
 
     //find by last name
     @GetMapping("/find-by-lastname/{lastName}")
+    @ResponseStatus(HttpStatus.OK)
     public List<EmployeeResponseDto> findByLastName(@PathVariable String lastName) {
         return employeeService.findByLastNameContainingIgnoreCase(lastName)
                 .stream()
