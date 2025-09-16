@@ -1,8 +1,6 @@
 package kz.zzhalelov.staffflow.server.department;
 
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
-import kz.zzhalelov.staffflow.server.employee.Employee;
-import kz.zzhalelov.staffflow.server.employee.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +10,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
-    private final EmployeeRepository employeeRepository;
 
     @Override
     public Department create(Department department) {
-        Long managerId = department.getManager().getId();
-        Employee manager = employeeRepository.findById(managerId)
-                .orElseThrow(() -> new NotFoundException("Сотрудник не найден"));
-        department.setManager(manager);
         return departmentRepository.save(department);
     }
 

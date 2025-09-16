@@ -1,7 +1,6 @@
 package kz.zzhalelov.staffflow.server.department;
 
 import jakarta.persistence.*;
-import kz.zzhalelov.staffflow.server.employee.Employee;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +13,4 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToOne
-    private Employee manager;
 }

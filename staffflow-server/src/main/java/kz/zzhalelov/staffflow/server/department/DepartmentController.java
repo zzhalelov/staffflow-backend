@@ -3,8 +3,6 @@ package kz.zzhalelov.staffflow.server.department;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentCreateDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentResponseDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentMapper;
-import kz.zzhalelov.staffflow.server.employee.Employee;
-import kz.zzhalelov.staffflow.server.employee.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +14,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/departments")
 public class DepartmentController {
     private final DepartmentRepository departmentRepository;
-    private final EmployeeRepository employeeRepository;
     private final DepartmentMapper departmentMapper;
     private final DepartmentService departmentService;
 
@@ -45,12 +42,9 @@ public class DepartmentController {
     //update
     @PatchMapping("/{departmentId}")
     public DepartmentResponseDto update(@PathVariable long departmentId,
-                                        @RequestParam long employeeId,
                                         @RequestBody Department department) {
         Department existingDepartment = departmentRepository.findById(departmentId).orElseThrow();
-        Employee employee = employeeRepository.findById(employeeId).orElseThrow();
         existingDepartment.setName(department.getName());
-        existingDepartment.setManager(employee);
         return departmentMapper.toResponse(departmentService.update(existingDepartment));
     }
 
