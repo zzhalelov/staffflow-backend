@@ -21,9 +21,10 @@ public class EmployeeController {
     //find all employees
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EmployeeResponseDto> findAll() {
-        return employeeService.findAll()
-                .stream()
+    public List<EmployeeResponseDto> findAll(@RequestParam(defaultValue = "0") int from,
+                                             @RequestParam(defaultValue = "10") int size) {
+        List<Employee> employeeList = employeeService.findAll(from, size);
+        return employeeList.stream()
                 .map(employeeMapper::toResponse)
                 .collect(Collectors.toList());
     }

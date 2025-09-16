@@ -5,7 +5,7 @@ import java.util.List;
 public interface EmployeeService {
     Employee create(Employee employee);
 
-    List<Employee> findAll();
+    List<Employee> findAll(int from, int size);
 
     Employee findById(long employeeId);
 

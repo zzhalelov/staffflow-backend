@@ -3,6 +3,8 @@ package kz.zzhalelov.staffflow.server.employee;
 import kz.zzhalelov.staffflow.server.exception.BadRequestException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +27,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
+    public List<Employee> findAll(int from, int size) {
+        Pageable pageable = PageRequest.of(from / size, size);
+        return employeeRepository.findAll(pageable).getContent();
     }
 
     @Override
