@@ -40,7 +40,8 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (optionalOrganization.isPresent()) {
             Organization organization = optionalOrganization.get();
         }
-        Organization existingOrganization = organizationRepository.findById(organizationId).orElseThrow();
+        Organization existingOrganization = organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new NotFoundException("Organization not found"));
         merge(existingOrganization, updatedOrganization);
         return organizationRepository.save(existingOrganization);
     }

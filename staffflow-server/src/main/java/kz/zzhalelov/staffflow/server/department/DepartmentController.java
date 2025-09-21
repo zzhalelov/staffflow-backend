@@ -4,6 +4,7 @@ import kz.zzhalelov.staffflow.server.department.dto.DepartmentCreateDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentResponseDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class DepartmentController {
 
     //create department
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public DepartmentResponseDto create(@RequestBody DepartmentCreateDto dto) {
         Department department = departmentMapper.fromCreate(dto);
         return departmentMapper.toResponse(departmentService.create(department));
@@ -26,6 +28,7 @@ public class DepartmentController {
 
     //find all
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<DepartmentResponseDto> findAll() {
         return departmentService.findAll()
                 .stream()
@@ -35,12 +38,14 @@ public class DepartmentController {
 
     //find by id
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public DepartmentResponseDto findById(@PathVariable long id) {
         return departmentMapper.toResponse(departmentService.findById(id));
     }
 
     //update
     @PatchMapping("/{departmentId}")
+    @ResponseStatus(HttpStatus.OK)
     public DepartmentResponseDto update(@PathVariable long departmentId,
                                         @RequestBody Department department) {
         Department existingDepartment = departmentRepository.findById(departmentId).orElseThrow();
@@ -49,6 +54,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable long id) {
         departmentService.delete(id);
     }
