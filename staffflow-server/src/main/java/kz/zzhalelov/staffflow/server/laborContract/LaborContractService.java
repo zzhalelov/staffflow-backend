@@ -9,5 +9,9 @@ public interface LaborContractService {
 
     LaborContract findById(long id);
 
-    LaborContract update(LaborContract laborContract);
+    LaborContract update(long id, LaborContract updatedContract);
+
+    LaborContract updateStatus(long id, LaborContractStatus newStatus);
+
+    void delete(long id);
 }

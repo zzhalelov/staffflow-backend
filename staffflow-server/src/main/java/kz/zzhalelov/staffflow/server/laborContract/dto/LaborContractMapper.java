@@ -4,6 +4,7 @@ import kz.zzhalelov.staffflow.server.department.Department;
 import kz.zzhalelov.staffflow.server.employee.Employee;
 import kz.zzhalelov.staffflow.server.laborContract.LaborContract;
 import kz.zzhalelov.staffflow.server.laborContract.LaborContractStatus;
+import kz.zzhalelov.staffflow.server.organization.Organization;
 import kz.zzhalelov.staffflow.server.position.Position;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,46 +13,54 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LaborContractMapper {
 
-    public LaborContract fromCreate(LaborContractCreateDto laborContractCreateDto) {
+    public LaborContract fromCreate(LaborContractCreateDto dto) {
         LaborContract laborContract = new LaborContract();
+        Organization organization = new Organization();
+        organization.setId(dto.getOrganizationId());
         Employee employee = new Employee();
-        employee.setId(laborContractCreateDto.getEmployeeId());
+        employee.setId(dto.getEmployeeId());
         Position position = new Position();
-        position.setId(laborContractCreateDto.getPositionId());
+        position.setId(dto.getPositionId());
         Department department = new Department();
-        department.setId(laborContractCreateDto.getDepartmentId());
+        department.setId(dto.getDepartmentId());
+        laborContract.setOrganization(organization);
         laborContract.setEmployee(employee);
-        laborContract.setHireDate(laborContractCreateDto.getHireDate().toLocalDate());
+        laborContract.setHireDate(dto.getHireDate().toLocalDate());
         laborContract.setDepartment(department);
         laborContract.setPosition(position);
         laborContract.setStatus(LaborContractStatus.NOT_SIGNED);
         return laborContract;
     }
 
-    public LaborContract fromUpdate(LaborContractUpdateDto laborContractUpdateDto) {
+    public LaborContract fromUpdate(LaborContractUpdateDto dto) {
+        Organization organization = new Organization();
+        organization.setId(dto.getOrganizationId());
         Employee employee = new Employee();
-        employee.setId(laborContractUpdateDto.getEmployeeId());
+        employee.setId(dto.getEmployeeId());
         Department department = new Department();
-        department.setId(laborContractUpdateDto.getDepartmentId());
+        department.setId(dto.getDepartmentId());
         Position position = new Position();
-        position.setId(laborContractUpdateDto.getPositionId());
+        position.setId(dto.getPositionId());
 
         LaborContract laborContract = new LaborContract();
+        laborContract.setOrganization(organization);
         laborContract.setEmployee(employee);
-        laborContract.setHireDate(laborContractUpdateDto.getHireDate().toLocalDate());
+        laborContract.setHireDate(dto.getHireDate().toLocalDate());
         laborContract.setDepartment(department);
         laborContract.setPosition(position);
-        laborContract.setStatus(laborContractUpdateDto.getLaborContractStatus());
+        laborContract.setStatus(dto.getLaborContractStatus());
         return laborContract;
     }
 
     public LaborContractResponseDto toResponse(LaborContract laborContract) {
-        LaborContractResponseDto laborContractResponseDto = new LaborContractResponseDto();
-        laborContractResponseDto.setEmployeeId(laborContract.getEmployee().getId());
-        laborContractResponseDto.setHireDate(laborContract.getHireDate().atStartOfDay());
-        laborContractResponseDto.setDepartmentId(laborContract.getDepartment().getId());
-        laborContractResponseDto.setPositionId(laborContract.getPosition().getId());
-        laborContractResponseDto.setLaborContractStatus(laborContract.getStatus());
-        return laborContractResponseDto;
+        LaborContractResponseDto dto = new LaborContractResponseDto();
+        dto.setId(laborContract.getId());
+        dto.setOrganizationId(laborContract.getOrganization().getId());
+        dto.setEmployeeId(laborContract.getEmployee().getId());
+        dto.setHireDate(laborContract.getHireDate().atStartOfDay());
+        dto.setDepartmentId(laborContract.getDepartment().getId());
+        dto.setPositionId(laborContract.getPosition().getId());
+        dto.setLaborContractStatus(laborContract.getStatus());
+        return dto;
     }
 }
