@@ -16,6 +16,7 @@ public class Employee {
     private String firstName;
     private String lastName;
     @NotBlank(message = "ИИН должен быть заполнен")
+    @Column(unique = true, nullable = false)
     private String iin;
     @Enumerated(EnumType.STRING)
     private GenderType gender;

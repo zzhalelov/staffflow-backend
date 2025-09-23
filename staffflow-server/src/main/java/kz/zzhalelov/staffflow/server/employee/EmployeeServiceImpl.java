@@ -17,6 +17,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee create(Employee employee) {
+        employeeRepository.findByIin(employee.getIin())
+                .ifPresent(e -> {
+                    throw new IllegalArgumentException("Сотрудник с таким ИИН уже существует: " + employee.getIin());
+                });
         if (employee.getIin() == null || employee.getIin().isBlank()) {
             throw new BadRequestException("ИИН должен быть заполнен");
         }
@@ -88,7 +92,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (updatedEmployee.getCitizenship() != null && !updatedEmployee.getCitizenship().isBlank()) {
             existingEmployee.setCitizenship(updatedEmployee.getCitizenship());
         }
-        if (updatedEmployee.getGender() != null && !updatedEmployee.getGender().describeConstable().isEmpty()) {
+        if (updatedEmployee.getGender() != null && updatedEmployee.getGender().describeConstable().isPresent()) {
             existingEmployee.setGender(updatedEmployee.getGender());
         }
     }
