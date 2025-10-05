@@ -79,5 +79,6 @@ public class TimesheetServiceImpl implements TimesheetService {
         if (!timesheetRepository.existsById(id)) {
             throw new NotFoundException("Timesheet with id " + id + " not found");
         }
+        timesheetRepository.deleteById(id);
     }
 }
