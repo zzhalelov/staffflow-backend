@@ -55,7 +55,7 @@ public class OrganizationController {
         organizationService.delete(organizationId);
     }
 
-    @GetMapping("/idNumber")
+    @GetMapping("/{idNumber}")
     @ResponseStatus(HttpStatus.OK)
     public Organization findByIdNumber(@PathVariable String idNumber) {
         return organizationService.findByIdNumber(idNumber);

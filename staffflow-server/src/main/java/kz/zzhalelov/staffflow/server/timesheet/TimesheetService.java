@@ -4,7 +4,7 @@ import java.time.Month;
 import java.util.List;
 
 public interface TimesheetService {
-    Timesheet createTimesheet(Long organizationId, Month month, int day);
+    Timesheet createTimesheet(Long organizationId, Month month, int year);
 
     Timesheet addEmployeeToTimesheet(Long timesheetId, Long employeeId);
 
@@ -13,4 +13,6 @@ public interface TimesheetService {
     List<Timesheet> findAll();
 
     Timesheet findById(Long id);
+
+    void deleteById(Long id);
 }

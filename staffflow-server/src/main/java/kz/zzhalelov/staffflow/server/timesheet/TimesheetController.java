@@ -1,25 +1,30 @@
 package kz.zzhalelov.staffflow.server.timesheet;
 
+import kz.zzhalelov.staffflow.server.timesheet.dto.TimesheetMapper;
+import kz.zzhalelov.staffflow.server.timesheet.dto.TimesheetResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Month;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/timesheets")
 @RequiredArgsConstructor
 public class TimesheetController {
     private final TimesheetService timesheetService;
+    private final TimesheetMapper timesheetMapper;
 
     //create new timesheet
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Timesheet createTimesheet(@RequestParam Long organizationId,
-                                     @RequestParam Month month,
-                                     @RequestParam int year) {
-        return timesheetService.createTimesheet(organizationId, month, year);
+    public TimesheetResponseDto createTimesheet(@RequestParam Long organizationId,
+                                                @RequestParam Month month,
+                                                @RequestParam int year) {
+//        Timesheet timesheet = timesheetMapper.fromCreate()
+        return timesheetMapper.toResponseDto(timesheetService.createTimesheet(organizationId, month, year));
     }
 
     // add employee into timesheet
@@ -39,12 +44,21 @@ public class TimesheetController {
     }
 
     @GetMapping
-    public List<Timesheet> findAll() {
-        return timesheetService.findAll();
+    public List<TimesheetResponseDto> findAll() {
+        return timesheetService.findAll()
+                .stream()
+                .map(timesheetMapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Timesheet findById(@PathVariable Long id) {
-        return timesheetService.findById(id);
+    public TimesheetResponseDto findById(@PathVariable Long id) {
+        return timesheetMapper.toResponseDto(timesheetService.findById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable Long id) {
+        timesheetService.deleteById(id);
     }
 }

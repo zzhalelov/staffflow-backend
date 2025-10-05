@@ -5,5 +5,6 @@ public enum DayStatus {
     ABSENT,
     VACATION,
     SICK_LEAVE,
-    HOLIDAY
+    HOLIDAY,
+    DAY_OFF
 }
