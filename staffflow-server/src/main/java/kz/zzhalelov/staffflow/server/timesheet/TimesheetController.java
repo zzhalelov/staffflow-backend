@@ -29,18 +29,20 @@ public class TimesheetController {
 
     // add employee into timesheet
     @PostMapping("/{timesheetId}/employee")
-    public Timesheet addEmployeeToTimesheet(@PathVariable Long timesheetId,
-                                            @RequestParam Long employeeId) {
-        return timesheetService.addEmployeeToTimesheet(timesheetId, employeeId);
+    public TimesheetResponseDto addEmployeeToTimesheet(@PathVariable Long timesheetId,
+                                                       @RequestParam Long employeeId) {
+        Timesheet timesheet = timesheetService.addEmployeeToTimesheet(timesheetId, employeeId);
+        return timesheetMapper.toResponseDto(timesheet);
     }
 
     //add day status
     @PostMapping("/{timesheetId}/employee/{employeeId}/day")
-    public Timesheet addDayStatus(@PathVariable Long timesheetId,
-                                  @PathVariable Long employeeId,
-                                  @RequestParam int dayOfMonth,
-                                  @RequestParam DayStatus status) {
-        return timesheetService.addDayStatus(timesheetId, employeeId, dayOfMonth, status);
+    public TimesheetResponseDto addDayStatus(@PathVariable Long timesheetId,
+                                             @PathVariable Long employeeId,
+                                             @RequestParam int dayOfMonth,
+                                             @RequestParam DayStatus status) {
+        Timesheet timesheet = timesheetService.addDayStatus(timesheetId, employeeId, dayOfMonth, status);
+        return timesheetMapper.toResponseDto(timesheet);
     }
 
     @GetMapping

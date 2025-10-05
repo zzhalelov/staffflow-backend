@@ -1,6 +1,5 @@
 package kz.zzhalelov.staffflow.server.timesheet.dto;
 
-import kz.zzhalelov.staffflow.server.employee.Employee;
 import kz.zzhalelov.staffflow.server.employee.dto.EmployeeShortResponseDto;
 import kz.zzhalelov.staffflow.server.organization.Organization;
 import kz.zzhalelov.staffflow.server.organization.dto.OrganizationShortResponseDto;
@@ -63,15 +62,17 @@ public class TimesheetMapper {
     private TimesheetEntryResponseDto toEntryResponse(TimesheetEntry entry) {
         TimesheetEntryResponseDto dto = new TimesheetEntryResponseDto();
         dto.setId(entry.getId());
+        if (entry.getTimesheet() != null) {
+            dto.setTimesheetId(entry.getTimesheet().getId());
+        }
 
         // Employee → только id и имя
-        Employee employee = entry.getEmployee();
-        if (employee != null) {
+        if (entry.getEmployee() != null) {
             EmployeeShortResponseDto employeeDto = new EmployeeShortResponseDto();
-            employeeDto.setId(employee.getId());
-            employeeDto.setFirstName(employee.getFirstName());
-            employeeDto.setLastName(employee.getLastName());
-            dto.setEmployee(employee);
+            employeeDto.setId(entry.getEmployee().getId());
+            employeeDto.setFirstName(entry.getEmployee().getFirstName());
+            employeeDto.setLastName(entry.getEmployee().getLastName());
+            dto.setEmployee(employeeDto);
         }
         if (entry.getDays() != null) {
             dto.setDays(entry.getDays()
