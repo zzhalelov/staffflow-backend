@@ -9,5 +9,4 @@ import lombok.experimental.FieldDefaults;
 public class PositionResponseDto {
     Long id;
     String name;
-    double salary;
 }
