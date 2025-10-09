@@ -46,9 +46,6 @@ public class PositionServiceImpl implements PositionService {
         if (updatedPosition.getName() != null && !updatedPosition.getName().isBlank()) {
             existingPosition.setName(updatedPosition.getName());
         }
-        if (updatedPosition.getSalary() != null) {
-            existingPosition.setSalary(updatedPosition.getSalary());
-        }
         positionRepository.save(existingPosition);
     }
 }
