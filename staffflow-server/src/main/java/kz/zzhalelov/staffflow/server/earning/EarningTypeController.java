@@ -1,8 +1,6 @@
 package kz.zzhalelov.staffflow.server.earning;
 
-import kz.zzhalelov.staffflow.server.earning.dto.EarningTypeCreateDto;
-import kz.zzhalelov.staffflow.server.earning.dto.EarningTypeMapper;
-import kz.zzhalelov.staffflow.server.earning.dto.EarningTypeResponseDto;
+import kz.zzhalelov.staffflow.server.earning.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +14,7 @@ import java.util.stream.Collectors;
 public class EarningTypeController {
     private final EarningTypeService earningTypeService;
     private final EarningTypeMapper earningTypeMapper;
+    private final EarningTypeHistoryMapper earningTypeHistoryMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,5 +43,23 @@ public class EarningTypeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         earningTypeService.delete(id);
+    }
+
+    @GetMapping("/{id}/history")
+    @ResponseStatus(HttpStatus.OK)
+    public List<EarningTypeHistoryResponseDto> getHistory(@PathVariable Long id) {
+        return earningTypeService.findHistoryByEarningTypeId(id)
+                .stream()
+                .map(earningTypeHistoryMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public EarningTypeResponseDto update(@PathVariable Long id,
+                                         @RequestBody EarningTypeUpdateDto dto) {
+        EarningType updated = earningTypeMapper.fromUpdate(dto);
+        EarningType saved = earningTypeService.update(id, updated);
+        return earningTypeMapper.toResponse(saved);
     }
 }

@@ -4,9 +4,20 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PositionResponseDto {
     Long id;
     String name;
+    List<StaffScheduleDto> scheduleItems;
+
+    @Data
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public static class StaffScheduleDto {
+        Long earningTypeId;
+        String earningTypeName;
+        private Double amount;
+    }
 }

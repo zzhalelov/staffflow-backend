@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.position;
 
+import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,15 @@ public class PositionServiceImpl implements PositionService {
     private final PositionRepository positionRepository;
 
     @Override
-    public Position create(Position position) {
+    public Position createPosition(Position position) {
         return positionRepository.save(position);
+    }
+
+    @Override
+    public Position addPositionIntoStaffSchedule(Long positionId) {
+        Position position = positionRepository.findById(positionId)
+                .orElseThrow(() -> new NotFoundException("Position not found"));
+        return null;
     }
 
     @Override

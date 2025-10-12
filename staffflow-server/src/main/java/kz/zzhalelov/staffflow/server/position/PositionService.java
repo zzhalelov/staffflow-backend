@@ -3,7 +3,9 @@ package kz.zzhalelov.staffflow.server.position;
 import java.util.List;
 
 public interface PositionService {
-    Position create(Position position);
+    Position createPosition(Position position);
+
+    Position addPositionIntoStaffSchedule(Long positionId);
 
     List<Position> findAll();
 

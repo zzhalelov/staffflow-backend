@@ -23,7 +23,14 @@ public class EarningTypeServiceImpl implements EarningTypeService {
         EarningType existingType = earningTypeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("EarningType not found"));
 
-        // перед изменением сохраняем запись в историю
+        // Находим последнюю запись истории и закрываем её (если есть)
+        earningTypeHistoryRepository.findTopByEarningTypeOrderByStartDateDesc(existingType)
+                .ifPresent(lastHistory -> {
+                    lastHistory.setEndDate(LocalDate.now());
+                    earningTypeHistoryRepository.save(lastHistory);
+                });
+
+        // Сохраняем запись об изменении в историю
         EarningTypeHistory history = new EarningTypeHistory();
         history.setEarningType(existingType);
         history.setStartDate(LocalDate.now());
@@ -31,10 +38,15 @@ public class EarningTypeServiceImpl implements EarningTypeService {
         history.setIncludeInAverageSalaryCalc(existingType.getIncludeInAverageSalaryCalc());
         history.setIsIndexable(existingType.getIsIndexable());
         history.setComment(existingType.getDescription());
+
         earningTypeHistoryRepository.save(history);
 
-        // обновляем актуальные данные в основном виде начисления
-        merge(existingType, updatedEarningType);
+        existingType.setName(updatedEarningType.getName());
+        existingType.setCode(updatedEarningType.getCode());
+        existingType.setIncludeInFot(updatedEarningType.getIncludeInFot());
+        existingType.setIncludeInAverageSalaryCalc(updatedEarningType.getIncludeInAverageSalaryCalc());
+        existingType.setIsIndexable(updatedEarningType.getIsIndexable());
+        existingType.setDescription(updatedEarningType.getDescription());
 
         return earningTypeRepository.save(existingType);
     }
@@ -55,24 +67,8 @@ public class EarningTypeServiceImpl implements EarningTypeService {
         earningTypeRepository.deleteById(id);
     }
 
-    public void merge(EarningType existing, EarningType updated) {
-        if (updated.getName() != null && !updated.getName().isBlank()) {
-            existing.setName(updated.getName());
-        }
-        if (updated.getCode() != null && !updated.getCode().isBlank()) {
-            existing.setCode(updated.getCode());
-        }
-        if (updated.getIncludeInFot() != null) {
-            existing.setIncludeInFot(updated.getIncludeInFot());
-        }
-        if (updated.getIncludeInAverageSalaryCalc() != null) {
-            existing.setIncludeInAverageSalaryCalc(updated.getIncludeInAverageSalaryCalc());
-        }
-        if (updated.getIsIndexable() != null) {
-            existing.setIsIndexable(updated.getIsIndexable());
-        }
-        if (updated.getDescription() != null && !updated.getDescription().isBlank()) {
-            existing.setDescription(updated.getDescription());
-        }
+    @Override
+    public List<EarningTypeHistory> findHistoryByEarningTypeId(Long earningTypeId) {
+        return earningTypeHistoryRepository.findAllByEarningTypeIdOrderByStartDateDesc(earningTypeId);
     }
 }

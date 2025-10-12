@@ -12,4 +12,6 @@ public interface EarningTypeService {
     EarningType findById(long id);
 
     void delete(long id);
+
+    List<EarningTypeHistory> findHistoryByEarningTypeId(Long earningTypeId);
 }
