@@ -15,16 +15,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/positions")
 public class PositionController {
-    private final PositionRepository positionRepository;
     private final PositionService positionService;
     private final PositionMapper positionMapper;
 
     //POST /api/positions
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PositionResponseDto create(@RequestBody PositionCreateDto positionCreateDto) {
-        Position position = positionMapper.fromCreate(positionCreateDto);
-        return positionMapper.toResponse(positionService.create(position));
+    public PositionResponseDto create(@RequestBody PositionCreateDto dto) {
+        Position position = positionMapper.fromCreate(dto);
+        Position saved = positionService.createPosition(position);
+
+        return positionMapper.toResponse(saved);
     }
 
     //GET /positions

@@ -10,19 +10,20 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @Entity
-@Table(name = "position_earnings")
+@Table(name = "staff_schedule")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PositionEarning {
+public class StaffSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "position_id", nullable = false)
+    Position position;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "earning_type_id", nullable = false)
     EarningType earningType;
 
-    Double amount;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "position_id")
-    Position position;
+    private Double amount;
 }
