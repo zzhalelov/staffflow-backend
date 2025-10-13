@@ -2,6 +2,7 @@ package kz.zzhalelov.staffflow.server.position.dto;
 
 import kz.zzhalelov.staffflow.server.earning.EarningType;
 import kz.zzhalelov.staffflow.server.earning.EarningTypeRepository;
+import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import kz.zzhalelov.staffflow.server.position.Position;
 import kz.zzhalelov.staffflow.server.position.StaffSchedule;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class PositionMapper {
             dto.getScheduleItems().forEach(item -> {
                 StaffSchedule schedule = new StaffSchedule();
                 EarningType earningType = earningTypeRepository.findById(item.getEarningTypeId())
-                        .orElseThrow(() -> new RuntimeException("EarningType not found"));
+                        .orElseThrow(() -> new NotFoundException("EarningType not found"));
                 schedule.setEarningType(earningType);
                 schedule.setAmount(item.getAmount());
                 schedule.setPosition(position);
