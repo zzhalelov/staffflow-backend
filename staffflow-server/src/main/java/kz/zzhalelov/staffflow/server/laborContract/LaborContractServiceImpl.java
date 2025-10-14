@@ -1,8 +1,10 @@
 package kz.zzhalelov.staffflow.server.laborContract;
 
 import kz.zzhalelov.staffflow.server.email.EmailService;
+import kz.zzhalelov.staffflow.server.event.ContractSignedEvent;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,7 @@ public class LaborContractServiceImpl implements LaborContractService {
     private final LaborContractRepository laborContractRepository;
     private final LaborContractHistoryRepository laborContractHistoryRepository;
     private final EmailService emailService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public LaborContract create(LaborContract laborContract) {
@@ -61,11 +64,11 @@ public class LaborContractServiceImpl implements LaborContractService {
         history.setChangedAt(LocalDateTime.now());
         laborContractHistoryRepository.save(history);
 
-        //Отправка письма
+        //Отправка события
         if (newStatus == LaborContractStatus.HIRED && contract.getEmployee() != null) {
             String email = contract.getEmployee().getEmail();
             String name = contract.getEmployee().getFirstName();
-            emailService.sendContractSignedEmail(email, name, contract.getId());
+            eventPublisher.publishEvent(new ContractSignedEvent(this, email, name, contract.getId()));
         }
         return contract;
     }
