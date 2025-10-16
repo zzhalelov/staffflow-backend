@@ -47,7 +47,11 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public void delete(long positionId) {
-        positionRepository.deleteById(positionId);
+        if (positionRepository.findById(positionId).isPresent()) {
+            positionRepository.deleteById(positionId);
+        } else {
+            throw new NotFoundException("Position doesn't exist");
+        }
     }
 
     private void merge(Position existingPosition, Position updatedPosition) {

@@ -1,6 +1,8 @@
 package kz.zzhalelov.staffflow.server.laborContract.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import kz.zzhalelov.staffflow.server.laborContract.LaborContractStatus;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -11,11 +13,16 @@ import java.time.LocalDateTime;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LaborContractCreateDto {
+    @NotNull(message = "Organization Id is required")
     Long organizationId;
+    @NotNull(message = "Employee Id is required")
     Long employeeId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime hireDate;
+    @NotNull(message = "Department Id is required")
     Long departmentId;
+    @NotNull(message = "Position Id is required")
     Long positionId;
+    @NotBlank(message = "LaborContractStatus is required")
     LaborContractStatus laborContractStatus;
 }

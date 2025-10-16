@@ -64,7 +64,11 @@ public class EarningTypeServiceImpl implements EarningTypeService {
 
     @Override
     public void delete(long id) {
-        earningTypeRepository.deleteById(id);
+        if (earningTypeRepository.findById(id).isPresent()) {
+            earningTypeRepository.deleteById(id);
+        } else {
+            throw new NotFoundException("EarningType not found");
+        }
     }
 
     @Override

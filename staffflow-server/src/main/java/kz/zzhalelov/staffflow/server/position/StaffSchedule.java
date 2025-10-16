@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -25,5 +27,6 @@ public class StaffSchedule {
     @JoinColumn(name = "earning_type_id", nullable = false)
     EarningType earningType;
 
-    private Double amount;
+    @Column(precision = 15, scale = 2)
+    private BigDecimal amount;
 }

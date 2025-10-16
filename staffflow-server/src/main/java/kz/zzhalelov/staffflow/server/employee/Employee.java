@@ -1,6 +1,7 @@
 package kz.zzhalelov.staffflow.server.employee;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,7 @@ public class Employee {
     private String iin;
     @Enumerated(EnumType.STRING)
     private GenderType gender;
+    @Email(message = "Email is incorrect")
     private String email;
     private String phone;
     private String address;

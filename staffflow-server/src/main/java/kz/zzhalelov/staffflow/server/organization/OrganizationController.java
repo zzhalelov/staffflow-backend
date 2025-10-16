@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrganizationController {
     private final OrganizationService organizationService;
-    private final OrganizationRepository organizationRepository;
     private final OrganizationMapper organizationMapper;
 
     @GetMapping
@@ -28,10 +27,10 @@ public class OrganizationController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/{organizationId}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public OrganizationResponseDto findById(@PathVariable long organizationId) {
-        return organizationMapper.toResponse(organizationService.findById(organizationId));
+    public OrganizationResponseDto findById(@PathVariable long id) {
+        return organizationMapper.toResponse(organizationService.findById(id));
     }
 
     @PostMapping
@@ -55,7 +54,7 @@ public class OrganizationController {
         organizationService.delete(organizationId);
     }
 
-    @GetMapping("/{idNumber}")
+    @GetMapping("/bin/{idNumber}")
     @ResponseStatus(HttpStatus.OK)
     public Organization findByIdNumber(@PathVariable String idNumber) {
         return organizationService.findByIdNumber(idNumber);

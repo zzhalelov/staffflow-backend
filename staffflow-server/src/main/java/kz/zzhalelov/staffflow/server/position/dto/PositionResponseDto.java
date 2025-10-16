@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -18,6 +19,6 @@ public class PositionResponseDto {
     public static class StaffScheduleDto {
         Long earningTypeId;
         String earningTypeName;
-        private Double amount;
+        BigDecimal amount;
     }
 }
