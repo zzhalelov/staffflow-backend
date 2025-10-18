@@ -1,7 +1,7 @@
 package kz.zzhalelov.staffflow.server.position;
 
 import jakarta.persistence.*;
-import kz.zzhalelov.staffflow.server.earning.EarningType;
+import kz.zzhalelov.staffflow.server.earningType.EarningType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

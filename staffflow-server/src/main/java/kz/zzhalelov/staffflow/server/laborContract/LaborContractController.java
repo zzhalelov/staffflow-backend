@@ -1,5 +1,7 @@
 package kz.zzhalelov.staffflow.server.laborContract;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kz.zzhalelov.staffflow.server.department.Department;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractMapper;
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/contracts")
+@Tag(name = "Labor Contracts", description = "Управление трудовыми договорами сотрудников")
 public class LaborContractController {
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
@@ -32,6 +35,7 @@ public class LaborContractController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Создание нового трудового договора")
     public LaborContractResponseDto create(@RequestParam long organizationId,
                                            @RequestParam long employeeId,
                                            @RequestParam long departmentId,
@@ -54,6 +58,7 @@ public class LaborContractController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Вывести список всех трудовых договоров")
     public List<LaborContractResponseDto> findAll() {
         return laborContractService.findAll()
                 .stream()
@@ -63,12 +68,14 @@ public class LaborContractController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Поиск трудового договора по Id")
     public LaborContractResponseDto findById(@PathVariable long id) {
         return laborContractMapper.toResponse(laborContractService.findById(id));
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Обновить сведения о трудовом договоре")
     public LaborContractResponseDto update(@PathVariable long id,
                                            @RequestBody LaborContractUpdateDto dto) {
         LaborContract laborContract = laborContractMapper.fromUpdate(dto);
@@ -77,6 +84,7 @@ public class LaborContractController {
 
     @PatchMapping("/{id}/status")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Обновить статус трудового договора")
     public LaborContractResponseDto updateStatus(@PathVariable long id,
                                                  @RequestParam LaborContractStatus status) {
         LaborContract updated = laborContractService.updateStatus(id, status);
@@ -85,6 +93,7 @@ public class LaborContractController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Удалить трудовой договор")
     public void delete(@PathVariable long id) {
         laborContractRepository.deleteById(id);
     }

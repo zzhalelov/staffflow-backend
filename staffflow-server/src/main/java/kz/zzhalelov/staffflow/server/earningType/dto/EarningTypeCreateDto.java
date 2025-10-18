@@ -1,4 +1,4 @@
-package kz.zzhalelov.staffflow.server.earning.dto;
+package kz.zzhalelov.staffflow.server.earningType.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;

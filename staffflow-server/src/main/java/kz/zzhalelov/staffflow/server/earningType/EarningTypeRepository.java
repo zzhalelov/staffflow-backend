@@ -1,4 +1,4 @@
-package kz.zzhalelov.staffflow.server.earning;
+package kz.zzhalelov.staffflow.server.earningType;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

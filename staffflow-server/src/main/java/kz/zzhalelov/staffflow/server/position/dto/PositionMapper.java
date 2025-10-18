@@ -1,7 +1,7 @@
 package kz.zzhalelov.staffflow.server.position.dto;
 
-import kz.zzhalelov.staffflow.server.earning.EarningType;
-import kz.zzhalelov.staffflow.server.earning.EarningTypeRepository;
+import kz.zzhalelov.staffflow.server.earningType.EarningType;
+import kz.zzhalelov.staffflow.server.earningType.EarningTypeRepository;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import kz.zzhalelov.staffflow.server.position.Position;
 import kz.zzhalelov.staffflow.server.position.StaffSchedule;

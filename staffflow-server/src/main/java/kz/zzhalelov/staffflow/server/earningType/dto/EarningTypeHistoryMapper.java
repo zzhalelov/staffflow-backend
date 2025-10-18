@@ -1,6 +1,6 @@
-package kz.zzhalelov.staffflow.server.earning.dto;
+package kz.zzhalelov.staffflow.server.earningType.dto;
 
-import kz.zzhalelov.staffflow.server.earning.EarningTypeHistory;
+import kz.zzhalelov.staffflow.server.earningType.EarningTypeHistory;
 import org.springframework.stereotype.Component;
 
 @Component

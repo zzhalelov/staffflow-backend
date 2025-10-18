@@ -1,6 +1,6 @@
-package kz.zzhalelov.staffflow.server.earning.dto;
+package kz.zzhalelov.staffflow.server.earningType.dto;
 
-import kz.zzhalelov.staffflow.server.earning.EarningType;
+import kz.zzhalelov.staffflow.server.earningType.EarningType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

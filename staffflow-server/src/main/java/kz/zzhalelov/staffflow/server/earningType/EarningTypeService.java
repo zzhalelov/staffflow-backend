@@ -1,4 +1,4 @@
-package kz.zzhalelov.staffflow.server.earning;
+package kz.zzhalelov.staffflow.server.earningType;
 
 import java.util.List;
 

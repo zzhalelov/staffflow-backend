@@ -1,4 +1,4 @@
-package kz.zzhalelov.staffflow.server.earning;
+package kz.zzhalelov.staffflow.server.earningType;
 
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;

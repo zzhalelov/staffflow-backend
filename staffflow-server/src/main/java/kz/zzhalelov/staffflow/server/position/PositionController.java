@@ -1,5 +1,7 @@
 package kz.zzhalelov.staffflow.server.position;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kz.zzhalelov.staffflow.server.position.dto.PositionCreateDto;
 import kz.zzhalelov.staffflow.server.position.dto.PositionMapper;
 import kz.zzhalelov.staffflow.server.position.dto.PositionResponseDto;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/positions")
+@Tag(name = "Positions", description = "Управление должностями и штатным расписанием")
 public class PositionController {
     private final PositionService positionService;
     private final PositionMapper positionMapper;
@@ -21,6 +24,7 @@ public class PositionController {
     //POST /api/positions
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Добавить позицию штатного расписания")
     public PositionResponseDto create(@RequestBody PositionCreateDto dto) {
         Position position = positionMapper.fromCreate(dto);
         Position saved = positionService.createPosition(position);
@@ -31,6 +35,7 @@ public class PositionController {
     //GET /positions
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Вывести все должности")
     public List<PositionResponseDto> findAll() {
         return positionService.findAll()
                 .stream()
@@ -41,6 +46,7 @@ public class PositionController {
     //GET /positions/{id}
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Поиск должности по Id")
     public PositionResponseDto findById(@PathVariable long id) {
         return positionMapper.toResponse(positionService.findById(id));
     }
@@ -48,6 +54,7 @@ public class PositionController {
     //PATCH /api/positions/{positionId}
     @PatchMapping("/{positionId}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Обновить сведения о позиции штатного расписания")
     public PositionResponseDto update(@PathVariable long positionId,
                                       @RequestBody PositionUpdateDto positionUpdateDto) {
         Position position = positionMapper.fromUpdate(positionUpdateDto);
@@ -57,6 +64,7 @@ public class PositionController {
     //DELETE /api/positions/{positionId}
     @DeleteMapping("/{positionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Удалить позицию штатного расписания")
     public void delete(@PathVariable long positionId) {
         positionService.delete(positionId);
     }
