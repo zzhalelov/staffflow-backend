@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.department;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +9,12 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "departments")
+@Schema(description = "Информация о департаменте")
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Идентификатор подразделения", example = "12")
     private Long id;
+    @Schema(description = "Наименование подразделения", example = "Administration")
     private String name;
 }

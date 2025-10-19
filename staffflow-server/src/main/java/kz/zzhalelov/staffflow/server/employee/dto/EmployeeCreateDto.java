@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.employee.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -10,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Schema(description = "Создание сотрудника")
 public class EmployeeCreateDto {
     @NotBlank(message = "First name is required")
     String firstName;
