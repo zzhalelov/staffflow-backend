@@ -2,6 +2,7 @@ package kz.zzhalelov.staffflow.server.payroll;
 
 import jakarta.persistence.*;
 import kz.zzhalelov.staffflow.server.organization.Organization;
+import kz.zzhalelov.staffflow.server.organization.dto.OrganizationShortResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,10 +23,14 @@ public class Payroll {
     @ManyToOne
     @JoinColumn(name = "organization_id")
     private Organization organization;
+
     @Enumerated(EnumType.STRING)
     private Month month;
+
     private int year;
+
     private LocalDate createdAt;
+
     @OneToMany(mappedBy = "payroll", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PayrollEntry> entries = new ArrayList<>();
 }

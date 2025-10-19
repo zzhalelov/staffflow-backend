@@ -1,6 +1,7 @@
 package kz.zzhalelov.staffflow.server.payroll.dto;
 
 import kz.zzhalelov.staffflow.server.organization.dto.OrganizationResponseDto;
+import kz.zzhalelov.staffflow.server.organization.dto.OrganizationShortResponseDto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -13,7 +14,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PayrollResponseDto {
     Long id;
-    OrganizationResponseDto organization;
+    OrganizationShortResponseDto organization;
     Month month;
     int year;
     LocalDate createdAt;
