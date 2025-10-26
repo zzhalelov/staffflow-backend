@@ -84,6 +84,34 @@ public class PayrollServiceImpl implements PayrollService {
                     .multiply(BigDecimal.valueOf(workedDays));
             detail.setGrossSum(grossSum);
             entry.getDetails().add(detail);
+
+            BigDecimal opv = grossSum
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN)
+                    .multiply(BigDecimal.valueOf(10));
+            detail.setOpv(opv);
+            entry.getDetails().add(detail);
+
+            BigDecimal vosms = grossSum
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN)
+                    .multiply(BigDecimal.valueOf(2));
+            detail.setVosms(vosms);
+            entry.getDetails().add(detail);
+
+            BigDecimal ipn = grossSum
+                    .subtract(opv)
+                    .subtract(vosms)
+                    .subtract(BigDecimal.valueOf(55048))
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN)
+                    .multiply(BigDecimal.valueOf(10));
+            detail.setIpn(ipn);
+            entry.getDetails().add(detail);
+
+            BigDecimal netSum = grossSum
+                    .subtract(opv)
+                    .subtract(vosms)
+                    .subtract(ipn);
+            detail.setNetSum(netSum);
+            entry.getDetails().add(detail);
         }
         entry.setPayroll(payroll);
         payroll.getEntries().add(entry);

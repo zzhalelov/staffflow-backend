@@ -30,4 +30,8 @@ public class PayrollDetail {
     private Long workedDays;
     private Long plannedDays;
     private BigDecimal grossSum;
+    BigDecimal opv;
+    BigDecimal vosms;
+    BigDecimal ipn;
+    BigDecimal netSum;
 }

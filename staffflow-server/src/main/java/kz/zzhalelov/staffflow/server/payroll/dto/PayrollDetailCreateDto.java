@@ -19,4 +19,8 @@ public class PayrollDetailCreateDto {
     Long workedDays;
     Long plannedDays;
     BigDecimal grossSum;
+    BigDecimal opv;
+    BigDecimal vosms;
+    BigDecimal ipn;
+    BigDecimal netSum;
 }

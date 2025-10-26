@@ -89,6 +89,14 @@ public class PayrollMapper {
             typeDto.setDescription(type.getDescription());
             dto.setEarningType(typeDto);
         }
+
+        dto.setWorkedDays(detail.getWorkedDays());
+        dto.setPlannedDays(detail.getPlannedDays());
+        dto.setGrossSum(detail.getGrossSum());
+        dto.setOpv(detail.getOpv());
+        dto.setVosms(detail.getVosms());
+        dto.setIpn(detail.getIpn());
+        dto.setNetSum(detail.getNetSum());
         return dto;
     }
 }
