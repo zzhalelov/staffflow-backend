@@ -91,9 +91,14 @@ public class PayrollServiceImpl implements PayrollService {
             detail.setOpv(opv);
             entry.getDetails().add(detail);
 
-            BigDecimal vosms = grossSum
-                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN)
-                    .multiply(BigDecimal.valueOf(2));
+            BigDecimal vosms;
+            if (grossSum.compareTo(BigDecimal.valueOf(850000)) < 0) {
+                vosms = grossSum
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN)
+                        .multiply(BigDecimal.valueOf(2));
+            } else {
+                vosms = BigDecimal.valueOf(17000);
+            }
             detail.setVosms(vosms);
             entry.getDetails().add(detail);
 
@@ -122,6 +127,12 @@ public class PayrollServiceImpl implements PayrollService {
     @Override
     public List<Payroll> findAll() {
         return payrollRepository.findAll();
+    }
+
+    @Override
+    public Payroll findById(Long payrollId) {
+        return payrollRepository.findById(payrollId)
+                .orElseThrow(() -> new NotFoundException("Payroll Not Found"));
     }
 
     @Override

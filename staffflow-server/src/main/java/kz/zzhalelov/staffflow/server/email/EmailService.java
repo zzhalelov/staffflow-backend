@@ -3,6 +3,7 @@ package kz.zzhalelov.staffflow.server.email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,25 @@ public class EmailService {
             mailSender.send(message);
         } catch (MessagingException ex) {
             throw new RuntimeException(ex.getMessage());
+        }
+    }
+
+    /**
+     * Отправка Excel-файла (как вложения)
+     */
+    public void sendPayslipExcel(String to, String subject, String bodyText, byte[] excelBytes) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(bodyText, false);
+
+            helper.addAttachment("payslip.xlsx", new ByteArrayResource(excelBytes));
+            mailSender.send(message);
+        } catch (MessagingException ex) {
+            throw new RuntimeException("Ошибка при отправке письма с Excel: " + ex.getMessage());
         }
     }
 }

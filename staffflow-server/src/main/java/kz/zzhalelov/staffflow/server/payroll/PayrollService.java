@@ -13,4 +13,6 @@ public interface PayrollService {
     List<Payroll> findAll();
 
     void delete(Long payrollId);
+
+    Payroll findById(Long payrollId);
 }
