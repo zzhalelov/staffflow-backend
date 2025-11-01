@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/payrolls/excel")
+@RequestMapping("/api/payrolls")
 public class PayrollExcelController {
     private final PayrollExcelService excelService;
     private final PayrollService payrollService;
@@ -19,7 +19,7 @@ public class PayrollExcelController {
         this.emailService = emailService;
     }
 
-    @GetMapping("/{payrollId}")
+    @GetMapping("/{payrollId}/downloadExcel")
     public ResponseEntity<byte[]> downloadPayrollExcel(@PathVariable Long payrollId) throws Exception {
         Payroll payroll = payrollService.findById(payrollId);
         byte[] excelData = excelService.generatePayslipSheet(payroll);
@@ -28,8 +28,8 @@ public class PayrollExcelController {
                 .body(excelData);
     }
 
-    @PostMapping("/send/{payrollId}")
-    public ResponseEntity<String> sendPayrollExcel(@PathVariable Long payrollId,
+    @PostMapping("/{payrollId}/sendExcel")
+    public ResponseEntity<String> sendPayslipExcel(@PathVariable Long payrollId,
                                                    @RequestParam String email) throws Exception {
         Payroll payroll = payrollService.findById(payrollId);
         byte[] excelData = excelService.generatePayslipSheet(payroll);

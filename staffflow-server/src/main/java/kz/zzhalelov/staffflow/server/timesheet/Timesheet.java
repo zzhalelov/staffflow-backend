@@ -19,7 +19,7 @@ import java.util.List;
 public class Timesheet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(description = "Индентификатор табеля")
+    @Schema(description = "Индентификатор табеля", example = "1")
     private Long id;
 
     @ManyToOne
