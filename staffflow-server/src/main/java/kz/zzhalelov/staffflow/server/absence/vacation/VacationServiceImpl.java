@@ -39,6 +39,21 @@ public class VacationServiceImpl implements VacationService {
 
     @Override
     public Vacation findById(long id) {
+        return vacationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Vacation not found"));
+    }
+
+    @Override
+    public void delete(long id) {
+        if (vacationRepository.existsById(id)) {
+            vacationRepository.deleteById(id);
+        } else {
+            throw new NotFoundException("Vacation not found");
+        }
+    }
+
+    @Override
+    public Vacation update(long id, Vacation vacation) {
         return null;
     }
 }

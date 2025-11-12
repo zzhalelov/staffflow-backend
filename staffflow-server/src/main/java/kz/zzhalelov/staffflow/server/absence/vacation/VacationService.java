@@ -10,4 +10,8 @@ public interface VacationService {
     List<Vacation> findAll();
 
     Vacation findById(long id);
+
+    void delete(long id);
+
+    Vacation update(long id, Vacation vacation);
 }
