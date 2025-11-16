@@ -24,10 +24,13 @@ public class VacationController {
     public VacationResponseDto create(@RequestBody VacationCreateDto dto,
                                       @PathVariable Long employeeId,
                                       @RequestParam Month month,
+                                      @RequestParam Integer year,
                                       @RequestParam LocalDate startDate,
-                                      @RequestParam LocalDate endDate) {
+                                      @RequestParam LocalDate endDate,
+                                      @RequestParam VacationType vacationType) {
         Vacation vacation = vacationMapper.fromCreate(dto);
-        return vacationMapper.toResponse(vacationService.create(vacation, employeeId, month, startDate, endDate));
+        return vacationMapper
+                .toResponse(vacationService.create(vacation, employeeId, month, year, startDate, endDate, vacationType));
     }
 
     @GetMapping

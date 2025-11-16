@@ -20,13 +20,20 @@ public class VacationServiceImpl implements VacationService {
     private final EmployeeRepository employeeRepository;
 
     @Override
-    public Vacation create(Vacation vacation, long employeeId, Month month, LocalDate startDate, LocalDate endDate) {
+    public Vacation create(Vacation vacation,
+                           long employeeId,
+                           Month month,
+                           int year,
+                           LocalDate startDate,
+                           LocalDate endDate,
+                           VacationType vacationType) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee not found"));
         vacation.setEmployee(employee);
         vacation.setStartDate(startDate);
         vacation.setEndDate(endDate);
         vacation.setMonth(month);
+        vacation.setYear(year);
         vacation.setStatus(AbsenceStatus.NOT_APPROVED);
         vacation.setDescription(vacation.getDescription());
         return vacationRepository.save(vacation);
@@ -53,7 +60,37 @@ public class VacationServiceImpl implements VacationService {
     }
 
     @Override
-    public Vacation update(long id, Vacation vacation) {
+    public Vacation update(long vacationId, Vacation updatedVacation) {
+        Vacation existingVacation = vacationRepository.findById(vacationId)
+                .orElseThrow(() -> new NotFoundException("Vacation not found"));
+        merge(existingVacation, updatedVacation);
         return null;
+    }
+
+    private void merge(Vacation existingVacation, Vacation updatedVacation) {
+        if (updatedVacation.getEmployee() != null) {
+            existingVacation.setEmployee(updatedVacation.getEmployee());
+        }
+        if (updatedVacation.getMonth() != null) {
+            existingVacation.setMonth(updatedVacation.getMonth());
+        }
+        if (updatedVacation.getYear() != null) {
+            existingVacation.setYear(updatedVacation.getYear());
+        }
+        if (updatedVacation.getStartDate() != null) {
+            existingVacation.setStartDate(updatedVacation.getStartDate());
+        }
+        if (updatedVacation.getEndDate() != null) {
+            existingVacation.setEndDate(updatedVacation.getEndDate());
+        }
+        if (updatedVacation.getStatus() != null) {
+            existingVacation.setStatus(updatedVacation.getStatus());
+        }
+        if (updatedVacation.getVacationType() != null) {
+            existingVacation.setVacationType(updatedVacation.getVacationType());
+        }
+        if (updatedVacation.getDescription() != null) {
+            existingVacation.setDescription(updatedVacation.getDescription());
+        }
     }
 }

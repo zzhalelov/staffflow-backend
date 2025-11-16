@@ -9,9 +9,24 @@ public class VacationMapper {
         Vacation vacation = new Vacation();
         vacation.setEmployee(dto.getEmployee());
         vacation.setMonth(dto.getMonth());
+        vacation.setYear(dto.getYear());
         vacation.setStartDate(dto.getStartDate());
         vacation.setEndDate(dto.getEndDate());
         vacation.setStatus(dto.getStatus());
+        vacation.setVacationType(dto.getVacationType());
+        vacation.setDescription(dto.getDescription());
+        return vacation;
+    }
+
+    public Vacation fromUpdate(VacationUpdateDto dto) {
+        Vacation vacation = new Vacation();
+        vacation.setEmployee(dto.getEmployee());
+        vacation.setMonth(dto.getMonth());
+        vacation.setYear(dto.getYear());
+        vacation.setStartDate(dto.getStartDate());
+        vacation.setEndDate(dto.getEndDate());
+        vacation.setStatus(dto.getStatus());
+        vacation.setVacationType(dto.getVacationType());
         vacation.setDescription(dto.getDescription());
         return vacation;
     }
@@ -21,9 +36,11 @@ public class VacationMapper {
         dto.setId(vacation.getId());
         dto.setEmployee(vacation.getEmployee());
         dto.setMonth(vacation.getMonth());
+        dto.setYear(vacation.getYear());
         dto.setStartDate(vacation.getStartDate());
         dto.setEndDate(vacation.getEndDate());
         dto.setStatus(vacation.getStatus());
+        dto.setVacationType(vacation.getVacationType());
         dto.setDescription(vacation.getDescription());
         return dto;
     }

@@ -5,7 +5,7 @@ import java.time.Month;
 import java.util.List;
 
 public interface VacationService {
-    Vacation create(Vacation vacation, long employeeId, Month month, LocalDate startDate, LocalDate endDate);
+    Vacation create(Vacation vacation, long employeeId, Month month, int year, LocalDate startDate, LocalDate endDate, VacationType vacationType);
 
     List<Vacation> findAll();
 

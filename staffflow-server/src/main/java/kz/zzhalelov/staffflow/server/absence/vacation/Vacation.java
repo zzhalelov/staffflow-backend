@@ -27,7 +27,11 @@ public class Vacation extends Absence {
     @Enumerated(EnumType.STRING)
     private AbsenceStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private VacationType vacationType;
+
     private Month month;
+    private Integer year;
     private LocalDate startDate;
     private LocalDate endDate;
     private String description;

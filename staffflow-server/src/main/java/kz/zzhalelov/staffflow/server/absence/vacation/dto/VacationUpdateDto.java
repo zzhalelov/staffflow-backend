@@ -3,7 +3,6 @@ package kz.zzhalelov.staffflow.server.absence.vacation.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import kz.zzhalelov.staffflow.server.absence.AbsenceStatus;
-import kz.zzhalelov.staffflow.server.absence.vacation.Vacation;
 import kz.zzhalelov.staffflow.server.absence.vacation.VacationType;
 import kz.zzhalelov.staffflow.server.employee.Employee;
 import lombok.AccessLevel;
@@ -14,12 +13,9 @@ import org.hibernate.validator.constraints.Length;
 import java.time.LocalDate;
 import java.time.Month;
 
-/**
- * DTO for {@link Vacation}
- */
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class VacationCreateDto {
+public class VacationUpdateDto {
     @NotNull(message = "Employee is required")
     Employee employee;
     @NotNull(message = "Status is required")

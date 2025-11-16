@@ -2,6 +2,7 @@ package kz.zzhalelov.staffflow.server.absence.vacation.dto;
 
 import kz.zzhalelov.staffflow.server.absence.AbsenceStatus;
 import kz.zzhalelov.staffflow.server.absence.vacation.Vacation;
+import kz.zzhalelov.staffflow.server.absence.vacation.VacationType;
 import kz.zzhalelov.staffflow.server.employee.Employee;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -19,7 +20,9 @@ public class VacationResponseDto {
     Long id;
     Employee employee;
     AbsenceStatus status;
+    VacationType vacationType;
     Month month;
+    int year;
     LocalDate startDate;
     LocalDate endDate;
     String description;
