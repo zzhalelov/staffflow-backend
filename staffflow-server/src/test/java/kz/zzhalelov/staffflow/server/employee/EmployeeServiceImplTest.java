@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.employee;
 
+import kz.zzhalelov.staffflow.server.exception.BadRequestException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,6 +72,34 @@ class EmployeeServiceImplTest {
 
         assertThrows(IllegalArgumentException.class, () ->
                 employeeService.create(newEmployee));
+    }
+
+    @Test
+    void create_shouldThrow_whenIinIsNull() {
+        Employee employee = new Employee();
+        employee.setIin(null);
+
+        Mockito
+                .when(employeeRepository.findByIin(null))
+                .thenReturn(Optional.empty());
+
+        BadRequestException exception = assertThrows(BadRequestException.class,
+                () -> employeeService.create(employee));
+        assertEquals("ИИН должен быть заполнен", exception.getMessage());
+    }
+
+    @Test
+    void create_shouldThrow_whenIinLengthNot12() {
+        Employee employee = new Employee();
+        employee.setIin("12345");
+
+        Mockito
+                .when(employeeRepository.findByIin("12345"))
+                .thenReturn(Optional.empty());
+
+        BadRequestException exception = assertThrows(BadRequestException.class,
+                () -> employeeService.create(employee));
+        assertEquals("Длина ИИН должна быть 12 символов", exception.getMessage());
     }
 
     @Test
@@ -232,5 +261,17 @@ class EmployeeServiceImplTest {
                 .thenReturn(false);
         assertThrows(NotFoundException.class, () -> employeeService.delete(1L));
         Mockito.verify(employeeRepository, Mockito.never()).deleteById(1L);
+    }
+
+    @Test
+    void delete_shouldDelete_whenEmployeeExists() {
+        long employeeId = 1L;
+
+        Mockito
+                .when(employeeRepository.existsById(employeeId))
+                .thenReturn(true);
+
+        assertDoesNotThrow(() -> employeeService.delete(employeeId));
+        Mockito.verify(employeeRepository).deleteById(employeeId);
     }
 }
