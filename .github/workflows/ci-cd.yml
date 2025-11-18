@@ -20,12 +20,37 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
+      # -------- TESTS --------
       - name: Run Tests (JUnit/Mockito)
         run: mvn -B test
 
+      # Save test results (useful if tests fail)
+      - name: Upload Surefire reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: staffflow-server/target/surefire-reports
+
+      # Save Jacoco reports
+      - name: Upload Jacoco report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: staffflow-server/target/site/jacoco
+
+      # -------- CODECOV --------
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      # -------- BUILD --------
       - name: Build all modules (Maven)
         run: mvn -B -DskipTests package
 
+      # -------- DOCKER --------
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
