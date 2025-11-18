@@ -20,6 +20,9 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
+      - name: Run Tests (JUnit/Mockito)
+        run: mvn -B test
+
       - name: Build all modules (Maven)
         run: mvn -B -DskipTests package
 
