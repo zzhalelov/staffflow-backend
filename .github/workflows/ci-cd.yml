@@ -20,30 +20,16 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
-      # -------- TESTS --------
-      - name: Run Tests (JUnit/Mockito)
-        run: mvn -B test
+      # Прогон тестов с Jacoco
+      - name: Run Tests & Generate Jacoco report
+        run: mvn clean test jacoco:report
 
-      # Save test results (useful if tests fail)
-      - name: Upload Surefire reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: surefire-reports
-          path: staffflow-server/target/surefire-reports
-
-      # Save Jacoco reports
-      - name: Upload Jacoco report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-report
-          path: staffflow-server/target/site/jacoco
-
-      # -------- CODECOV --------
+      # Загружаем coverage в Codecov
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
+          files: ./staffflow-server/target/site/jacoco/jacoco.xml
+          fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
       # -------- BUILD --------
