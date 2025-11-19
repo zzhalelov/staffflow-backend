@@ -1,6 +1,6 @@
 [![Java](https://img.shields.io/badge/Java-21-%23ED8B00.svg?style=flat&logo=openjdk&logoColor=white)]()
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-success?logo=springboot)]()
-[![CI](https://github.com/zzhalelov/staffflow-backend/actions/workflows/ci.yml/badge.svg)]()
+[![CI](https://github.com/zzhalelov/staffflow-backend/actions/workflows/ci-cd.yml/badge.svg)]()
 [![codecov](https://codecov.io/gh/zzhalelov/staffflow-backend/graph/badge.svg?token=EJWHMEHWI2)](https://codecov.io/gh/zzhalelov/staffflow-backend)
 
 # 🧾 StaffFlow Server — Technical Specification
