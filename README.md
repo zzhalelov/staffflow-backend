@@ -1,7 +1,6 @@
+[![codecov](https://codecov.io/gh/zzhalelov/staffflow-backend/graph/badge.svg?token=EJWHMEHWI2)](https://codecov.io/gh/zzhalelov/staffflow-backend)
+
 # 🧾 StaffFlow Server — Technical Specification
-
-[![Coverage](https://codecov.io/gh/zzhalelov/staffflow-backend/branch/main/graph/badge.svg)](https://codecov.io/gh/zzhalelov/staffflow-backend)
-
 
 ## 📘 Overview
 **StaffFlow Server** — это серверная часть корпоративной системы учёта сотрудников, организаций, табелей рабочего времени и начислений заработной платы.  
