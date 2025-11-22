@@ -159,7 +159,56 @@ class OrganizationServiceImplTest {
     }
 
     @Test
-    void update() {
+    void update_shouldSaveOrganization() {
+        Organization organization = new Organization();
+        organization.setId(1L);
+        organization.setShortName("Test");
+        organization.setFullName("Test Inc.");
+        organization.setAddress("Beverly Hills");
+        organization.setIsBranch(false);
+        organization.setHasBranches(false);
+        organization.setIdNumber("123456789012");
+        organization.setOrganizationType(OrganizationType.LEGAL_PERSON);
+
+        Mockito
+                .when(organizationRepository.findById(1L))
+                .thenReturn(Optional.of(organization));
+
+        Mockito
+                .when(organizationRepository.save(Mockito.any(Organization.class)))
+                .thenReturn(organization);
+
+        Organization savedOrganization = organizationService.update(1L, organization);
+        assertEquals(organization.getId(), savedOrganization.getId());
+        assertEquals(organization.getShortName(), savedOrganization.getShortName());
+        assertEquals(organization.getFullName(), savedOrganization.getFullName());
+        assertEquals(organization.getAddress(), savedOrganization.getAddress());
+        assertEquals(organization.getIsBranch(), savedOrganization.getIsBranch());
+        assertEquals(organization.getHasBranches(), savedOrganization.getHasBranches());
+        assertEquals(organization.getIdNumber(), savedOrganization.getIdNumber());
+        assertEquals(organization.getOrganizationType(), savedOrganization.getOrganizationType());
+    }
+
+    @Test
+    void delete_shouldThrow_whenNotFound() {
+        Organization organization = new Organization();
+        organization.setId(1L);
+        organization.setShortName("Test");
+        organization.setFullName("Test Inc.");
+        organization.setAddress("Beverly Hills");
+        organization.setIsBranch(false);
+        organization.setHasBranches(false);
+        organization.setIdNumber("123456789012");
+        organization.setOrganizationType(OrganizationType.LEGAL_PERSON);
+
+        Mockito
+                .when(organizationRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(
+                NotFoundException.class,
+                () -> organizationService.update(1L, organization));
+        assertEquals("Organization not found", ex.getMessage());
     }
 
     @Test
