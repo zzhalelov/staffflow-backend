@@ -8,6 +8,7 @@ public class EarningTypeHistoryMapper {
     public EarningTypeHistoryResponseDto toResponse(EarningTypeHistory entity) {
         EarningTypeHistoryResponseDto dto = new EarningTypeHistoryResponseDto();
         dto.setId(entity.getId());
+        dto.setEarningType(entity.getEarningType());
         dto.setStartDate(entity.getStartDate());
         dto.setEndDate(entity.getEndDate());
         dto.setIncludeInFot(entity.getIncludeInFot());
