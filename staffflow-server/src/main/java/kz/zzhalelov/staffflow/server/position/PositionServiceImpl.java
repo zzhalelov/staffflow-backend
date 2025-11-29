@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,13 +14,6 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public Position createPosition(Position position) {
         return positionRepository.save(position);
-    }
-
-    @Override
-    public Position addPositionIntoStaffSchedule(Long positionId) {
-        Position position = positionRepository.findById(positionId)
-                .orElseThrow(() -> new NotFoundException("Position not found"));
-        return null;
     }
 
     @Override
@@ -36,10 +28,6 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public Position update(long positionId, Position updatedPosition) {
-        Optional<Position> optionalPosition = positionRepository.findById(positionId);
-        if (optionalPosition.isPresent()) {
-            Position position = optionalPosition.get();
-        }
         Position existingPosition = positionRepository.findById(positionId).orElseThrow();
         merge(existingPosition, updatedPosition);
         return positionRepository.save(existingPosition);

@@ -135,7 +135,8 @@ class EarningTypeServiceImplTest {
         updated.setCode("X100");
         updated.setDescription("New Desc");
 
-        Mockito.when(earningTypeRepository.findById(1L))
+        Mockito
+                .when(earningTypeRepository.findById(1L))
                 .thenReturn(Optional.of(existing));
 
         Mockito.when(earningTypeHistoryRepository
