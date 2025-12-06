@@ -25,7 +25,7 @@ public class LaborContractMapper {
         department.setId(dto.getDepartmentId());
         laborContract.setOrganization(organization);
         laborContract.setEmployee(employee);
-        laborContract.setHireDate(dto.getHireDate().toLocalDate());
+        laborContract.setHireDate(dto.getHireDate());
         laborContract.setDepartment(department);
         laborContract.setPosition(position);
         laborContract.setStatus(LaborContractStatus.NOT_SIGNED);
@@ -45,7 +45,7 @@ public class LaborContractMapper {
         LaborContract laborContract = new LaborContract();
         laborContract.setOrganization(organization);
         laborContract.setEmployee(employee);
-        laborContract.setHireDate(dto.getHireDate().toLocalDate());
+        laborContract.setHireDate(dto.getHireDate());
         laborContract.setDepartment(department);
         laborContract.setPosition(position);
         laborContract.setStatus(dto.getLaborContractStatus());
@@ -57,7 +57,7 @@ public class LaborContractMapper {
         dto.setId(laborContract.getId());
         dto.setOrganizationId(laborContract.getOrganization().getId());
         dto.setEmployeeId(laborContract.getEmployee().getId());
-        dto.setHireDate(laborContract.getHireDate().atStartOfDay());
+        dto.setHireDate(laborContract.getHireDate());
         dto.setDepartmentId(laborContract.getDepartment().getId());
         dto.setPositionId(laborContract.getPosition().getId());
         dto.setLaborContractStatus(laborContract.getStatus());

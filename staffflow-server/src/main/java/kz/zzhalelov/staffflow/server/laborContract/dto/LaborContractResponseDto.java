@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -14,8 +14,8 @@ public class LaborContractResponseDto {
     Long id;
     Long organizationId;
     Long employeeId;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime hireDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    LocalDate hireDate;
     Long departmentId;
     Long positionId;
     LaborContractStatus laborContractStatus;

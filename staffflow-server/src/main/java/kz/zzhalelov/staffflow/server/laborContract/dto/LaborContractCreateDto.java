@@ -8,7 +8,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -17,8 +17,8 @@ public class LaborContractCreateDto {
     Long organizationId;
     @NotNull(message = "Employee Id is required")
     Long employeeId;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime hireDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    LocalDate hireDate;
     @NotNull(message = "Department Id is required")
     Long departmentId;
     @NotNull(message = "Position Id is required")
