@@ -2,6 +2,7 @@ package kz.zzhalelov.staffflow.server.laborContract;
 
 import kz.zzhalelov.staffflow.server.department.Department;
 import kz.zzhalelov.staffflow.server.employee.Employee;
+import kz.zzhalelov.staffflow.server.event.ContractSignedEvent;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import kz.zzhalelov.staffflow.server.organization.Organization;
 import kz.zzhalelov.staffflow.server.position.Position;
@@ -11,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +27,8 @@ class LaborContractServiceImplTest {
     private LaborContractRepository laborContractRepository;
     @Mock
     private LaborContractHistoryRepository historyRepository;
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
     @InjectMocks
     private LaborContractServiceImpl laborContractService;
 
@@ -262,6 +266,28 @@ class LaborContractServiceImplTest {
     }
 
     @Test
-    void merge() {
+    void updateStatus_shouldPublishEvent_whenStatusHiredAndEmployeeNotNull() {
+        LaborContract laborContract = new LaborContract();
+        laborContract.setId(1L);
+
+        Employee employee = new Employee();
+        employee.setEmail("test@gmail.com");
+        employee.setFirstName("John");
+        laborContract.setEmployee(employee);
+
+        Mockito
+                .when(laborContractRepository.findById(1L))
+                .thenReturn(Optional.of(laborContract));
+
+        laborContractService.updateStatus(1L, LaborContractStatus.HIRED);
+
+        Mockito
+                .verify(eventPublisher, Mockito.times(1))
+                .publishEvent(Mockito.argThat(event ->
+                        event instanceof ContractSignedEvent &&
+                                ((ContractSignedEvent) event).getEmail().equals("test@gmail.com") &&
+                                ((ContractSignedEvent) event).getEmployeeName().equals("John") &&
+                                ((ContractSignedEvent) event).getContractId() == 1L
+                ));
     }
 }

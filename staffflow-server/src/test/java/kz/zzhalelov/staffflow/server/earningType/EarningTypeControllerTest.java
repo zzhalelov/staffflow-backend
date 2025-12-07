@@ -268,7 +268,7 @@ class EarningTypeControllerTest {
 
     @Test
     @SneakyThrows
-    void update_shouldReturnUpdatedEarningTyp() {
+    void update_shouldReturnUpdatedEarningType() {
         long earningTypeId = 1L;
 
         EarningTypeUpdateDto dto = new EarningTypeUpdateDto();

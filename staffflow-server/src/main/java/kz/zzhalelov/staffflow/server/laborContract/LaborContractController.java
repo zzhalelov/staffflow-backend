@@ -30,7 +30,6 @@ public class LaborContractController {
     private final PositionRepository positionRepository;
     private final LaborContractService laborContractService;
     private final LaborContractMapper laborContractMapper;
-    private final LaborContractRepository laborContractRepository;
     private final OrganizationRepository organizationRepository;
 
     @PostMapping
@@ -95,6 +94,6 @@ public class LaborContractController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Удалить трудовой договор")
     public void delete(@PathVariable long id) {
-        laborContractRepository.deleteById(id);
+        laborContractService.delete(id);
     }
 }
