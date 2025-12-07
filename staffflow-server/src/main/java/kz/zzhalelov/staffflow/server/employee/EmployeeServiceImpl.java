@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,10 +43,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee update(long employeeId, Employee updatedEmployee) {
-        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
-        if (optionalEmployee.isPresent()) {
-            Employee employee = optionalEmployee.get();
-        }
         Employee existingEmployee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee not found"));
         merge(existingEmployee, updatedEmployee);
@@ -79,9 +74,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         if (updatedEmployee.getIin() != null && !updatedEmployee.getIin().isBlank()) {
             existingEmployee.setIin(updatedEmployee.getIin());
-        }
-        if (updatedEmployee.getEmail() != null && !updatedEmployee.getEmail().isBlank()) {
-            existingEmployee.setEmail(updatedEmployee.getEmail());
         }
         if (updatedEmployee.getPhone() != null && !updatedEmployee.getPhone().isBlank()) {
             existingEmployee.setPhone(updatedEmployee.getPhone());
