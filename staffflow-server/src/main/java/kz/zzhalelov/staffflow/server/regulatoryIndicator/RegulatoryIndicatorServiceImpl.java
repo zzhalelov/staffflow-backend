@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,10 +38,6 @@ public class RegulatoryIndicatorServiceImpl implements RegulatoryIndicatorServic
 
     @Override
     public RegulatoryIndicator update(Long indicatorId, RegulatoryIndicator updatedIndicator) {
-        Optional<RegulatoryIndicator> optional = repository.findById(indicatorId);
-        if (optional.isPresent()) {
-            RegulatoryIndicator indicator = optional.get();
-        }
         RegulatoryIndicator existingIndicator = repository.findById(indicatorId)
                 .orElseThrow(() -> new NotFoundException("Regulatory Indicator Not Found"));
         merge(existingIndicator, updatedIndicator);
