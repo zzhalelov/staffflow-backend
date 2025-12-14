@@ -334,9 +334,11 @@ class EmployeeServiceImplTest {
         updated.setPhone(" ");
         updated.setIin(" ");
 
-        Mockito.when(employeeRepository.findById(employeeId))
+        Mockito
+                .when(employeeRepository.findById(employeeId))
                 .thenReturn(Optional.of(existing));
-        Mockito.when(employeeRepository.save(Mockito.any()))
+        Mockito
+                .when(employeeRepository.save(Mockito.any()))
                 .thenAnswer(i -> i.getArgument(0));
 
         Employee result = employeeService.update(employeeId, updated);

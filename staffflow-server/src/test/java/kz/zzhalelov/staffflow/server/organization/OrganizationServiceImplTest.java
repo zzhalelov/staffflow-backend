@@ -153,9 +153,12 @@ class OrganizationServiceImplTest {
                 .when(organizationRepository.findById(1L))
                 .thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> organizationService.findById(1L));
+        assertThrows(
+                NotFoundException.class,
+                () -> organizationService.findById(1L));
         Mockito
-                .verify(organizationRepository).findById(1L);
+                .verify(organizationRepository)
+                .findById(1L);
     }
 
     @Test
@@ -187,6 +190,77 @@ class OrganizationServiceImplTest {
         assertEquals(organization.getHasBranches(), savedOrganization.getHasBranches());
         assertEquals(organization.getIdNumber(), savedOrganization.getIdNumber());
         assertEquals(organization.getOrganizationType(), savedOrganization.getOrganizationType());
+    }
+
+    @Test
+    void update_shouldOnlyUpdateNonNullFields() {
+        long orgId = 1L;
+
+        Organization existing = new Organization();
+        existing.setId(orgId);
+        existing.setAddress("Beverly Hills");
+        existing.setFullName("Umbrella Corporation");
+        existing.setShortName("Umbrella Corp");
+        existing.setHasBranches(false);
+        existing.setIsBranch(false);
+        existing.setIdNumber("123456789012");
+        existing.setOrganizationType(OrganizationType.LEGAL_PERSON);
+
+        //Nothing changed. All fields are null
+        Organization updated = new Organization();
+
+        Mockito
+                .when(organizationRepository.findById(orgId))
+                .thenReturn(Optional.of(existing));
+
+        Mockito
+                .when(organizationRepository.save(Mockito.any()))
+                .thenAnswer(i -> i.getArgument(0));
+
+        Organization result = organizationService.update(orgId, updated);
+        assertEquals("Beverly Hills", result.getAddress());
+        assertEquals("Umbrella Corporation", result.getFullName());
+        assertEquals("Umbrella Corp", result.getShortName());
+        assertEquals(false, result.getHasBranches());
+        assertEquals(false, result.getIsBranch());
+        assertEquals("123456789012", result.getIdNumber());
+        assertEquals(OrganizationType.LEGAL_PERSON, result.getOrganizationType());
+    }
+
+    @Test
+    void update_shouldNotUpdateBlankFields() {
+        long orgId = 1L;
+
+        Organization existing = new Organization();
+        existing.setId(orgId);
+        existing.setAddress("Beverly Hills");
+        existing.setFullName("Umbrella Corporation");
+        existing.setShortName("Umbrella Corp");
+        existing.setHasBranches(false);
+        existing.setIsBranch(false);
+        existing.setIdNumber("123456789012");
+        existing.setOrganizationType(OrganizationType.LEGAL_PERSON);
+
+        Organization updated = new Organization();
+        updated.setIdNumber("");
+        updated.setShortName("");
+        updated.setFullName("");
+        updated.setAddress("");
+
+        Mockito
+                .when(organizationRepository.findById(orgId))
+                .thenReturn(Optional.of(existing));
+
+        Mockito
+                .when(organizationRepository.save(Mockito.any()))
+                .thenAnswer(i -> i.getArgument(0));
+
+        Organization result = organizationService.update(orgId, updated);
+
+        assertEquals("Beverly Hills", result.getAddress());
+        assertEquals("Umbrella Corporation", result.getFullName());
+        assertEquals("Umbrella Corp", result.getShortName());
+        assertEquals("123456789012", result.getIdNumber());
     }
 
     @Test

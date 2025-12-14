@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,10 +35,6 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public Organization update(long organizationId, Organization updatedOrganization) {
-        Optional<Organization> optionalOrganization = organizationRepository.findById(organizationId);
-        if (optionalOrganization.isPresent()) {
-            Organization organization = optionalOrganization.get();
-        }
         Organization existingOrganization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new NotFoundException("Organization not found"));
         merge(existingOrganization, updatedOrganization);
@@ -63,7 +58,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (updatedOrganization.getIdNumber() != null && !updatedOrganization.getIdNumber().isBlank()) {
             existingOrganization.setIdNumber(updatedOrganization.getIdNumber());
         }
-        if (updatedOrganization.getOrganizationType() != null && !updatedOrganization.getOrganizationType().toString().isBlank()) {
+        if (updatedOrganization.getOrganizationType() != null) {
             existingOrganization.setOrganizationType(updatedOrganization.getOrganizationType());
         }
         if (updatedOrganization.getFullName() != null && !updatedOrganization.getFullName().isBlank()) {
@@ -72,10 +67,10 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (updatedOrganization.getShortName() != null && !updatedOrganization.getShortName().isBlank()) {
             existingOrganization.setShortName(updatedOrganization.getShortName());
         }
-        if (updatedOrganization.getHasBranches() != null && !updatedOrganization.getHasBranches().toString().isBlank()) {
+        if (updatedOrganization.getHasBranches() != null) {
             existingOrganization.setHasBranches(updatedOrganization.getHasBranches());
         }
-        if (updatedOrganization.getIsBranch() != null && !updatedOrganization.getIsBranch().toString().isBlank()) {
+        if (updatedOrganization.getIsBranch() != null) {
             existingOrganization.setIsBranch(updatedOrganization.getIsBranch());
         }
         if (updatedOrganization.getAddress() != null && !updatedOrganization.getAddress().isBlank()) {

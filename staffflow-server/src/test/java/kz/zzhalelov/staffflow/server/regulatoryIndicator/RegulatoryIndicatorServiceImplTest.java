@@ -171,4 +171,60 @@ class RegulatoryIndicatorServiceImplTest {
                 .verify(indicatorRepository)
                 .findById(indicatorId);
     }
+
+    @Test
+    void update_shouldOnlyUpdateNonNullFields() {
+        long indicatorId = 1L;
+
+        RegulatoryIndicator existing = new RegulatoryIndicator();
+        existing.setId(indicatorId);
+        existing.setDescription("test");
+        existing.setMzpValue(BigDecimal.valueOf(85000));
+        existing.setMrpValue(BigDecimal.valueOf(3932));
+        existing.setDate(LocalDate.of(2025, 1, 1));
+
+        //Nothing changed. All fields are null
+        RegulatoryIndicator updated = new RegulatoryIndicator();
+
+        Mockito
+                .when(indicatorRepository.findById(indicatorId))
+                .thenReturn(Optional.of(existing));
+
+        Mockito
+                .when(indicatorRepository.save(Mockito.any()))
+                .thenAnswer(i -> i.getArgument(0));
+
+        RegulatoryIndicator result = indicatorService.update(indicatorId, updated);
+        assertEquals("test", result.getDescription());
+        assertEquals(BigDecimal.valueOf(3932), result.getMrpValue());
+        assertEquals(BigDecimal.valueOf(85000), result.getMzpValue());
+        assertEquals(LocalDate.of(2025, 1, 1), result.getDate());
+    }
+
+    @Test
+    void update_shouldNotUpdateBlankFields() {
+        long indicatorId = 1L;
+
+        RegulatoryIndicator existing = new RegulatoryIndicator();
+        existing.setId(indicatorId);
+        existing.setDescription("test");
+        existing.setMzpValue(BigDecimal.valueOf(85000));
+        existing.setMrpValue(BigDecimal.valueOf(3932));
+        existing.setDate(LocalDate.of(2025, 1, 1));
+
+        RegulatoryIndicator updated = new RegulatoryIndicator();
+        updated.setDescription("");
+
+        Mockito
+                .when(indicatorRepository.findById(indicatorId))
+                .thenReturn(Optional.of(existing));
+
+        Mockito
+                .when(indicatorRepository.save(Mockito.any()))
+                .thenAnswer(i -> i.getArgument(0));
+
+        RegulatoryIndicator result = indicatorService.update(indicatorId, updated);
+
+        assertEquals("test", result.getDescription());
+    }
 }

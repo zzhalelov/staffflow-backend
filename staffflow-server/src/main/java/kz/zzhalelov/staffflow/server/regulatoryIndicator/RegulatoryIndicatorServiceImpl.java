@@ -54,7 +54,7 @@ public class RegulatoryIndicatorServiceImpl implements RegulatoryIndicatorServic
         if (updatedIndicator.getMzpValue() != null) {
             existingIndicator.setMzpValue(updatedIndicator.getMzpValue());
         }
-        if (updatedIndicator.getDescription() != null) {
+        if (updatedIndicator.getDescription() != null  && !updatedIndicator.getDescription().isBlank()) {
             existingIndicator.setDescription(updatedIndicator.getDescription());
         }
     }

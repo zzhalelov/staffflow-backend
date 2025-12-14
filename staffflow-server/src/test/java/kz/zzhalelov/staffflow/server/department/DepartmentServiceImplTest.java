@@ -75,6 +75,21 @@ class DepartmentServiceImplTest {
     }
 
     @Test
+    void findById_shouldThrow_whenDepartmentNotFound() {
+        Mockito
+                .when(departmentRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                NotFoundException.class,
+                () -> departmentService.findById(1L)
+        );
+        Mockito
+                .verify(departmentRepository)
+                .findById(1L);
+    }
+
+    @Test
     void update_shouldSaveDepartment() {
         Department department = new Department();
         department.setId(1L);

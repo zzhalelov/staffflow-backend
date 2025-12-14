@@ -124,4 +124,49 @@ class PositionServiceImplTest {
                 .verify(positionRepository, Mockito.never())
                 .deleteById(Mockito.anyLong());
     }
+
+    @Test
+    void update_shouldOnlyUpdateNonNullFields() {
+        long positionId = 1L;
+
+        Position existing = new Position();
+        existing.setName("Test");
+
+        //Nothing changed. All fields are null
+        Position updated = new Position();
+
+        Mockito
+                .when(positionRepository.findById(positionId))
+                .thenReturn(Optional.of(existing));
+
+        Mockito
+                .when(positionRepository.save(Mockito.any()))
+                .thenAnswer(i -> i.getArgument(0));
+
+        Position result = positionService.update(positionId, updated);
+
+        assertEquals("Test", result.getName());
+    }
+
+    @Test
+    void update_shouldNotUpdateBlankFields() {
+        long positionId = 1L;
+
+        Position existing = new Position();
+        existing.setName("Test");
+
+        Position updated = new Position();
+        updated.setName("");
+
+        Mockito
+                .when(positionRepository.findById(positionId))
+                .thenReturn(Optional.of(existing));
+        Mockito
+                .when(positionRepository.save(Mockito.any()))
+                .thenAnswer(i -> i.getArgument(0));
+
+        Position result = positionService.update(positionId, updated);
+
+        assertEquals("Test", result.getName());
+    }
 }
