@@ -30,7 +30,7 @@ jobs:
         with:
           files: ./staffflow-server/target/site/jacoco/jacoco.xml
           fail_ci_if_error: true
-          #token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       # -------- BUILD --------
       - name: Build all modules (Maven)
