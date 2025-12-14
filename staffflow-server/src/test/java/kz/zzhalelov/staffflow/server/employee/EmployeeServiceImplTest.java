@@ -83,9 +83,27 @@ class EmployeeServiceImplTest {
                 .when(employeeRepository.findByIin(null))
                 .thenReturn(Optional.empty());
 
-        BadRequestException exception = assertThrows(BadRequestException.class,
-                () -> employeeService.create(employee));
+        BadRequestException exception = assertThrows(
+                BadRequestException.class,
+                () -> employeeService.create(employee)
+        );
         assertEquals("ИИН должен быть заполнен", exception.getMessage());
+    }
+
+    @Test
+    void create_shouldThrow_whenIinIsBlank() {
+        Employee employee = new Employee();
+        employee.setIin("");
+
+        Mockito
+                .when(employeeRepository.findByIin(""))
+                .thenReturn(Optional.empty());
+
+        BadRequestException ex = assertThrows(
+                BadRequestException.class,
+                () -> employeeService.create(employee)
+        );
+        assertEquals("ИИН должен быть заполнен", ex.getMessage());
     }
 
     @Test
@@ -186,6 +204,37 @@ class EmployeeServiceImplTest {
     }
 
     @Test
+    void findById_shouldThrow_whenEmployeeNotFound() {
+        Mockito
+                .when(employeeRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                NotFoundException.class,
+                () -> employeeService.findById(1L)
+        );
+        Mockito
+                .verify(employeeRepository).findById(1L);
+    }
+
+    @Test
+    void update_shouldThrow_whenEmployeeNotFound() {
+        Mockito
+                .when(employeeRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(
+                NotFoundException.class,
+                () -> employeeService.update(1L, new Employee())
+        );
+        assertEquals("Employee not found", ex.getMessage());
+
+        Mockito
+                .verify(employeeRepository)
+                .findById(1L);
+    }
+
+    @Test
     void update_shouldUpdateEmployee() {
         Employee employee = new Employee();
         employee.setId(1L);
@@ -216,6 +265,90 @@ class EmployeeServiceImplTest {
         assertEquals(employee.getPhone(), savedEmployee.getPhone());
         assertEquals(employee.getIin(), savedEmployee.getIin());
         assertEquals(employee.getAddress(), savedEmployee.getAddress());
+    }
+
+    @Test
+    void update_shouldOnlyUpdateNonNullFields() {
+        long employeeId = 1L;
+
+        Employee existing = new Employee();
+        existing.setId(employeeId);
+        existing.setFirstName("Old First");
+        existing.setLastName("Old Last");
+        existing.setEmail("old@email.com");
+        existing.setIin("123456789012");
+        existing.setPhone("+7 111 111 1111");
+        existing.setAddress("Old Address");
+        existing.setCitizenship("KZ");
+        existing.setGender(GenderType.MALE);
+
+        Employee updated = new Employee();
+        // Only update firstName, everything else is null
+        //updated.setFirstName("New First");
+        //Nothing changed. All fields are null
+
+        Mockito
+                .when(employeeRepository.findById(employeeId))
+                .thenReturn(Optional.of(existing));
+
+        Mockito
+                .when(employeeRepository.save(Mockito.any()))
+                .thenAnswer(i -> i.getArgument(0));
+
+        Employee result = employeeService.update(employeeId, updated);
+        // Only firstName should change
+        //assertEquals("New First", result.getFirstName());
+        //Nothing changed. All fields are null
+        assertEquals("Old First", result.getFirstName());
+        // Everything else should remain unchanged
+        assertEquals("Old Last", result.getLastName());
+        assertEquals("old@email.com", result.getEmail());
+        assertEquals("123456789012", result.getIin());
+        assertEquals("+7 111 111 1111", result.getPhone());
+        assertEquals("Old Address", result.getAddress());
+        assertEquals("KZ", result.getCitizenship());
+        assertEquals(GenderType.MALE, result.getGender());
+    }
+
+    @Test
+    void update_shouldNotUpdateBlankFields() {
+        long employeeId = 1L;
+
+        Employee existing = new Employee();
+        existing.setId(employeeId);
+        existing.setFirstName("Old First");
+        existing.setLastName("Old Last");
+        existing.setEmail("old@email.com");
+        existing.setGender(GenderType.MALE);
+        existing.setCitizenship("US");
+        existing.setAddress("Old Address");
+        existing.setPhone("+7 777 111 11 11");
+        existing.setIin("123456789012");
+
+        Employee updated = new Employee();
+        updated.setFirstName(" ");
+        updated.setEmail("   ");
+        updated.setLastName("");
+        updated.setCitizenship(" ");
+        updated.setAddress(" ");
+        updated.setPhone(" ");
+        updated.setIin(" ");
+
+        Mockito.when(employeeRepository.findById(employeeId))
+                .thenReturn(Optional.of(existing));
+        Mockito.when(employeeRepository.save(Mockito.any()))
+                .thenAnswer(i -> i.getArgument(0));
+
+        Employee result = employeeService.update(employeeId, updated);
+
+        assertEquals("Old First", result.getFirstName()); // Should remain unchanged
+        assertEquals("old@email.com", result.getEmail()); // Should remain unchanged
+        assertEquals("Old Last", result.getLastName());
+        assertEquals(GenderType.MALE, result.getGender());
+        assertEquals("US", result.getCitizenship());
+        assertEquals("Old Address", result.getAddress());
+        assertEquals("+7 777 111 11 11", result.getPhone());
+        assertEquals("123456789012", result.getIin());
     }
 
     @Test

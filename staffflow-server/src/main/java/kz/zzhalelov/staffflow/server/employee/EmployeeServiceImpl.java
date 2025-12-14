@@ -84,7 +84,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (updatedEmployee.getCitizenship() != null && !updatedEmployee.getCitizenship().isBlank()) {
             existingEmployee.setCitizenship(updatedEmployee.getCitizenship());
         }
-        if (updatedEmployee.getGender() != null && updatedEmployee.getGender().describeConstable().isPresent()) {
+        if (updatedEmployee.getGender() != null) {
             existingEmployee.setGender(updatedEmployee.getGender());
         }
     }
