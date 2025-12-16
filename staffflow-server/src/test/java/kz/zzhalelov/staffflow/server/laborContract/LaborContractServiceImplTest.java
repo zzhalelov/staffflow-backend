@@ -290,4 +290,53 @@ class LaborContractServiceImplTest {
                                 ((ContractSignedEvent) event).getContractId() == 1L
                 ));
     }
+
+    @Test
+    void update_shouldOnlyUpdateNonNullFields() {
+        long contractId = 1L;
+
+        Department existingDep = new Department();
+        existingDep.setId(1L);
+
+        Employee existingEmp = new Employee();
+        existingEmp.setId(1L);
+
+        Organization existingOrg = new Organization();
+        existingOrg.setId(1L);
+
+        Position existingPos = new Position();
+        existingPos.setId(1L);
+
+        LaborContract existing = new LaborContract();
+        existing.setId(contractId);
+        existing.setDepartment(existingDep);
+        existing.setEmployee(existingEmp);
+        existing.setHireDate(LocalDate.of(2025, 11, 1));
+        existing.setOrganization(existingOrg);
+        existing.setPosition(existingPos);
+        existing.setStatus(LaborContractStatus.NOT_SIGNED);
+
+        //Nothing changed. All fields are null
+        LaborContract updated = new LaborContract();
+
+        Mockito
+                .when(laborContractRepository.findById(contractId))
+                .thenReturn(Optional.of(existing));
+
+        Mockito
+                .when(laborContractRepository.save(Mockito.any()))
+                .thenAnswer(i -> i.getArgument(0));
+
+        LaborContract result = laborContractService.update(contractId, updated);
+
+        assertEquals(existingDep, result.getDepartment());
+        assertEquals(existingEmp, result.getEmployee());
+        assertEquals(LocalDate.of(2025, 11, 1), result.getHireDate());
+        assertEquals(existingOrg, result.getOrganization());
+        assertEquals(existingPos, result.getPosition());
+        assertEquals(LaborContractStatus.NOT_SIGNED, result.getStatus());
+
+        Mockito.verify(laborContractRepository).findById(contractId);
+        Mockito.verify(laborContractRepository).save(existing);
+    }
 }

@@ -3,7 +3,6 @@ package kz.zzhalelov.staffflow.server.regulatoryIndicator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.zzhalelov.staffflow.server.regulatoryIndicator.dto.RegulatoryIndicatorCreateDto;
 import kz.zzhalelov.staffflow.server.regulatoryIndicator.dto.RegulatoryIndicatorMapper;
-import kz.zzhalelov.staffflow.server.regulatoryIndicator.dto.RegulatoryIndicatorResponseDto;
 import kz.zzhalelov.staffflow.server.regulatoryIndicator.dto.RegulatoryIndicatorUpdateDto;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -31,8 +30,6 @@ class RegulatoryIndicatorControllerTest {
     RegulatoryIndicatorService indicatorService;
     @MockitoBean
     RegulatoryIndicatorRepository indicatorRepository;
-    @MockitoBean
-    RegulatoryIndicatorMapper indicatorMapper;
 
     @Autowired
     MockMvc mockMvc;
@@ -50,24 +47,6 @@ class RegulatoryIndicatorControllerTest {
         createDto.setDate(LocalDate.of(2025, 1, 1));
         createDto.setDescription("МРП и МЗП на 2025 год");
 
-        RegulatoryIndicator mapped = new RegulatoryIndicator();
-        mapped.setId(indicatorId);
-        mapped.setMzpValue(BigDecimal.valueOf(85000));
-        mapped.setMrpValue(BigDecimal.valueOf(3932));
-        mapped.setDate(LocalDate.of(2025, 1, 1));
-        mapped.setDescription("МРП и МЗП на 2025 год");
-
-        RegulatoryIndicatorResponseDto responseDto = new RegulatoryIndicatorResponseDto();
-        responseDto.setId(indicatorId);
-        responseDto.setDate(LocalDate.of(2025, 1, 1));
-        responseDto.setMrpValue(BigDecimal.valueOf(3932));
-        responseDto.setMzpValue(BigDecimal.valueOf(85000));
-        responseDto.setDescription("МРП и МЗП на 2025 год");
-
-        Mockito
-                .when(indicatorMapper.fromCreate(Mockito.any()))
-                .thenReturn(mapped);
-
         Mockito
                 .when(indicatorService.create(Mockito.any(RegulatoryIndicator.class)))
                 .thenAnswer(i -> {
@@ -75,10 +54,6 @@ class RegulatoryIndicatorControllerTest {
                     argument.setId(indicatorId);
                     return argument;
                 });
-
-        Mockito
-                .when(indicatorMapper.toResponse(Mockito.any()))
-                .thenReturn(responseDto);
 
         String json = objectMapper.writeValueAsString(createDto);
 
@@ -106,31 +81,9 @@ class RegulatoryIndicatorControllerTest {
         indicator2.setMzpValue(BigDecimal.valueOf(85000));
         indicator2.setDescription("МРП и МЗП на 2025 год");
 
-        RegulatoryIndicatorResponseDto dto1 = new RegulatoryIndicatorResponseDto();
-        dto1.setId(1L);
-        dto1.setDate(LocalDate.of(2024, 1, 1));
-        dto1.setMrpValue(BigDecimal.valueOf(3692));
-        dto1.setMzpValue(BigDecimal.valueOf(85000));
-        dto1.setDescription("МРП и МЗП на 2024 год");
-
-        RegulatoryIndicatorResponseDto dto2 = new RegulatoryIndicatorResponseDto();
-        dto2.setId(2L);
-        dto2.setDate(LocalDate.of(2025, 1, 1));
-        dto2.setMrpValue(BigDecimal.valueOf(3932));
-        dto2.setMzpValue(BigDecimal.valueOf(85000));
-        dto2.setDescription("МРП и МЗП на 2025 год");
-
         Mockito
                 .when(indicatorService.findAll())
                 .thenReturn(List.of(indicator1, indicator2));
-
-        Mockito
-                .when(indicatorMapper.toResponse(indicator1))
-                .thenReturn(dto1);
-
-        Mockito
-                .when(indicatorMapper.toResponse(indicator2))
-                .thenReturn(dto2);
 
         mockMvc.perform(get("/api/indicators"))
                 .andExpect(status().isOk())
@@ -151,20 +104,9 @@ class RegulatoryIndicatorControllerTest {
         indicator.setMzpValue(BigDecimal.valueOf(85000));
         indicator.setDescription("МРП и МЗП на 2024 год");
 
-        RegulatoryIndicatorResponseDto responseDto = new RegulatoryIndicatorResponseDto();
-        responseDto.setId(1L);
-        responseDto.setDate(LocalDate.of(2024, 1, 1));
-        responseDto.setMrpValue(BigDecimal.valueOf(3692));
-        responseDto.setMzpValue(BigDecimal.valueOf(85000));
-        responseDto.setDescription("МРП и МЗП на 2024 год");
-
         Mockito
                 .when(indicatorService.findById(Mockito.anyLong()))
                 .thenReturn(indicator);
-
-        Mockito
-                .when(indicatorMapper.toResponse(indicator))
-                .thenReturn(responseDto);
 
         mockMvc.perform(get("/api/indicators/" + indicatorId))
                 .andExpect(status().isOk())
@@ -201,36 +143,15 @@ class RegulatoryIndicatorControllerTest {
         dto.setDescription("МРП и МЗП на 2025 год");
 
         RegulatoryIndicator indicator = new RegulatoryIndicator();
+        indicator.setId(indicatorId);
         indicator.setDate(LocalDate.of(2025, 1, 1));
         indicator.setMrpValue(BigDecimal.valueOf(3932));
         indicator.setMzpValue(BigDecimal.valueOf(85000));
         indicator.setDescription("МРП и МЗП на 2025 год");
 
-        RegulatoryIndicator savedIndicator = new RegulatoryIndicator();
-        savedIndicator.setId(indicatorId);
-        savedIndicator.setDate(LocalDate.of(2025, 1, 1));
-        savedIndicator.setMrpValue(BigDecimal.valueOf(3932));
-        savedIndicator.setMzpValue(BigDecimal.valueOf(85000));
-        savedIndicator.setDescription("МРП и МЗП на 2025 год");
-
-        RegulatoryIndicatorResponseDto responseDto = new RegulatoryIndicatorResponseDto();
-        responseDto.setId(indicatorId);
-        responseDto.setDate(LocalDate.of(2025, 1, 1));
-        responseDto.setMrpValue(BigDecimal.valueOf(3932));
-        responseDto.setMzpValue(BigDecimal.valueOf(85000));
-        responseDto.setDescription("МРП и МЗП на 2025 год");
-
-        Mockito
-                .when(indicatorMapper.fromUpdate(Mockito.any(RegulatoryIndicatorUpdateDto.class)))
-                .thenReturn(indicator);
-
         Mockito
                 .when(indicatorService.update(Mockito.eq(indicatorId), Mockito.any(RegulatoryIndicator.class)))
-                .thenReturn(savedIndicator);
-
-        Mockito
-                .when(indicatorMapper.toResponse(Mockito.any(RegulatoryIndicator.class)))
-                .thenReturn(responseDto);
+                .thenReturn(indicator);
 
         String json = objectMapper.writeValueAsString(dto);
 

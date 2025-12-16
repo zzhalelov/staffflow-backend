@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Tag(name = "Indicators", description = "Управление регламентированными показателями")
 public class RegulatoryIndicatorController {
     private final RegulatoryIndicatorService service;
-    private final RegulatoryIndicatorRepository repository;
     private final RegulatoryIndicatorMapper mapper;
 
     @PostMapping
@@ -27,8 +26,7 @@ public class RegulatoryIndicatorController {
     @Operation(summary = "Добавить регламентированный показатель")
     public RegulatoryIndicatorResponseDto create(@RequestBody RegulatoryIndicatorCreateDto dto) {
         RegulatoryIndicator indicator = mapper.fromCreate(dto);
-        RegulatoryIndicator saved = repository.save(indicator);
-        return mapper.toResponse(saved);
+        return mapper.toResponse(service.create(indicator));
     }
 
     @GetMapping

@@ -109,21 +109,22 @@ class DepartmentControllerTest {
     void update_shouldReturnOk() {
         long departmentId = 1L;
 
-        DepartmentUpdateDto departmentUpdateDto = new DepartmentUpdateDto();
-        departmentUpdateDto.setName("updatedName");
+        DepartmentUpdateDto updateDto = new DepartmentUpdateDto();
+        updateDto.setName("updatedName");
 
         Department department = new Department();
         department.setId(departmentId);
         department.setName("updatedName");
 
-        Mockito.when(departmentRepository.findById(Mockito.eq(departmentId)))
+        Mockito
+                .when(departmentRepository.findById(Mockito.eq(departmentId)))
                 .thenReturn(Optional.of(new Department()));
 
         Mockito
                 .when(departmentService.update(Mockito.any(Department.class)))
                 .thenReturn(department);
 
-        String json = objectMapper.writeValueAsString(departmentUpdateDto);
+        String json = objectMapper.writeValueAsString(updateDto);
 
         mockMvc.perform(patch("/api/departments/" + departmentId)
                         .contentType(MediaType.APPLICATION_JSON)

@@ -94,16 +94,16 @@ public class LaborContractServiceImpl implements LaborContractService {
     }
 
     public void merge(LaborContract existingLaborContract, LaborContract updated) {
-        if (updated.getOrganization() != null && updated.getOrganization().getId() != null) {
+        if (updated.getOrganization() != null) {
             existingLaborContract.setOrganization(updated.getOrganization());
         }
-        if (updated.getEmployee() != null && updated.getEmployee().getId() != null) {
+        if (updated.getEmployee() != null) {
             existingLaborContract.setEmployee(updated.getEmployee());
         }
-        if (updated.getDepartment() != null && updated.getDepartment().getId() != null) {
+        if (updated.getDepartment() != null) {
             existingLaborContract.setDepartment(updated.getDepartment());
         }
-        if (updated.getPosition() != null && updated.getPosition().getId() != null) {
+        if (updated.getPosition() != null) {
             existingLaborContract.setPosition(updated.getPosition());
         }
         if (updated.getHireDate() != null) {
