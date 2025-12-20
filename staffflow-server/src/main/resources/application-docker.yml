@@ -1,6 +1,9 @@
 server:
   port: 8081
 
+cors:
+  allowed-origins: http://localhost:3000,http://localhost:8080,http://127.0.0.1:5500,http://localhost:63342,https://staffflow.kz,https://www.staffflow.kz
+
 spring:
   datasource:
     url: jdbc:postgresql://staffflow-db:5432/${POSTGRES_DB}
