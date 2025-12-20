@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Список Подразделений</h1>
+<a href="department-create.html">Добавить новое подразделение</a>
+
+<div id="message"></div>
+
+<table>
+    <caption>Список подразделений</caption>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Наменование поразделения</th>
+    </tr>
+    </thead>
+    <tbody id="departmentTableBody">
+    <tr>
+        <td colspan="2" class="loading">Загрузка данных...</td>
+    </tr>
+    </tbody>
+
+    <tfoot></tfoot>
+</table>
+
+<a href="index.html">Вернуться на главную страницу</a>
+
+<script>
+    const API_URL = '/api/departments';
+
+    async function loadDepartments() {
+        const tbody = document.getElementById('departmentTableBody');
+        const messageDiv = document.getElementById('message');
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="2">Нет данных</td></tr>';
+                return;
+            }
+
+            data.forEach(dept => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+            <td>${dept.id}</td>
+            <td>${dept.name}</td>
+        `;
+                tbody.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error);
+            tbody.innerHTML = '<tr><td colspan="2" class="error">Ошибка загрузки данных</td></tr>';
+            messageDiv.innerHTML = `<div class="error">Ошибка: ${error.message}</div>`;
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadDepartments);
+</script>
+</body>
+</html>
