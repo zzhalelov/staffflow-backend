@@ -6,7 +6,7 @@ import kz.zzhalelov.staffflow.server.organization.Organization;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class Timesheet {
     private int year;
 
     @Schema(description = "Дата создания табеля", example = "2025-10-19T07:01:03.799Z")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @OneToMany(mappedBy = "timesheet", cascade = CascadeType.ALL, orphanRemoval = true)
     @Schema(description = "Список записей в табличной части табеля")

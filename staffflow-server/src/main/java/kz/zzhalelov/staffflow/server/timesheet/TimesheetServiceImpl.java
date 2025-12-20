@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class TimesheetServiceImpl implements TimesheetService {
         timesheet.setOrganization(organization);
         timesheet.setMonth(month);
         timesheet.setYear(year);
-        timesheet.setCreatedAt(LocalDateTime.now());
+        timesheet.setCreatedAt(LocalDate.now());
         return timesheetRepository.save(timesheet);
     }
 

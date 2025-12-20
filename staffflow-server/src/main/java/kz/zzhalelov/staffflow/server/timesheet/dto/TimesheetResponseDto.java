@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class TimesheetResponseDto {
     int year;
 
     @Schema(description = "Дата создания табеля", example = "2025-10-19T07:01:03.799Z")
-    LocalDateTime createdAt;
+    LocalDate createdAt;
 
     @Schema(description = "Список записей в табличной части табеля")
     List<TimesheetEntryResponseDto> entries;

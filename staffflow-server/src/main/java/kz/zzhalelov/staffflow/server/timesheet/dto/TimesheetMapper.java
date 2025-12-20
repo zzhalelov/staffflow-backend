@@ -8,7 +8,7 @@ import kz.zzhalelov.staffflow.server.timesheet.TimesheetDay;
 import kz.zzhalelov.staffflow.server.timesheet.TimesheetEntry;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 @Component
@@ -17,7 +17,7 @@ public class TimesheetMapper {
         Timesheet timesheet = new Timesheet();
         timesheet.setMonth(dto.getMonth());
         timesheet.setYear(dto.getYear());
-        timesheet.setCreatedAt(LocalDateTime.now());
+        timesheet.setCreatedAt(LocalDate.now());
         return timesheet;
     }
 
