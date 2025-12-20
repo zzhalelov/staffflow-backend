@@ -20,7 +20,7 @@ spring:
     password: jsng gfpy zbkc wotk
     properties:
       mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.enable: false
 
 springdoc:
   swagger-ui:
