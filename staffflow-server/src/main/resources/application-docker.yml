@@ -14,7 +14,7 @@ cors:
 spring:
   datasource:
     url: jdbc:postgresql://staffflow-db:5432/${POSTGRES_DB}
-    username: ${POSTGRES_DB}
+    username: ${POSTGRES_USER}
     password: ${POSTGRES_DB}
     hikari:
       maximum-pool-size: 10
