@@ -9,9 +9,6 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - TZ=Asia/Almaty
-      - POSTGRES_DB=hrms-spring-jpa
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
     depends_on:
       - staffflow-db
     healthcheck:

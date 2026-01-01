@@ -74,4 +74,6 @@ jobs:
             docker-compose pull
             docker-compose up -d --force-recreate --remove-orphans
             docker image prune -f
+            # Проверка health
+            curl -f http://localhost:8081/actuator/health || exit 1
           
