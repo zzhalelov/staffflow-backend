@@ -3,7 +3,6 @@ version: "3.9"
 services:
   staffflow-server:
     image: zzhalelov/staffflow-server:latest
-    container_name: staffflow-server
     restart: always
     ports:
       - "8081:8081"
@@ -16,52 +15,66 @@ services:
     depends_on:
       - staffflow-db
     healthcheck:
-      test: [ "CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health || exit 1" ]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 10s
+    networks:
+      - staffflow-network
 
   staffflow-db:
     image: postgres:15-alpine
-    container_name: staffflow-db
     restart: always
     ports:
       - "5434:5432"
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=hrms-spring-jpa
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
       - staffflow-db-data:/var/lib/postgresql/data
+    networks:
+      - staffflow-network
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: prometheus
-    volumes:
-      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus-data:/prometheus
     ports:
       - "9090:9090"
-    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - staffflow-network
+    restart: always
 
   grafana:
     image: grafana/grafana:latest
-    container_name: grafana
-    depends_on:
-      - prometheus
     ports:
       - "3000:3000"
+    volumes:
+      - /srv/grafana/data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
-    volumes:
-      - grafana-data:/var/lib/grafana
-      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - staffflow-network
+    depends_on:
+      - prometheus
     restart: unless-stopped
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    restart: always
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:postgres@staffflow-db:5432/hrms-spring-jpa?sslmode=disable
+    ports:
+      - "9187:9187"
+    networks:
+      - staffflow-network
 
 volumes:
   staffflow-db-data:
-  prometheus-data:
-  grafana-data:
+
+networks:
+  staffflow-network:
+    driver: bridge
