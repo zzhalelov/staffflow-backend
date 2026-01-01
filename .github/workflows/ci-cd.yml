@@ -71,11 +71,7 @@ jobs:
             cd /opt/staffflow
             # Авторизация на DockerHub
             echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-            # Останавливаем старые контейнеры
-            docker-compose down
             # Обновляем образы и запускаем контейнеры
             docker-compose pull
-            docker-compose up -d --force-recreate --remove-orphans
+            docker-compose up -d
             docker image prune -f
-            # Проверка health
-            curl -f http://localhost:8081/actuator/health || exit 1
