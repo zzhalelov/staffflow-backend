@@ -69,13 +69,19 @@ jobs:
           script: |
             set -e
             cd /opt/staffflow
-            # Авторизация на DockerHub
             echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-            # Останавливаем старые контейнеры
             docker-compose down
-            # Обновляем образы и запускаем контейнеры
             docker-compose pull
             docker-compose up -d --force-recreate --remove-orphans
             docker image prune -f
-            # Проверка health
-            curl -f http://localhost:8081/actuator/health || exit 1
+            # Ждём пока сервер поднимется
+            for i in {1..15}; do
+              if curl -fs http://localhost:8081/actuator/health | grep '"status":"UP"' > /dev/null; then
+                echo "Application is healthy"
+                exit 0
+              fi
+              echo "Waiting for application..."
+              sleep 10
+            done
+            echo "Application failed to become healthy"
+            exit 1
