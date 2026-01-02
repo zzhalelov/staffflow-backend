@@ -74,6 +74,9 @@ jobs:
             docker-compose pull
             docker-compose up -d --force-recreate --remove-orphans
             docker image prune -f
+            # Ждём пока контейнер станет healthy
+            docker-compose ps
+            docker inspect --format='{{json .State.Health.Status}}' staffflow-staffflow-server-1
             # Проверка health
-            curl -f http://localhost:8081/actuator/health || exit 1
+            curl --retry 5 --retry-delay 10 -f http://localhost:8081/actuator/health
           
