@@ -7,12 +7,15 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
-      - TZ=Asia/Almaty
+      SPRING_PROFILES_ACTIVE: docker
+      TZ: Asia/Almaty
+      SPRING_DATASOURCE_URL: jdbc:postgresql://staffflow-db:5432/hrms-spring-jpa
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
     depends_on:
       - staffflow-db
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health || exit 1"]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -26,9 +29,9 @@ services:
     ports:
       - "5434:5432"
     environment:
-      - POSTGRES_DB=hrms-spring-jpa
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: hrms-spring-jpa
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - staffflow-db-data:/var/lib/postgresql/data
     networks:
@@ -49,7 +52,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - /srv/grafana/data:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
@@ -71,6 +74,7 @@ services:
 
 volumes:
   staffflow-db-data:
+  grafana-data:
 
 networks:
   staffflow-network:
