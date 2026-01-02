@@ -13,9 +13,9 @@ cors:
 
 spring:
   datasource:
-    url: jdbc:postgresql://staffflow-db:5432/hrms-spring-jpa
-    username: postgres
-    password: postgres
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     hikari:
       maximum-pool-size: 10
       minimum-idle: 2
