@@ -7,13 +7,16 @@ WORKDIR /app
 
 # Сначала копируем pom.xml и скачиваем зависимости (кэширование слоёв)
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN staffflow-server/pom.xml staffflow-server/pom.xml
+
+# Скачиваем зависимости
+RUN mvn -B -pl staffflow-server -am dependency:go-offline
 
 # Копируем исходники
-COPY src ./src
+COPY staffflow-server staffflow-server
 
-# Собираем проект, пропуская тесты
-RUN mvn clean package -DskipTests
+# Сборка
+RUN mvn -B -pl staffflow-server -am -DskipTests package
 
 # ---------------------------
 # Stage 2: Runtime
