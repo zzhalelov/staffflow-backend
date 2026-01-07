@@ -76,7 +76,7 @@ jobs:
             docker image prune -f
             # Ждём пока контейнер станет healthy
             docker-compose ps
-            docker inspect --format='{{json .State.Health.Status}}' staffflow-staffflow-server-1
+            docker inspect --format='{{json .State.Health.Status}}' staffflow-server
             # Проверка health
             curl --retry 5 --retry-delay 10 -f http://localhost:8081/actuator/health
           
