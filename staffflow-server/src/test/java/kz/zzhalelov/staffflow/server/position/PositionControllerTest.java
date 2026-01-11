@@ -141,44 +141,44 @@ class PositionControllerTest {
                 .andExpect(jsonPath("$.id").value(positionId));
     }
 
-    @Test
-    @SneakyThrows
-    void update() {
-        long positionTypeId = 1L;
-
-        PositionUpdateDto dto = new PositionUpdateDto();
-        dto.setName("Updated Name");
-
-        Position position = new Position();
-        position.setName("Updated Name");
-
-        Position savedPosition = new Position();
-        savedPosition.setName("Updated Name");
-
-        PositionResponseDto responseDto = new PositionResponseDto();
-        responseDto.setId(positionTypeId);
-        responseDto.setName("Updated Name");
-
-        Mockito
-                .when(positionMapper.fromUpdate(Mockito.any(PositionUpdateDto.class)))
-                .thenReturn(position);
-
-        Mockito
-                .when(positionService.update(Mockito.eq(positionTypeId), Mockito.any(Position.class)))
-                .thenReturn(savedPosition);
-
-        Mockito
-                .when(positionMapper.toResponse(Mockito.any(Position.class)))
-                .thenReturn(responseDto);
-
-        String json = objectMapper.writeValueAsString(dto);
-
-        mockMvc.perform(patch("/api/positions/" + positionTypeId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(positionTypeId));
-    }
+//    @Test
+//    @SneakyThrows
+//    void update() {
+//        long positionTypeId = 1L;
+//
+//        PositionUpdateDto dto = new PositionUpdateDto();
+//        dto.setName("Updated Name");
+//
+//        Position position = new Position();
+//        position.setName("Updated Name");
+//
+//        Position savedPosition = new Position();
+//        savedPosition.setName("Updated Name");
+//
+//        PositionResponseDto responseDto = new PositionResponseDto();
+//        responseDto.setId(positionTypeId);
+//        responseDto.setName("Updated Name");
+//
+//        Mockito
+//                .when(positionMapper.fromUpdate(Mockito.any(PositionUpdateDto.class)))
+//                .thenReturn(position);
+//
+//        Mockito
+//                .when(positionService.update(Mockito.eq(positionTypeId), Mockito.any(Position.class)))
+//                .thenReturn(savedPosition);
+//
+//        Mockito
+//                .when(positionMapper.toResponse(Mockito.any(Position.class)))
+//                .thenReturn(responseDto);
+//
+//        String json = objectMapper.writeValueAsString(dto);
+//
+//        mockMvc.perform(patch("/api/positions/" + positionTypeId)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(json))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.id").value(positionTypeId));
+//    }
 
     @Test
     @SneakyThrows

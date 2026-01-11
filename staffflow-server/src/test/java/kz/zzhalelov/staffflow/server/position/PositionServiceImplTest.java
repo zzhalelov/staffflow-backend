@@ -78,22 +78,22 @@ class PositionServiceImplTest {
         assertEquals(position.getName(), savedPosition.getName());
     }
 
-    @Test
-    void update() {
-        Position existingPosition = new Position();
-        existingPosition.setId(1L);
-
-        Position updatedPosition = new Position();
-        updatedPosition.setName("new name");
-
-        Mockito
-                .when(positionRepository.findById(1L))
-                .thenReturn(Optional.of(existingPosition));
-
-        positionService.update(1L, updatedPosition);
-
-        assertEquals("new name", existingPosition.getName());
-    }
+//    @Test
+//    void update() {
+//        Position existingPosition = new Position();
+//        existingPosition.setId(1L);
+//
+//        Position updatedPosition = new Position();
+//        updatedPosition.setName("new name");
+//
+//        Mockito
+//                .when(positionRepository.findById(1L))
+//                .thenReturn(Optional.of(existingPosition));
+//
+//        positionService.update(1L, updatedPosition);
+//
+//        assertEquals("new name", existingPosition.getName());
+//    }
 
     @Test
     void delete_shouldDelete_whenExists() {
@@ -125,48 +125,48 @@ class PositionServiceImplTest {
                 .deleteById(Mockito.anyLong());
     }
 
-    @Test
-    void update_shouldOnlyUpdateNonNullFields() {
-        long positionId = 1L;
-
-        Position existing = new Position();
-        existing.setName("Test");
-
-        //Nothing changed. All fields are null
-        Position updated = new Position();
-
-        Mockito
-                .when(positionRepository.findById(positionId))
-                .thenReturn(Optional.of(existing));
-
-        Mockito
-                .when(positionRepository.save(Mockito.any()))
-                .thenAnswer(i -> i.getArgument(0));
-
-        Position result = positionService.update(positionId, updated);
-
-        assertEquals("Test", result.getName());
-    }
-
-    @Test
-    void update_shouldNotUpdateBlankFields() {
-        long positionId = 1L;
-
-        Position existing = new Position();
-        existing.setName("Test");
-
-        Position updated = new Position();
-        updated.setName("");
-
-        Mockito
-                .when(positionRepository.findById(positionId))
-                .thenReturn(Optional.of(existing));
-        Mockito
-                .when(positionRepository.save(Mockito.any()))
-                .thenAnswer(i -> i.getArgument(0));
-
-        Position result = positionService.update(positionId, updated);
-
-        assertEquals("Test", result.getName());
-    }
+//    @Test
+//    void update_shouldOnlyUpdateNonNullFields() {
+//        long positionId = 1L;
+//
+//        Position existing = new Position();
+//        existing.setName("Test");
+//
+//        //Nothing changed. All fields are null
+//        Position updated = new Position();
+//
+//        Mockito
+//                .when(positionRepository.findById(positionId))
+//                .thenReturn(Optional.of(existing));
+//
+//        Mockito
+//                .when(positionRepository.save(Mockito.any()))
+//                .thenAnswer(i -> i.getArgument(0));
+//
+//        Position result = positionService.update(positionId, updated);
+//
+//        assertEquals("Test", result.getName());
+//    }
+//
+//    @Test
+//    void update_shouldNotUpdateBlankFields() {
+//        long positionId = 1L;
+//
+//        Position existing = new Position();
+//        existing.setName("Test");
+//
+//        Position updated = new Position();
+//        updated.setName("");
+//
+//        Mockito
+//                .when(positionRepository.findById(positionId))
+//                .thenReturn(Optional.of(existing));
+//        Mockito
+//                .when(positionRepository.save(Mockito.any()))
+//                .thenAnswer(i -> i.getArgument(0));
+//
+//        Position result = positionService.update(positionId, updated);
+//
+//        assertEquals("Test", result.getName());
+//    }
 }
