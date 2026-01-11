@@ -3,6 +3,7 @@ package kz.zzhalelov.staffflow.server.position;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,10 +28,28 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
+    @Transactional
     public Position update(long positionId, Position updatedPosition) {
-        Position existingPosition = positionRepository.findById(positionId).orElseThrow();
-        merge(existingPosition, updatedPosition);
-        return positionRepository.save(existingPosition);
+        Position existing = positionRepository.findById(positionId)
+                .orElseThrow(() -> new NotFoundException("Position not found"));
+
+        // имя
+        if (updatedPosition.getName() != null && !updatedPosition.getName().isBlank()) {
+            existing.setName(updatedPosition.getName());
+        }
+
+        // 🔥 начисления
+        if (updatedPosition.getEntities() != null) {
+            // полностью пересобираем начисления
+            existing.getEntities().clear();
+
+            updatedPosition.getEntities().forEach(schedule -> {
+                schedule.setPosition(existing);
+                existing.getEntities().add(schedule);
+            });
+        }
+
+        return positionRepository.save(existing);
     }
 
     @Override

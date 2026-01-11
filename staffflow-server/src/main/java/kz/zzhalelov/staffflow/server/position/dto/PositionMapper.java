@@ -37,9 +37,24 @@ public class PositionMapper {
         return position;
     }
 
-    public Position fromUpdate(PositionUpdateDto positionUpdateDto) {
+    public Position fromUpdate(PositionUpdateDto dto) {
         Position position = new Position();
-        position.setName(positionUpdateDto.getName());
+        position.setName(dto.getName());
+
+        if (dto.getScheduleItems() != null) {
+            dto.getScheduleItems().forEach(item -> {
+                StaffSchedule schedule = new StaffSchedule();
+
+                EarningType earningType = earningTypeRepository.findById(item.getEarningTypeId())
+                        .orElseThrow(() -> new NotFoundException("EarningType not found"));
+
+                schedule.setEarningType(earningType);
+                schedule.setAmount(item.getAmount());
+
+                position.getEntities().add(schedule);
+            });
+        }
+
         return position;
     }
 

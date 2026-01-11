@@ -17,6 +17,9 @@ public class Position {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "position", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "position",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     List<StaffSchedule> entities = new ArrayList<>();
 }
