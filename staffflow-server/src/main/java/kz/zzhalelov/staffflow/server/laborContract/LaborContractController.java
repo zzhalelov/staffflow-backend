@@ -2,15 +2,12 @@ package kz.zzhalelov.staffflow.server.laborContract;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kz.zzhalelov.staffflow.server.department.Department;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
+import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractCreateDto;
 import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractMapper;
 import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractResponseDto;
-import kz.zzhalelov.staffflow.server.employee.Employee;
 import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractUpdateDto;
-import kz.zzhalelov.staffflow.server.organization.Organization;
 import kz.zzhalelov.staffflow.server.organization.OrganizationRepository;
-import kz.zzhalelov.staffflow.server.position.Position;
 import kz.zzhalelov.staffflow.server.department.DepartmentRepository;
 import kz.zzhalelov.staffflow.server.employee.EmployeeRepository;
 import kz.zzhalelov.staffflow.server.position.PositionRepository;
@@ -39,20 +36,21 @@ public class LaborContractController {
                                            @RequestParam long employeeId,
                                            @RequestParam long departmentId,
                                            @RequestParam long positionId,
-                                           @RequestBody LaborContract laborContract) {
-        Organization organization = organizationRepository.findById(organizationId)
+                                           @RequestBody LaborContractCreateDto createDto) {
+        organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new NotFoundException("Organization not found"));
-        Employee employee = employeeRepository.findById(employeeId)
+        employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee not found"));
-        Department department = departmentRepository.findById(departmentId)
+        departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new NotFoundException("Department not found"));
-        Position position = positionRepository.findById(positionId)
+        positionRepository.findById(positionId)
                 .orElseThrow(() -> new NotFoundException("Position not found"));
-        laborContract.setOrganization(organization);
-        laborContract.setEmployee(employee);
-        laborContract.setDepartment(department);
-        laborContract.setPosition(position);
-        return laborContractMapper.toResponse(laborContractService.create(laborContract));
+        createDto.setOrganizationId(organizationId);
+        createDto.setEmployeeId(employeeId);
+        createDto.setDepartmentId(departmentId);
+        createDto.setPositionId(positionId);
+        LaborContract contract = laborContractMapper.fromCreate(createDto);
+        return laborContractMapper.toResponse(laborContractService.create(contract));
     }
 
     @GetMapping

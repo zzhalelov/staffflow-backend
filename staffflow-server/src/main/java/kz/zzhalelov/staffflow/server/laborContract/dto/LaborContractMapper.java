@@ -55,11 +55,11 @@ public class LaborContractMapper {
     public LaborContractResponseDto toResponse(LaborContract laborContract) {
         LaborContractResponseDto dto = new LaborContractResponseDto();
         dto.setId(laborContract.getId());
-        dto.setOrganizationId(laborContract.getOrganization().getId());
-        dto.setEmployeeId(laborContract.getEmployee().getId());
+        dto.setOrganization(laborContract.getOrganization());
+        dto.setEmployee(laborContract.getEmployee());
         dto.setHireDate(laborContract.getHireDate());
-        dto.setDepartmentId(laborContract.getDepartment().getId());
-        dto.setPositionId(laborContract.getPosition().getId());
+        dto.setDepartment(laborContract.getDepartment());
+        dto.setPosition(laborContract.getPosition());
         dto.setLaborContractStatus(laborContract.getStatus());
         return dto;
     }
