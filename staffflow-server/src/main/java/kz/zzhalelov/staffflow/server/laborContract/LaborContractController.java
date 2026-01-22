@@ -2,6 +2,7 @@ package kz.zzhalelov.staffflow.server.laborContract;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractCreateDto;
 import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractMapper;
@@ -32,24 +33,17 @@ public class LaborContractController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создание нового трудового договора")
-    public LaborContractResponseDto create(@RequestParam long organizationId,
-                                           @RequestParam long employeeId,
-                                           @RequestParam long departmentId,
-                                           @RequestParam long positionId,
-                                           @RequestBody LaborContractCreateDto createDto) {
-        organizationRepository.findById(organizationId)
+    public LaborContractResponseDto create(@Valid @RequestBody LaborContractCreateDto dto) {
+        organizationRepository.findById(dto.getOrganizationId())
                 .orElseThrow(() -> new NotFoundException("Organization not found"));
-        employeeRepository.findById(employeeId)
+        employeeRepository.findById(dto.getEmployeeId())
                 .orElseThrow(() -> new NotFoundException("Employee not found"));
-        departmentRepository.findById(departmentId)
+        departmentRepository.findById(dto.getDepartmentId())
                 .orElseThrow(() -> new NotFoundException("Department not found"));
-        positionRepository.findById(positionId)
+        positionRepository.findById(dto.getPositionId())
                 .orElseThrow(() -> new NotFoundException("Position not found"));
-        createDto.setOrganizationId(organizationId);
-        createDto.setEmployeeId(employeeId);
-        createDto.setDepartmentId(departmentId);
-        createDto.setPositionId(positionId);
-        LaborContract contract = laborContractMapper.fromCreate(createDto);
+
+        LaborContract contract = laborContractMapper.fromCreate(dto);
         return laborContractMapper.toResponse(laborContractService.create(contract));
     }
 

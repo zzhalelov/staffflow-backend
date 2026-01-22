@@ -17,12 +17,13 @@ public class LaborContractCreateDto {
     Long organizationId;
     @NotNull(message = "Employee Id is required")
     Long employeeId;
+    @NotNull(message = "Hire date is required")
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate hireDate;
     @NotNull(message = "Department Id is required")
     Long departmentId;
     @NotNull(message = "Position Id is required")
     Long positionId;
-    @NotBlank(message = "LaborContractStatus is required")
+    @NotNull(message = "LaborContractStatus is required")
     LaborContractStatus laborContractStatus;
 }
