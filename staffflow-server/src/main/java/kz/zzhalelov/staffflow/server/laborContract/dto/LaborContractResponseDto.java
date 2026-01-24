@@ -5,7 +5,7 @@ import kz.zzhalelov.staffflow.server.department.Department;
 import kz.zzhalelov.staffflow.server.employee.Employee;
 import kz.zzhalelov.staffflow.server.laborContract.LaborContractStatus;
 import kz.zzhalelov.staffflow.server.organization.Organization;
-import kz.zzhalelov.staffflow.server.position.Position;
+import kz.zzhalelov.staffflow.server.position.dto.PositionResponseDto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +21,6 @@ public class LaborContractResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate hireDate;
     Department department;
-    Position position;
+    PositionResponseDto position;
     LaborContractStatus laborContractStatus;
 }
