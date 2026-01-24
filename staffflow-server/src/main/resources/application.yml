@@ -22,12 +22,13 @@ spring:
       ddl-auto: update
   mail:
     host: smtp.gmail.com
-    port: 587
+    port: 465
     username: zzhalelov@gmail.com
     password: hclq fpgs pqdu jfti
     properties:
       mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.ssl.trust: smtp.gmail.com
 
 springdoc:
   swagger-ui:
