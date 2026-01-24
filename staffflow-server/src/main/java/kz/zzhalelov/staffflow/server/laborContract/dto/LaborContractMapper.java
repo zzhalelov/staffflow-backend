@@ -6,6 +6,7 @@ import kz.zzhalelov.staffflow.server.laborContract.LaborContract;
 import kz.zzhalelov.staffflow.server.laborContract.LaborContractStatus;
 import kz.zzhalelov.staffflow.server.organization.Organization;
 import kz.zzhalelov.staffflow.server.position.Position;
+import kz.zzhalelov.staffflow.server.position.dto.PositionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -59,7 +60,11 @@ public class LaborContractMapper {
         dto.setEmployee(laborContract.getEmployee());
         dto.setHireDate(laborContract.getHireDate());
         dto.setDepartment(laborContract.getDepartment());
-        dto.setPosition(laborContract.getPosition());
+
+        PositionResponseDto positionDto = new PositionResponseDto();
+        positionDto.setId(laborContract.getPosition().getId());
+        positionDto.setName(laborContract.getPosition().getName());
+        dto.setPosition(positionDto);
         dto.setLaborContractStatus(laborContract.getStatus());
         return dto;
     }
