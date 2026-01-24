@@ -24,10 +24,10 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: zzhalelov@gmail.com
-    password: jsng gfpy zbkc wotk
+    password: hclq fpgs pqdu jfti
     properties:
       mail.smtp.auth: true
-      mail.smtp.starttls.enable: false
+      mail.smtp.starttls.enable: true
 
 springdoc:
   swagger-ui:
@@ -36,6 +36,9 @@ springdoc:
     path: /api-docs
 
 management:
+  health:
+    mail:
+      enabled: false
   endpoints:
     web:
       exposure:
