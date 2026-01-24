@@ -7,6 +7,8 @@ import kz.zzhalelov.staffflow.server.position.Position;
 import kz.zzhalelov.staffflow.server.position.StaffSchedule;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class PositionMapper {
     private final EarningTypeRepository earningTypeRepository;
@@ -61,17 +63,25 @@ public class PositionMapper {
         dto.setId(position.getId());
         dto.setName(position.getName());
 
-//        if (position.getEntities() != null) {
-//            dto.setScheduleItems(position.getEntities()
-//                    .stream()
-//                    .map(schedule -> {
-//                        PositionResponseDto.StaffScheduleDto s = new PositionResponseDto.StaffScheduleDto();
-//                        s.setEarningTypeId(schedule.getEarningType().getId());
-//                        s.setEarningTypeName(schedule.getEarningType().getName());
-//                        s.setAmount(schedule.getAmount());
-//                        return s;
-//                    }).collect(Collectors.toList()));
-//        }
+        return dto;
+    }
+
+    public PositionFullResponseDto toFullResponse(Position position) {
+        PositionFullResponseDto dto = new PositionFullResponseDto();
+        dto.setId(position.getId());
+        dto.setName(position.getName());
+
+        if (position.getEntities() != null) {
+            dto.setScheduleItems(position.getEntities()
+                    .stream()
+                    .map(schedule -> {
+                        PositionFullResponseDto.StaffScheduleDto s = new PositionFullResponseDto.StaffScheduleDto();
+                        s.setEarningTypeId(schedule.getEarningType().getId());
+                        s.setEarningTypeName(schedule.getEarningType().getName());
+                        s.setAmount(schedule.getAmount());
+                        return s;
+                    }).collect(Collectors.toList()));
+        }
         return dto;
     }
 }

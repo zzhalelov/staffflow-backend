@@ -1,0 +1,25 @@
+package kz.zzhalelov.staffflow.server.position.dto;
+
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.experimental.FieldDefaults;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class PositionFullResponseDto {
+    Long id;
+    String name;
+
+    List<StaffScheduleDto> scheduleItems;
+
+    @Data
+    @FieldDefaults(level = AccessLevel.PRIVATE)
+    public static class StaffScheduleDto {
+        Long earningTypeId;
+        String earningTypeName;
+        BigDecimal amount;
+    }
+}

@@ -65,6 +65,7 @@ public class LaborContractMapper {
         positionDto.setId(laborContract.getPosition().getId());
         positionDto.setName(laborContract.getPosition().getName());
         dto.setPosition(positionDto);
+
         dto.setLaborContractStatus(laborContract.getStatus());
         return dto;
     }

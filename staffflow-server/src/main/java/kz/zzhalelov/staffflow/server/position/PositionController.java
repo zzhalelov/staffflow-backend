@@ -2,10 +2,7 @@ package kz.zzhalelov.staffflow.server.position;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kz.zzhalelov.staffflow.server.position.dto.PositionCreateDto;
-import kz.zzhalelov.staffflow.server.position.dto.PositionMapper;
-import kz.zzhalelov.staffflow.server.position.dto.PositionResponseDto;
-import kz.zzhalelov.staffflow.server.position.dto.PositionUpdateDto;
+import kz.zzhalelov.staffflow.server.position.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,21 +22,21 @@ public class PositionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Добавить позицию штатного расписания")
-    public PositionResponseDto create(@RequestBody PositionCreateDto dto) {
+    public PositionFullResponseDto create(@RequestBody PositionCreateDto dto) {
         Position position = positionMapper.fromCreate(dto);
         Position saved = positionService.createPosition(position);
 
-        return positionMapper.toResponse(saved);
+        return positionMapper.toFullResponse(saved);
     }
 
     //GET /positions
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Вывести все должности")
-    public List<PositionResponseDto> findAll() {
+    public List<PositionFullResponseDto> findAll() {
         return positionService.findAll()
                 .stream()
-                .map(positionMapper::toResponse)
+                .map(positionMapper::toFullResponse)
                 .collect(Collectors.toList());
     }
 
@@ -47,18 +44,18 @@ public class PositionController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Поиск должности по Id")
-    public PositionResponseDto findById(@PathVariable long id) {
-        return positionMapper.toResponse(positionService.findById(id));
+    public PositionFullResponseDto findById(@PathVariable long id) {
+        return positionMapper.toFullResponse(positionService.findById(id));
     }
 
     //PATCH /api/positions/{positionId}
     @PatchMapping("/{positionId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Обновить сведения о позиции штатного расписания")
-    public PositionResponseDto update(@PathVariable long positionId,
-                                      @RequestBody PositionUpdateDto positionUpdateDto) {
+    public PositionFullResponseDto update(@PathVariable long positionId,
+                                          @RequestBody PositionUpdateDto positionUpdateDto) {
         Position position = positionMapper.fromUpdate(positionUpdateDto);
-        return positionMapper.toResponse(positionService.update(positionId, position));
+        return positionMapper.toFullResponse(positionService.update(positionId, position));
     }
 
     //DELETE /api/positions/{positionId}

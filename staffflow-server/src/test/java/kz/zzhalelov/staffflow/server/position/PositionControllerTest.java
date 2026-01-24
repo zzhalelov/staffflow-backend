@@ -1,10 +1,7 @@
 package kz.zzhalelov.staffflow.server.position;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kz.zzhalelov.staffflow.server.position.dto.PositionCreateDto;
-import kz.zzhalelov.staffflow.server.position.dto.PositionMapper;
-import kz.zzhalelov.staffflow.server.position.dto.PositionResponseDto;
-import kz.zzhalelov.staffflow.server.position.dto.PositionUpdateDto;
+import kz.zzhalelov.staffflow.server.position.dto.*;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -48,7 +45,7 @@ class PositionControllerTest {
         Position position = new Position();
         position.setName("Test");
 
-        PositionResponseDto responseDto = new PositionResponseDto();
+        PositionFullResponseDto responseDto = new PositionFullResponseDto();
         responseDto.setId(positionTypeId);
         responseDto.setName("Test");
 
@@ -65,7 +62,7 @@ class PositionControllerTest {
                 });
 
         Mockito
-                .when(positionMapper.toResponse(Mockito.any()))
+                .when(positionMapper.toFullResponse(Mockito.any()))
                 .thenReturn(responseDto);
 
         String json = objectMapper.writeValueAsString(createDto);
@@ -88,11 +85,11 @@ class PositionControllerTest {
         position2.setId(2L);
         position2.setName("Position 2");
 
-        PositionResponseDto dto1 = new PositionResponseDto();
+        PositionFullResponseDto dto1 = new PositionFullResponseDto();
         dto1.setId(1L);
         dto1.setName("Position 1");
 
-        PositionResponseDto dto2 = new PositionResponseDto();
+        PositionFullResponseDto dto2 = new PositionFullResponseDto();
         dto2.setId(2L);
         dto2.setName("Position 2");
 
@@ -101,11 +98,11 @@ class PositionControllerTest {
                 .thenReturn(List.of(position1, position2));
 
         Mockito
-                .when(positionMapper.toResponse(position1))
+                .when(positionMapper.toFullResponse(position1))
                 .thenReturn(dto1);
 
         Mockito
-                .when(positionMapper.toResponse(position2))
+                .when(positionMapper.toFullResponse(position2))
                 .thenReturn(dto2);
 
         mockMvc.perform(get("/api/positions"))
@@ -124,7 +121,7 @@ class PositionControllerTest {
         position.setId(1L);
         position.setName("Position 1");
 
-        PositionResponseDto responseDto = new PositionResponseDto();
+        PositionFullResponseDto responseDto = new PositionFullResponseDto();
         responseDto.setId(1L);
         responseDto.setName("Position 1");
 
@@ -133,7 +130,7 @@ class PositionControllerTest {
                 .thenReturn(position);
 
         Mockito
-                .when(positionMapper.toResponse(position))
+                .when(positionMapper.toFullResponse(position))
                 .thenReturn(responseDto);
 
         mockMvc.perform(get("/api/positions/" + positionId))

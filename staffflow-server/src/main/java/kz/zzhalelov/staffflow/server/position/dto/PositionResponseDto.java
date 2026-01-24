@@ -9,14 +9,4 @@ import lombok.experimental.FieldDefaults;
 public class PositionResponseDto {
     Long id;
     String name;
-
-//    List<StaffScheduleDto> scheduleItems;
-//
-//    @Data
-//    @FieldDefaults(level = AccessLevel.PRIVATE)
-//    public static class StaffScheduleDto {
-//        Long earningTypeId;
-//        String earningTypeName;
-//        BigDecimal amount;
-//    }
 }
