@@ -69,10 +69,18 @@ jobs:
           script: |
             set -e
             cd /opt/staffflow
+
             echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
             docker-compose down
-            docker-compose pull
+
+            for i in 1 2 3; do
+              docker-compose pull && break
+              echo "Pull failed, retrying in 10s..."
+              sleep 10
+            done
+
             docker-compose up -d --force-recreate --remove-orphans
             docker image prune -f
-  
+
             echo "Deploy finished successfully"
