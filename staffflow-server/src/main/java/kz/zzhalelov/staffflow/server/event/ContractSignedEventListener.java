@@ -16,7 +16,11 @@ public class ContractSignedEventListener {
     @Async
     @EventListener
     public void onContractSigned(ContractSignedEvent event) {
-        log.info("Отправляем письмо сотруднику: {}", event.getEmail());
-        emailService.sendContractSignedEmail(event.getEmail(), event.getEmployeeName(), event.getContractId());
+        try {
+            log.info("Отправляем письмо сотруднику: {}", event.getEmail());
+            emailService.sendContractSignedEmail(event.getEmail(), event.getEmployeeName(), event.getContractId());
+        } catch (Exception e) {
+            log.error("ОШИБКА ОТПРАВКИ EMAIL (ignored)", e);
+        }
     }
 }
