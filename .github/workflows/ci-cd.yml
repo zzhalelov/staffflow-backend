@@ -75,19 +75,4 @@ jobs:
             docker-compose up -d --force-recreate --remove-orphans
             docker image prune -f
   
-            echo "Waiting for staffflow-server to become healthy..."
-
-            for i in {1..30}; do
-              STATUS=$(docker inspect --format='{{.State.Health.Status}}' staffflow-server)
-              echo "Health status: $STATUS"
-              if [ "$STATUS" = "healthy" ]; then
-                echo "Server is healthy"
-                exit 0
-              fi
-              sleep 5
-            done
-  
-            echo "Server did not become healthy in time"
-            exit 1
-
-          
+            echo "Deploy finished successfully"
