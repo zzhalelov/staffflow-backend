@@ -3,11 +3,17 @@ version: "3.9"
 services:
   staffflow-server:
     container_name: staffflow-server
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     image: zzhalelov/staffflow-server:latest
     restart: always
     ports:
       - "8081:8081"
     environment:
+      JAVA_TOOL_OPTIONS: >
+        -Djava.net.preferIPv4Stack=true
+        -Djava.net.preferIPv6Addresses=false
       SPRING_PROFILES_ACTIVE: docker
       TZ: Asia/Almaty
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
