@@ -1,6 +1,7 @@
 package kz.zzhalelov.staffflow.server.employee;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kz.zzhalelov.staffflow.server.config.SecurityConfig;
 import kz.zzhalelov.staffflow.server.employee.dto.EmployeeCreateDto;
 import kz.zzhalelov.staffflow.server.employee.dto.EmployeeMapper;
 import kz.zzhalelov.staffflow.server.employee.dto.EmployeeUpdateDto;
@@ -9,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,8 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import java.util.Optional;
 
-
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 @WebMvcTest({EmployeeController.class, EmployeeMapper.class})
+@Import(SecurityConfig.class)
 class EmployeeControllerTest {
     @MockitoBean
     EmployeeService employeeService;

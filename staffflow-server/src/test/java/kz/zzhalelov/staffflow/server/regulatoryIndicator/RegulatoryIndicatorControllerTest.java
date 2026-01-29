@@ -1,6 +1,7 @@
 package kz.zzhalelov.staffflow.server.regulatoryIndicator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kz.zzhalelov.staffflow.server.config.SecurityConfig;
 import kz.zzhalelov.staffflow.server.regulatoryIndicator.dto.RegulatoryIndicatorCreateDto;
 import kz.zzhalelov.staffflow.server.regulatoryIndicator.dto.RegulatoryIndicatorMapper;
 import kz.zzhalelov.staffflow.server.regulatoryIndicator.dto.RegulatoryIndicatorUpdateDto;
@@ -9,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -24,7 +27,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 @WebMvcTest({RegulatoryIndicatorController.class, RegulatoryIndicatorMapper.class})
+@Import(SecurityConfig.class)
 class RegulatoryIndicatorControllerTest {
     @MockitoBean
     RegulatoryIndicatorService indicatorService;

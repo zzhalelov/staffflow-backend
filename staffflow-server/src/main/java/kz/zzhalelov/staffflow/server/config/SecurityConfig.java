@@ -2,6 +2,7 @@ package kz.zzhalelov.staffflow.server.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,7 +25,16 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").authenticated()
+                        // 🔐 WRITE — только ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
+
+                        // 👀 READ — любой авторизованный
+                        .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+
+                        // ❌ всё остальное запрещено
                         .anyRequest().denyAll()
                 )
 

@@ -1,13 +1,16 @@
 package kz.zzhalelov.staffflow.server.earningType;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kz.zzhalelov.staffflow.server.config.SecurityConfig;
 import kz.zzhalelov.staffflow.server.earningType.dto.*;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,7 +24,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 @WebMvcTest({EarningTypeController.class, EarningTypeMapper.class})
+@Import(SecurityConfig.class)
 class EarningTypeControllerTest {
     @MockitoBean
     EarningTypeService earningTypeService;

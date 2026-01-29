@@ -93,15 +93,19 @@ class DepartmentServiceImplTest {
     void update_shouldSaveDepartment() {
         Department department = new Department();
         department.setId(1L);
-        department.setName("updated");
+        department.setName("test");
 
         Mockito
-                .when(departmentRepository.save(department))
+                .when(departmentRepository.findById(1L))
+                .thenReturn(Optional.of(department));
+
+        Mockito
+                .when(departmentRepository.save(Mockito.any(Department.class)))
                 .thenReturn(department);
 
-        Department result = departmentService.update(department);
-        assertEquals("updated", result.getName());
-        Mockito.verify(departmentRepository).save(department);
+        Department savedDepartment = departmentService.update(1L, department);
+        assertEquals(department.getId(), savedDepartment.getId());
+        assertEquals(department.getName(), savedDepartment.getName());
     }
 
     @Test

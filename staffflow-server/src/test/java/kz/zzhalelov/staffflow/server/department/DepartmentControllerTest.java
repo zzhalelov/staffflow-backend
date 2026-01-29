@@ -1,6 +1,7 @@
 package kz.zzhalelov.staffflow.server.department;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kz.zzhalelov.staffflow.server.config.SecurityConfig;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentCreateDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentMapper;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentUpdateDto;
@@ -9,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,7 +26,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 @WebMvcTest({DepartmentController.class, DepartmentMapper.class})
+@Import(SecurityConfig.class)
 class DepartmentControllerTest {
     @MockitoBean
     DepartmentService departmentService;
@@ -121,7 +126,7 @@ class DepartmentControllerTest {
                 .thenReturn(Optional.of(new Department()));
 
         Mockito
-                .when(departmentService.update(Mockito.any(Department.class)))
+                .when(departmentService.update(Mockito.anyLong(), Mockito.any(Department.class)))
                 .thenReturn(department);
 
         String json = objectMapper.writeValueAsString(updateDto);
