@@ -25,16 +25,19 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        // 🔐 WRITE — только ADMIN
+                        // Prometheus
+                        .requestMatchers("/actuator/prometheus").permitAll()
+
+                        // WRITE — только ADMIN
                         .requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
 
-                        // 👀 READ — любой авторизованный
+                        // READ — любой авторизованный
                         .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
 
-                        // ❌ всё остальное запрещено
+                        // всё остальное запрещено
                         .anyRequest().denyAll()
                 )
 
