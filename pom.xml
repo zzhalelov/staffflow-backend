@@ -33,6 +33,14 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.12</version>
@@ -42,6 +50,14 @@
                         <phase>test</phase>
                         <goals>
                             <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>jacoco-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -60,6 +76,7 @@
     <properties>
         <java.version>17</java.version>
         <spring-boot.version>3.4.2</spring-boot.version>
+        <argLine></argLine>
     </properties>
     <dependencies>
         <dependency>
