@@ -24,7 +24,7 @@ RUN mvn -B -pl staffflow-server -am -DskipTests package
 # ---------------------------
 # Stage 2: Runtime
 # ---------------------------
-FROM amazoncorretto:17-alpine-jdk
+FROM amazoncorretto:17-alpine-jre
 
 WORKDIR /app
 
