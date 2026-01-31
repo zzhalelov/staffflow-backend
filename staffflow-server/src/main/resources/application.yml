@@ -2,7 +2,7 @@ server:
   port: 8081
 
 jwt:
-  secret: "staffflow-super-secret-key-which-is-at-least-32-chars"
+  secret: staffflow-super-secret-key-which-is-at-least-32-chars
   expiration: 3600000
 
 cors:

@@ -1,15 +1,16 @@
 package kz.zzhalelov.staffflow.server.security;
 
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@Getter
+@Data
 public class JwtProperties {
-    @Value("${security.jwt.secret}")
+    @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${security.jwt.expiration}")
+    @Value("${jwt.expiration}")
     private long expiration; // ms
 }
