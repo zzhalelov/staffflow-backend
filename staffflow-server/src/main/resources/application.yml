@@ -16,6 +16,8 @@ cors:
     - https://www.staffflow.kz
 
 spring:
+  profiles:
+    active: local
   datasource:
     url: jdbc:postgresql://localhost:5432/hrms-spring-jpa
     username: postgres

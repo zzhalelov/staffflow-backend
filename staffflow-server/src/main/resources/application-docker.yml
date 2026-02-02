@@ -16,6 +16,8 @@ cors:
     - https://www.staffflow.kz
 
 spring:
+  profiles:
+    active: docker
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
