@@ -1,4 +1,4 @@
-package kz.zzhalelov.staffflow.server.absence;
+package kz.zzhalelov.staffflow.server.common;
 
 public enum AbsenceStatus {
     NOT_APPROVED,

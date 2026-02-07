@@ -1,11 +1,9 @@
-package kz.zzhalelov.staffflow.server.absence.vacation.dto;
+package kz.zzhalelov.staffflow.server.vacation.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import kz.zzhalelov.staffflow.server.absence.AbsenceStatus;
-import kz.zzhalelov.staffflow.server.absence.vacation.Vacation;
-import kz.zzhalelov.staffflow.server.absence.vacation.VacationType;
-import kz.zzhalelov.staffflow.server.employee.Employee;
+import kz.zzhalelov.staffflow.server.vacation.Vacation;
+import kz.zzhalelov.staffflow.server.vacation.VacationType;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -20,16 +18,12 @@ import java.time.Month;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class VacationCreateDto {
-    @NotNull(message = "Employee is required")
-    Employee employee;
-    @NotNull(message = "Status is required")
-    AbsenceStatus status;
-    @NotBlank(message = "Vacation type is required")
+    @NotBlank(message = "VacationType type is required")
     VacationType vacationType;
     @NotNull(message = "Month is required")
     Month month;
-    @NotBlank(message = "Year is required")
-    int year;
+    @NotNull(message = "Year is required")
+    Integer year;
     @NotNull(message = "Start date is required")
     LocalDate startDate;
     @NotNull(message = "End date is required")

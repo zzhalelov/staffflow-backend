@@ -1,15 +1,16 @@
-package kz.zzhalelov.staffflow.server.absence.vacation;
+package kz.zzhalelov.staffflow.server.vacation;
 
-import kz.zzhalelov.staffflow.server.absence.AbsenceStatus;
+import jakarta.persistence.EntityNotFoundException;
+import kz.zzhalelov.staffflow.server.common.AbsenceStatus;
 import kz.zzhalelov.staffflow.server.employee.Employee;
 import kz.zzhalelov.staffflow.server.employee.EmployeeRepository;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
+import kz.zzhalelov.staffflow.server.organization.Organization;
+import kz.zzhalelov.staffflow.server.organization.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,24 +19,19 @@ import java.util.List;
 public class VacationServiceImpl implements VacationService {
     private final VacationRepository vacationRepository;
     private final EmployeeRepository employeeRepository;
+    private final OrganizationRepository organizationRepository;
 
     @Override
-    public Vacation create(Vacation vacation,
-                           long employeeId,
-                           Month month,
-                           int year,
-                           LocalDate startDate,
-                           LocalDate endDate,
-                           VacationType vacationType) {
+    public Vacation create(Long employeeId, Long organizationId, Vacation vacation) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee not found"));
+
+        Organization organization = organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new EntityNotFoundException("Organization not found"));
+
+        vacation.setOrganization(organization);
         vacation.setEmployee(employee);
-        vacation.setStartDate(startDate);
-        vacation.setEndDate(endDate);
-        vacation.setMonth(month);
-        vacation.setYear(year);
         vacation.setStatus(AbsenceStatus.NOT_APPROVED);
-        vacation.setDescription(vacation.getDescription());
         return vacationRepository.save(vacation);
     }
 
@@ -60,11 +56,12 @@ public class VacationServiceImpl implements VacationService {
     }
 
     @Override
-    public Vacation update(long vacationId, Vacation updatedVacation) {
-        Vacation existingVacation = vacationRepository.findById(vacationId)
+    public Vacation update(long id, Vacation updatedVacation) {
+        Vacation existing = vacationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Vacation not found"));
-        merge(existingVacation, updatedVacation);
-        return null;
+
+        merge(existing, updatedVacation);
+        return vacationRepository.save(existing);
     }
 
     private void merge(Vacation existingVacation, Vacation updatedVacation) {

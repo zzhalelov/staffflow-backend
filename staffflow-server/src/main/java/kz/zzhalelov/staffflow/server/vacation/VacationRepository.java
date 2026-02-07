@@ -1,4 +1,4 @@
-package kz.zzhalelov.staffflow.server.absence.vacation;
+package kz.zzhalelov.staffflow.server.vacation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
