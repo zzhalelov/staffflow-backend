@@ -40,6 +40,7 @@ public class VacationController {
 
     @GetMapping("/{vacationId}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Получить отпуск по id")
     public VacationResponseDto findById(@PathVariable Long vacationId) {
         return vacationMapper.toResponse(vacationService.findById(vacationId));
     }

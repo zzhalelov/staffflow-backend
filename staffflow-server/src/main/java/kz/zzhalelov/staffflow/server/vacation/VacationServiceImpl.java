@@ -68,6 +68,9 @@ public class VacationServiceImpl implements VacationService {
         if (updatedVacation.getEmployee() != null) {
             existingVacation.setEmployee(updatedVacation.getEmployee());
         }
+        if (updatedVacation.getOrganization() != null) {
+            existingVacation.setOrganization(updatedVacation.getOrganization());
+        }
         if (updatedVacation.getMonth() != null) {
             existingVacation.setMonth(updatedVacation.getMonth());
         }
