@@ -1,8 +1,7 @@
 package kz.zzhalelov.staffflow.server.bonus;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.zzhalelov.staffflow.server.bonus.dto.BonusCreateDto;
+import kz.zzhalelov.staffflow.server.bonus.dto.BonusMapper;
 import kz.zzhalelov.staffflow.server.bonus.dto.BonusResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -13,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +21,7 @@ import java.util.Optional;
 public class BonusController {
 
     private final BonusRepository bonusRepository;
-
-    private final ObjectMapper objectMapper;
+    private final BonusMapper bonusMapper;
 
     @GetMapping
     public PagedModel<Bonus> getAll(@ParameterObject Pageable pageable) {
@@ -46,33 +42,34 @@ public class BonusController {
     }
 
     @PostMapping
-//    public BonusResponseDto create(@RequestBody BonusCreateDto dto) {
+    public BonusResponseDto create(@RequestBody BonusCreateDto dto) {
+        Bonus bonus = bonusMapper.fromCreate(dto);
+        return bonusMapper.toResponse(bonus);
+    }
+
+//    @PatchMapping("/{id}")
+//    public Bonus patch(@PathVariable Long id, @RequestBody JsonNode patchNode) throws IOException {
+//        Bonus bonus = bonusRepository.findById(id).orElseThrow(() ->
+//                new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id)));
+//
+//        bonusMapper.readerForUpdating(bonus).readValue(patchNode);
+//
 //        return bonusRepository.save(bonus);
 //    }
 
-    @PatchMapping("/{id}")
-    public Bonus patch(@PathVariable Long id, @RequestBody JsonNode patchNode) throws IOException {
-        Bonus bonus = bonusRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id)));
-
-        objectMapper.readerForUpdating(bonus).readValue(patchNode);
-
-        return bonusRepository.save(bonus);
-    }
-
-    @PatchMapping
-    public List<Long> patchMany(@RequestParam List<Long> ids, @RequestBody JsonNode patchNode) throws IOException {
-        Collection<Bonus> bonuses = bonusRepository.findAllById(ids);
-
-        for (Bonus bonus : bonuses) {
-            objectMapper.readerForUpdating(bonus).readValue(patchNode);
-        }
-
-        List<Bonus> resultBonuses = bonusRepository.saveAll(bonuses);
-        return resultBonuses.stream()
-                .map(Bonus::getId)
-                .toList();
-    }
+//    @PatchMapping
+//    public List<Long> patchMany(@RequestParam List<Long> ids, @RequestBody JsonNode patchNode) throws IOException {
+//        Collection<Bonus> bonuses = bonusRepository.findAllById(ids);
+//
+//        for (Bonus bonus : bonuses) {
+//            bonusMapper.readerForUpdating(bonus).readValue(patchNode);
+//        }
+//
+//        List<Bonus> resultBonuses = bonusRepository.saveAll(bonuses);
+//        return resultBonuses.stream()
+//                .map(Bonus::getId)
+//                .toList();
+//    }
 
     @DeleteMapping("/{id}")
     public Bonus delete(@PathVariable Long id) {
