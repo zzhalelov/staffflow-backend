@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.position;
 
+import kz.zzhalelov.staffflow.server.exception.ConflictException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,10 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public Position createPosition(Position position) {
+        positionRepository.findByNameIgnoreCase(position.getName())
+                .ifPresent(p -> {
+                    throw new ConflictException("Должность с таким названием уже существует: " + position.getName());
+                });
         return positionRepository.save(position);
     }
 
@@ -24,7 +29,8 @@ public class PositionServiceImpl implements PositionService {
 
     @Override
     public Position findById(long positionId) {
-        return positionRepository.findById(positionId).orElseThrow();
+        return positionRepository.findById(positionId)
+                .orElseThrow(() -> new NotFoundException("Position not found"));
     }
 
     @Override

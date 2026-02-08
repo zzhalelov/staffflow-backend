@@ -325,7 +325,7 @@ class OrganizationServiceImplTest {
 
         Mockito
                 .when(organizationRepository.findByIdNumber("123456789012"))
-                .thenReturn(organization);
+                .thenReturn(Optional.of(organization));
 
         Organization result = organizationService.findByIdNumber("123456789012");
         assertEquals("123456789012", result.getIdNumber());

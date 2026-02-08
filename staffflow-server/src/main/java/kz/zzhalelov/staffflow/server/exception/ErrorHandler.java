@@ -22,4 +22,11 @@ public class ErrorHandler {
         log.warn(ex.getMessage());
         return new ErrorResponse(ex.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleConflict(ConflictException ex) {
+        log.warn(ex.getMessage());
+        return new ErrorResponse(ex.getMessage());
+    }
 }

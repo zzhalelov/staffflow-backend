@@ -1,6 +1,7 @@
 package kz.zzhalelov.staffflow.server.organization;
 
 import kz.zzhalelov.staffflow.server.exception.BadRequestException;
+import kz.zzhalelov.staffflow.server.exception.ConflictException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public Organization create(Organization organization) {
+        organizationRepository.findByIdNumber(organization.getIdNumber())
+                .ifPresent(o -> {
+                    throw new ConflictException("Организация с таким БИН уже существует: " + organization.getIdNumber());
+                });
         if (organization.getIdNumber() == null
                 || organization.getIdNumber().isBlank()
                 || organization.getIdNumber().length() != 12) {
@@ -51,7 +56,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public Organization findByIdNumber(String idNumber) {
-        return organizationRepository.findByIdNumber(idNumber);
+        return organizationRepository.findByIdNumber(idNumber)
+                .orElseThrow(() -> new NotFoundException("Организация не найдена"));
     }
 
     private void merge(Organization existingOrganization, Organization updatedOrganization) {

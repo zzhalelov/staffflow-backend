@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.regulatoryIndicator;
 
+import kz.zzhalelov.staffflow.server.exception.ConflictException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,10 @@ public class RegulatoryIndicatorServiceImpl implements RegulatoryIndicatorServic
 
     @Override
     public RegulatoryIndicator create(RegulatoryIndicator indicator) {
+        int year = indicator.getDate().getYear();
+        if (repository.existsByYear(year)) {
+            throw new ConflictException("Расчетные показатели за " + indicator.getDate().getYear() + " год уже введены");
+        }
         return repository.save(indicator);
     }
 
@@ -54,7 +59,7 @@ public class RegulatoryIndicatorServiceImpl implements RegulatoryIndicatorServic
         if (updatedIndicator.getMzpValue() != null) {
             existingIndicator.setMzpValue(updatedIndicator.getMzpValue());
         }
-        if (updatedIndicator.getDescription() != null  && !updatedIndicator.getDescription().isBlank()) {
+        if (updatedIndicator.getDescription() != null && !updatedIndicator.getDescription().isBlank()) {
             existingIndicator.setDescription(updatedIndicator.getDescription());
         }
     }

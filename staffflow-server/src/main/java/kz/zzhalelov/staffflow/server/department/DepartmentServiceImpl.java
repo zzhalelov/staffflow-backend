@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.department;
 
+import kz.zzhalelov.staffflow.server.exception.ConflictException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department create(Department department) {
+        departmentRepository.findByNameIgnoreCase(department.getName())
+                .ifPresent(d -> {
+                    throw new ConflictException("Подразделение с таким названием уже существует: " + department.getName());
+                });
         return departmentRepository.save(department);
     }
 

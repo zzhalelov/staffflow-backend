@@ -1,6 +1,7 @@
 package kz.zzhalelov.staffflow.server.employee;
 
 import kz.zzhalelov.staffflow.server.exception.BadRequestException;
+import kz.zzhalelov.staffflow.server.exception.ConflictException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +19,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee create(Employee employee) {
         employeeRepository.findByIin(employee.getIin())
                 .ifPresent(e -> {
-                    throw new IllegalArgumentException("Сотрудник с таким ИИН уже существует: " + employee.getIin());
+                    throw new ConflictException("Сотрудник с таким ИИН уже существует: " + employee.getIin());
                 });
         if (employee.getIin() == null || employee.getIin().isBlank()) {
             throw new BadRequestException("ИИН должен быть заполнен");

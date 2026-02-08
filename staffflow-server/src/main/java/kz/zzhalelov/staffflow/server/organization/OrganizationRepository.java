@@ -2,7 +2,8 @@ package kz.zzhalelov.staffflow.server.organization;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrganizationRepository extends JpaRepository<Organization, Long> {
+import java.util.Optional;
 
-    Organization findByIdNumber(String idNumber);
+public interface OrganizationRepository extends JpaRepository<Organization, Long> {
+    Optional<Organization> findByIdNumber(String idNumber);
 }
