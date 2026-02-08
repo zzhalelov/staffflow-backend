@@ -8,6 +8,7 @@ import kz.zzhalelov.staffflow.server.organization.dto.OrganizationResponseDto;
 import kz.zzhalelov.staffflow.server.organization.dto.OrganizationUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/organizations")
 @RequiredArgsConstructor
 @Tag(name = "Organizations", description = "Управление организациями")
+@PreAuthorize("hasRole('ADMIN')")
 public class OrganizationController {
     private final OrganizationService organizationService;
     private final OrganizationMapper organizationMapper;
