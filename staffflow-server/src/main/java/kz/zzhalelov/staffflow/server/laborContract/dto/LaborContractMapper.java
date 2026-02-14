@@ -2,9 +2,11 @@ package kz.zzhalelov.staffflow.server.laborContract.dto;
 
 import kz.zzhalelov.staffflow.server.department.Department;
 import kz.zzhalelov.staffflow.server.employee.Employee;
+import kz.zzhalelov.staffflow.server.employee.dto.EmployeeShortResponseDto;
 import kz.zzhalelov.staffflow.server.laborContract.LaborContract;
 import kz.zzhalelov.staffflow.server.laborContract.LaborContractStatus;
 import kz.zzhalelov.staffflow.server.organization.Organization;
+import kz.zzhalelov.staffflow.server.organization.dto.OrganizationShortResponseDto;
 import kz.zzhalelov.staffflow.server.position.Position;
 import kz.zzhalelov.staffflow.server.position.dto.PositionResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -56,8 +58,8 @@ public class LaborContractMapper {
     public LaborContractResponseDto toResponse(LaborContract laborContract) {
         LaborContractResponseDto dto = new LaborContractResponseDto();
         dto.setId(laborContract.getId());
-        dto.setOrganization(laborContract.getOrganization());
-        dto.setEmployee(laborContract.getEmployee());
+        dto.setOrganization(new OrganizationShortResponseDto());
+        dto.setEmployee(new EmployeeShortResponseDto());
         dto.setHireDate(laborContract.getHireDate());
         dto.setDepartment(laborContract.getDepartment());
 

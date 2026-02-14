@@ -4,7 +4,11 @@ import jakarta.persistence.EntityNotFoundException;
 import kz.zzhalelov.staffflow.server.common.AbsenceStatus;
 import kz.zzhalelov.staffflow.server.employee.Employee;
 import kz.zzhalelov.staffflow.server.employee.EmployeeRepository;
+import kz.zzhalelov.staffflow.server.exception.BadRequestException;
+import kz.zzhalelov.staffflow.server.exception.ConflictException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
+import kz.zzhalelov.staffflow.server.laborContract.LaborContractRepository;
+import kz.zzhalelov.staffflow.server.laborContract.LaborContractStatus;
 import kz.zzhalelov.staffflow.server.organization.Organization;
 import kz.zzhalelov.staffflow.server.organization.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +24,17 @@ public class VacationServiceImpl implements VacationService {
     private final VacationRepository vacationRepository;
     private final EmployeeRepository employeeRepository;
     private final OrganizationRepository organizationRepository;
+    private final LaborContractRepository contractRepository;
 
     @Override
     public Vacation create(Long employeeId, Long organizationId, Vacation vacation) {
+        checkContractStatus(employeeId);
+        if (vacation.getStartDate().isAfter(vacation.getEndDate())) {
+            throw new BadRequestException("Дата начала не может быть позже даты окончания");
+        }
+        if (vacationRepository.existsOverlappingVacation(employeeId, vacation.getStartDate(), vacation.getEndDate())) {
+            throw new ConflictException("Есть отпуск, который по датам пересекается с ранее зарегистрированным отпуском");
+        }
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee not found"));
 
@@ -92,5 +104,12 @@ public class VacationServiceImpl implements VacationService {
         if (updatedVacation.getDescription() != null) {
             existingVacation.setDescription(updatedVacation.getDescription());
         }
+    }
+
+    private void checkContractStatus(long employeeId) {
+        contractRepository.findByEmployee_IdAndStatusNot(employeeId, LaborContractStatus.HIRED)
+                .ifPresent(lc -> {
+                    throw new ConflictException("Трудовой договор не заключен, либо расторгнут");
+                });
     }
 }

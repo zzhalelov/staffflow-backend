@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface LaborContractRepository extends JpaRepository<LaborContract, Long> {
     @Query("select lc from LaborContract lc where lc.employee.id = :employeeId and lc.status = 'HIRED'")
     Optional<LaborContract> finActiveByEmployeeId(@Param("employeeId") Long employeeId);
+
+    Optional<LaborContract> findByEmployee_IdAndStatusNot(Long employeeId, LaborContractStatus status);
 }

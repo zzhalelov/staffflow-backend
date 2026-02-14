@@ -3,7 +3,11 @@ package kz.zzhalelov.staffflow.server.sickLeave;
 import kz.zzhalelov.staffflow.server.common.AbsenceStatus;
 import kz.zzhalelov.staffflow.server.employee.Employee;
 import kz.zzhalelov.staffflow.server.employee.EmployeeRepository;
+import kz.zzhalelov.staffflow.server.exception.BadRequestException;
+import kz.zzhalelov.staffflow.server.exception.ConflictException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
+import kz.zzhalelov.staffflow.server.laborContract.LaborContractRepository;
+import kz.zzhalelov.staffflow.server.laborContract.LaborContractStatus;
 import kz.zzhalelov.staffflow.server.organization.Organization;
 import kz.zzhalelov.staffflow.server.organization.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +21,19 @@ public class SickLeaveServiceImpl implements SickLeaveService {
     private final SickLeaveRepository sickLeaveRepository;
     private final EmployeeRepository employeeRepository;
     private final OrganizationRepository organizationRepository;
+    private final LaborContractRepository contractRepository;
 
     @Override
     public SickLeave create(Long employeeId, Long organizationId, SickLeave sickLeave) {
+        checkContractStatus(employeeId);
+        if (sickLeave.getStartDate().isAfter(sickLeave.getEndDate())) {
+            throw new BadRequestException("Дата начала не может быть позже даты окончания");
+        }
+        if (sickLeaveRepository.existsOverlappingSickLeaves(employeeId,
+                sickLeave.getStartDate(),
+                sickLeave.getEndDate())) {
+            throw new ConflictException("Больничный лист по датам пересекается с ранее зарегистрированным БЛ");
+        }
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new NotFoundException("Employee not found"));
 
@@ -85,5 +99,12 @@ public class SickLeaveServiceImpl implements SickLeaveService {
         if (updated.getDescription() != null) {
             existing.setDescription(updated.getDescription());
         }
+    }
+
+    private void checkContractStatus(long employeeId) {
+        contractRepository.findByEmployee_IdAndStatusNot(employeeId, LaborContractStatus.HIRED)
+                .ifPresent(lc -> {
+                    throw new ConflictException("Трудовой договор не заключен, либо расторгнут");
+                });
     }
 }
