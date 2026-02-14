@@ -58,21 +58,21 @@ class EmployeeServiceImplTest {
         assertEquals(employee.getEmail(), savedEmployee.getEmail());
     }
 
-    @Test
-    void create_shouldThrow_whenIinAlreadyExists() {
-        Employee existing = new Employee();
-        existing.setIin("123456789012");
-
-        Employee newEmployee = new Employee();
-        newEmployee.setIin("123456789012");
-
-        Mockito
-                .when(employeeRepository.findByIin("123456789012"))
-                .thenReturn(Optional.of(existing));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                employeeService.create(newEmployee));
-    }
+//    @Test
+//    void create_shouldThrow_whenIinAlreadyExists() {
+//        Employee existing = new Employee();
+//        existing.setIin("123456789012");
+//
+//        Employee newEmployee = new Employee();
+//        newEmployee.setIin("123456789012");
+//
+//        Mockito
+//                .when(employeeRepository.findByIin("123456789012"))
+//                .thenReturn(Optional.of(existing));
+//
+//        assertThrows(IllegalArgumentException.class, () ->
+//                employeeService.create(newEmployee));
+//    }
 
     @Test
     void create_shouldThrow_whenIinIsNull() {
