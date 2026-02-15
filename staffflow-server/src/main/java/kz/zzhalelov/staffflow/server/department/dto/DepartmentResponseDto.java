@@ -13,4 +13,6 @@ public class DepartmentResponseDto {
     String name;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+    String createdBy;
+    String updatedBy;
 }
