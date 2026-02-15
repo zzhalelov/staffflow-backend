@@ -52,7 +52,7 @@ public class DepartmentController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Обновить сведения о подразделении")
     public DepartmentResponseDto update(@PathVariable long id,
-                                        @RequestBody DepartmentUpdateDto dto) {
+                                        @Valid @RequestBody DepartmentUpdateDto dto) {
         Department department = departmentMapper.fromUpdate(dto);
         return departmentMapper.toResponse(departmentService.update(id, department));
     }

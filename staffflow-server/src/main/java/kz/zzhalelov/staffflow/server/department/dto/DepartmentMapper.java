@@ -21,6 +21,8 @@ public class DepartmentMapper {
         DepartmentResponseDto dto = new DepartmentResponseDto();
         dto.setId(department.getId());
         dto.setName(department.getName());
+        dto.setCreatedAt(department.getCreatedAt());
+        dto.setUpdatedAt(department.getUpdatedAt());
         return dto;
     }
 }

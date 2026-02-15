@@ -14,7 +14,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department create(Department department) {
-        departmentRepository.findByNameIgnoreCase(department.getName())
+        departmentRepository.findByNameIgnoreCase(department.getName().trim())
                 .ifPresent(d -> {
                     throw new ConflictException("Подразделение с таким названием уже существует: " + department.getName());
                 });
