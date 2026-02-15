@@ -11,6 +11,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -75,17 +79,26 @@ class DepartmentControllerTest {
         department2.setId(2L);
         department2.setName("def");
 
+        Page<Department> page =
+                new PageImpl<>(
+                        List.of(department1, department2),
+                        PageRequest.of(0, 20),
+                        2
+                );
+
         Mockito
-                .when(departmentService.findAll())
-                .thenReturn(List.of(department1, department2));
+                .when(departmentService.findAll(Mockito.any(Pageable.class)))
+                .thenReturn(page);
 
         mockMvc.perform(get("/api/departments"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(department1.getId()))
-                .andExpect(jsonPath("$[0].name").value(department1.getName()))
-                .andExpect(jsonPath("$[1].id").value(department2.getId()))
-                .andExpect(jsonPath("$[1].name").value(department2.getName()));
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.content[0].id").value(department1.getId()))
+                .andExpect(jsonPath("$.content[0].name").value(department1.getName()))
+                .andExpect(jsonPath("$.content[1].id").value(department2.getId()))
+                .andExpect(jsonPath("$.content[1].name").value(department2.getName()))
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.totalPages").value(1));
     }
 
     @Test

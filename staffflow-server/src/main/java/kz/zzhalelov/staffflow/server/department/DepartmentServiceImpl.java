@@ -3,9 +3,9 @@ package kz.zzhalelov.staffflow.server.department;
 import kz.zzhalelov.staffflow.server.exception.ConflictException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +22,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public List<Department> findAll() {
-        return departmentRepository.findAll();
+    public Page<Department> findAll(Pageable pageable) {
+        return departmentRepository.findAll(pageable);
     }
 
     @Override

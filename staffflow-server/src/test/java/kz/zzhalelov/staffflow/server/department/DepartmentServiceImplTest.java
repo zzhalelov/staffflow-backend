@@ -1,5 +1,6 @@
 package kz.zzhalelov.staffflow.server.department;
 
+import kz.zzhalelov.staffflow.server.exception.ConflictException;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,6 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +46,25 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void findAll_shouldReturnList() {
+    void create_shouldThrow_whenNameAlreadyExists() {
+        Department existing = new Department();
+        existing.setName("Marketing");
+
+        Department newDepartment = new Department();
+        newDepartment.setName("Marketing");
+
+        Mockito
+                .when(departmentRepository.findByNameIgnoreCase("Marketing"))
+                .thenReturn(Optional.of(existing));
+
+        assertThrows(ConflictException.class, () ->
+                departmentService.create(newDepartment));
+    }
+
+    @Test
+    void findAll_shouldReturnPage() {
+        Pageable pageable = PageRequest.of(0, 10);
+
         Department existingDepartment1 = new Department();
         existingDepartment1.setId(1L);
         existingDepartment1.setName("abc");
@@ -50,16 +73,18 @@ class DepartmentServiceImplTest {
         existingDepartment2.setId(2L);
         existingDepartment2.setName("def");
 
-        List<Department> existingDepartments = List.of(existingDepartment1, existingDepartment2);
+        Page<Department> page = new PageImpl<>(List.of(existingDepartment1, existingDepartment2), pageable, 2);
 
         Mockito
-                .when(departmentRepository.findAll())
-                .thenReturn(existingDepartments);
+                .when(departmentRepository.findAll(pageable))
+                .thenReturn(page);
 
-        List<Department> savedDepartments = departmentService.findAll();
-        assertEquals(2, savedDepartments.size());
-        assertEquals(existingDepartment1.getId(), savedDepartments.get(0).getId());
-        assertEquals(existingDepartment2.getId(), savedDepartments.get(1).getId());
+        Page<Department> savedDepartments = departmentService.findAll(pageable);
+        assertEquals(2, savedDepartments.getContent().size());
+        assertEquals(1, savedDepartments.getTotalPages());
+        assertEquals(2, savedDepartments.getTotalElements());
+        assertEquals(existingDepartment1.getId(), savedDepartments.getContent().get(0).getId());
+        assertEquals(existingDepartment2.getId(), savedDepartments.getContent().get(1).getId());
     }
 
     @Test
@@ -110,6 +135,23 @@ class DepartmentServiceImplTest {
         Department savedDepartment = departmentService.update(1L, department);
         assertEquals(department.getId(), savedDepartment.getId());
         assertEquals(department.getName(), savedDepartment.getName());
+    }
+
+    @Test
+    void update_shouldThrow_whenDepartmentNotFound() {
+        Mockito
+                .when(departmentRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(
+                NotFoundException.class,
+                () -> departmentService.update(1L, new Department())
+        );
+        assertEquals("Отдел не найден", ex.getMessage());
+
+        Mockito
+                .verify(departmentRepository)
+                .findById(1L);
     }
 
     @Test

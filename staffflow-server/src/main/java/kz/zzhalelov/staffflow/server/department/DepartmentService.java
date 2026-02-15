@@ -1,11 +1,12 @@
 package kz.zzhalelov.staffflow.server.department;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface DepartmentService {
     Department create(Department department);
 
-    List<Department> findAll();
+    Page<Department> findAll(Pageable pageable);
 
     Department findById(long departmentId);
 

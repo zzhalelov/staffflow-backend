@@ -2,16 +2,16 @@ package kz.zzhalelov.staffflow.server.department;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentCreateDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentResponseDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentMapper;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentUpdateDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class DepartmentController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создать новое подразделение")
-    public DepartmentResponseDto create(@RequestBody DepartmentCreateDto dto) {
+    public DepartmentResponseDto create(@Valid @RequestBody DepartmentCreateDto dto) {
         Department department = departmentMapper.fromCreate(dto);
         return departmentMapper.toResponse(departmentService.create(department));
     }
@@ -34,11 +34,9 @@ public class DepartmentController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Вывести список всех подразделений")
-    public List<DepartmentResponseDto> findAll() {
-        return departmentService.findAll()
-                .stream()
-                .map(departmentMapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<DepartmentResponseDto> findAll(Pageable pageable) {
+        return departmentService.findAll(pageable)
+                .map(departmentMapper::toResponse);
     }
 
     //find by id
