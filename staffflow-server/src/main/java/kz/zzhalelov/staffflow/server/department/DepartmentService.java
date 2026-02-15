@@ -9,7 +9,7 @@ public interface DepartmentService {
 
     Department findById(long departmentId);
 
-    Department update(Department department);
+    Department update(long id, Department department);
 
     void delete(long departmentId);
 }

@@ -9,7 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @TestConfiguration
 public class NoSecurityTestConfig {
     @Bean
-    SecurityFilterChain testFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());

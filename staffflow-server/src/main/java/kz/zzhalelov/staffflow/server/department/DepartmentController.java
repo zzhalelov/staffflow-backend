@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentCreateDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentResponseDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentMapper;
+import kz.zzhalelov.staffflow.server.department.dto.DepartmentUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/departments")
 @Tag(name = "Departments", description = "Управление подразделениями организации")
 public class DepartmentController {
-    private final DepartmentRepository departmentRepository;
     private final DepartmentMapper departmentMapper;
     private final DepartmentService departmentService;
 
@@ -50,14 +50,13 @@ public class DepartmentController {
     }
 
     //update
-    @PatchMapping("/{departmentId}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Обновить сведения о подразделении")
-    public DepartmentResponseDto update(@PathVariable long departmentId,
-                                        @RequestBody Department department) {
-        Department existingDepartment = departmentRepository.findById(departmentId).orElseThrow();
-        existingDepartment.setName(department.getName());
-        return departmentMapper.toResponse(departmentService.update(existingDepartment));
+    public DepartmentResponseDto update(@PathVariable long id,
+                                        @RequestBody DepartmentUpdateDto dto) {
+        Department department = departmentMapper.fromUpdate(dto);
+        return departmentMapper.toResponse(departmentService.update(id, department));
     }
 
     @DeleteMapping("/{id}")

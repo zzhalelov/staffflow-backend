@@ -33,8 +33,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department update(Department department) {
-        return departmentRepository.save(department);
+    public Department update(long id, Department updated) {
+        Department existing = departmentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Отдел не найден"));
+        existing.setName(updated.getName());
+        return departmentRepository.save(existing);
     }
 
     @Override
