@@ -45,4 +45,11 @@ public class ErrorHandler {
 
         return new ErrorResponse(message);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleOptimisticLock(OptimisticLockException ex) {
+        log.warn(ex.getMessage());
+        return new ErrorResponse("Данные были изменены другим пользователем. Обновите страницу.");
+    }
 }
