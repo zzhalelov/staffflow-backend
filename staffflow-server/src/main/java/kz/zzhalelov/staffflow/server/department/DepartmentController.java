@@ -59,8 +59,15 @@ public class DepartmentController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Удалить подразделение")
+    @Operation(summary = "Удалить подразделение (в архив)")
     public void delete(@PathVariable long id) {
         departmentService.delete(id);
+    }
+
+    @PostMapping("/{id}/restore")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Восстановить удаленное подразделение (из архива)")
+    public void restore(@PathVariable long id) {
+        departmentService.restore(id);
     }
 }

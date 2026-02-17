@@ -76,7 +76,7 @@ class DepartmentServiceImplTest {
         Page<Department> page = new PageImpl<>(List.of(existingDepartment1, existingDepartment2), pageable, 2);
 
         Mockito
-                .when(departmentRepository.findAll(pageable))
+                .when(departmentRepository.findAllByDeletedFalse(pageable))
                 .thenReturn(page);
 
         Page<Department> savedDepartments = departmentService.findAll(pageable);
@@ -94,7 +94,7 @@ class DepartmentServiceImplTest {
         existingDepartment.setName("abc");
 
         Mockito
-                .when(departmentRepository.findById(1L))
+                .when(departmentRepository.findByIdAndDeletedFalse(1L))
                 .thenReturn(Optional.of(existingDepartment));
 
         Department savedDepartment = departmentService.findById(1L);
@@ -106,7 +106,7 @@ class DepartmentServiceImplTest {
     @Test
     void findById_shouldThrow_whenDepartmentNotFound() {
         Mockito
-                .when(departmentRepository.findById(1L))
+                .when(departmentRepository.findByIdAndDeletedFalse(1L))
                 .thenReturn(Optional.empty());
 
         assertThrows(
@@ -115,7 +115,7 @@ class DepartmentServiceImplTest {
         );
         Mockito
                 .verify(departmentRepository)
-                .findById(1L);
+                .findByIdAndDeletedFalse(1L);
     }
 
     @Test

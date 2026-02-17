@@ -27,12 +27,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Page<Department> findAll(Pageable pageable) {
-        return departmentRepository.findAll(pageable);
+        return departmentRepository.findAllByDeletedFalse(pageable);
     }
 
     @Override
     public Department findById(long departmentId) {
-        return departmentRepository.findById(departmentId)
+        return departmentRepository.findByIdAndDeletedFalse(departmentId)
                 .orElseThrow(() -> new NotFoundException("Отдел не найден"));
     }
 
@@ -62,5 +62,27 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
 
         department.markAsDeleted(username);
+    }
+
+    @Transactional
+    public void restore(long id) {
+        Department department = departmentRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Department not found"));
+
+        if (!department.isDeleted()) {
+            throw new ConflictException("Подразделение не удалено");
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = "system";
+
+        if (authentication != null
+                && authentication.isAuthenticated()
+                && !(authentication instanceof AnonymousAuthenticationToken)) {
+            username = authentication.getName();
+        }
+
+        department.restore(username);
     }
 }

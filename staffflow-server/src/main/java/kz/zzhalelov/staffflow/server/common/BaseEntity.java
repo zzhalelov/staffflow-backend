@@ -32,13 +32,22 @@ public abstract class BaseEntity {
     private String updatedBy;
 
     @Column(nullable = false)
-    private boolean deleted = false;
-    private LocalDateTime deletedAt;
-    private String deletedBy;
+    protected boolean deleted = false;
+    protected LocalDateTime deletedAt;
+    protected String deletedBy;
 
     public void markAsDeleted(String username) {
+        if (this.deleted) {
+            return;
+        }
         this.deleted = true;
         this.deletedAt = LocalDateTime.now();
         this.deletedBy = username;
+    }
+
+    public void restore(String username) {
+        this.deleted = false;
+        this.deletedAt = null;
+        this.deletedBy = null;
     }
 }

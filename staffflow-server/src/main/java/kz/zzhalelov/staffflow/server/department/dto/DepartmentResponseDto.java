@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class DepartmentResponseDto {
     Long id;
     String name;
+
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
     String createdBy;

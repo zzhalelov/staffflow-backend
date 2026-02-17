@@ -20,7 +20,6 @@ import org.hibernate.annotations.Where;
             deleted_by = current_user
         where id = ?
         """)
-@Where(clause = "deleted = false")
 public class Department extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

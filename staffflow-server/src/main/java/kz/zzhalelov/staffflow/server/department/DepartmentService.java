@@ -13,4 +13,6 @@ public interface DepartmentService {
     Department update(long id, Department department);
 
     void delete(long departmentId);
+
+    void restore(long departmentId);
 }
