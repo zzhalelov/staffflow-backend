@@ -155,21 +155,27 @@ class DepartmentServiceImplTest {
     }
 
     @Test
-    void delete_shouldDelete_whenExists() {
+    void delete_shouldMarkAsDeleted_whenExists() {
+        Department department = new Department();
+        department.setId(1L);
+
         Mockito
                 .when(departmentRepository.findById(1L))
-                .thenReturn(Optional.of(new Department()));
+                .thenReturn(Optional.of(department));
+
         departmentService.delete(1L);
 
-        Mockito.verify(departmentRepository).deleteById(1L);
+        assertTrue(department.isDeleted());
+        assertNotNull(department.getDeletedAt());
+        assertEquals("system", department.getDeletedBy());
     }
 
     @Test
-    void delete_shouldThrow_whenNoExists() {
+    void delete_shouldThrow_whenNotExists() {
         Mockito
                 .when(departmentRepository.findById(1L))
                 .thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> departmentService.delete(1L));
-        Mockito.verify(departmentRepository, Mockito.never()).deleteById(1L);
+        Mockito.verify(departmentRepository, Mockito.never()).save(Mockito.any());
     }
 }

@@ -15,4 +15,7 @@ public class DepartmentResponseDto {
     LocalDateTime updatedAt;
     String createdBy;
     String updatedBy;
+    boolean deleted;
+    LocalDateTime deletedAt;
+    String deletedBy;
 }

@@ -25,6 +25,9 @@ public class DepartmentMapper {
         dto.setUpdatedAt(department.getUpdatedAt());
         dto.setCreatedBy(department.getCreatedBy());
         dto.setUpdatedBy(department.getUpdatedBy());
+        dto.setDeleted(department.isDeleted());
+        dto.setDeletedAt(department.getDeletedAt());
+        dto.setDeletedBy(department.getDeletedBy());
         return dto;
     }
 }

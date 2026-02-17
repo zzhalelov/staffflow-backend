@@ -30,4 +30,15 @@ public abstract class BaseEntity {
 
     @LastModifiedBy
     private String updatedBy;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
+    private LocalDateTime deletedAt;
+    private String deletedBy;
+
+    public void markAsDeleted(String username) {
+        this.deleted = true;
+        this.deletedAt = LocalDateTime.now();
+        this.deletedBy = username;
+    }
 }
