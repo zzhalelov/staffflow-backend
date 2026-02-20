@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity {
     @Version
     @Column(nullable = false)
-    private Long version;
+    private long version;
 
     @Column(nullable = false, updatable = false)
     @CreatedDate

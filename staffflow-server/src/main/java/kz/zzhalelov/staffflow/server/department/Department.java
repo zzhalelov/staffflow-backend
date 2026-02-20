@@ -6,7 +6,6 @@ import kz.zzhalelov.staffflow.server.common.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Getter
 @Setter

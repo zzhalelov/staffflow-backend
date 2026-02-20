@@ -39,6 +39,13 @@ public class OrganizationMapper {
         dto.setFullName(organization.getFullName());
         dto.setShortName(organization.getShortName());
         dto.setAddress(organization.getAddress());
+        dto.setCreatedAt(organization.getCreatedAt());
+        dto.setUpdatedAt(organization.getUpdatedAt());
+        dto.setCreatedBy(organization.getCreatedBy());
+        dto.setUpdatedBy(organization.getUpdatedBy());
+        dto.setDeleted(organization.isDeleted());
+        dto.setDeletedAt(organization.getDeletedAt());
+        dto.setDeletedBy(organization.getDeletedBy());
         return dto;
     }
 }

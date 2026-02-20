@@ -1,5 +1,5 @@
-[![Java](https://img.shields.io/badge/Java-21-%23ED8B00.svg?style=flat&logo=openjdk&logoColor=white)]()
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.4-success?logo=springboot)]()
+[![Java](https://img.shields.io/badge/Java-17%2B-%23ED8B00.svg?style=flat&logo=openjdk&logoColor=white)]()
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.2-success?logo=springboot)]()
 [![CI](https://github.com/zzhalelov/staffflow-backend/actions/workflows/ci-cd.yml/badge.svg)]()
 [![codecov](https://codecov.io/gh/zzhalelov/staffflow-backend/graph/badge.svg?token=EJWHMEHWI2)](https://codecov.io/gh/zzhalelov/staffflow-backend)
 
@@ -14,7 +14,7 @@
 ## 🧱 Архитектура проекта
 
 ### Основные принципы
-- Модульная архитектура (по доменам: `organization`, `employee`, `timesheet`, `position`, `payroll`).
+- Модульная архитектура (по доменам: `organization`, `employee`, `timesheet`, `position`, `payroll`, `hiring`, `laborContract`, `vacation`, `sickLeave` и др.).
 - Разделение на **entity**, **repository**, **service**, **controller**, **dto**, **mapper**.
 - REST API с JSON обменом.
 - Использование Lombok (`@Data`, `@FieldDefaults`, `@RequiredArgsConstructor`) для сокращения шаблонного кода.
@@ -28,14 +28,57 @@
 | Компонент | Используемое решение       |
 |------------|----------------------------|
 | Язык | Java 17+                   |
-| Фреймворк | Spring Boot                |
+| Фреймворк | Spring Boot 3.4.2          |
 | ORM | Hibernate / JPA            |
-| База данных | PostgreSQL                 |
+| База данных | PostgreSQL 15+             |
+| Миграции | Liquibase (планируется)    |
 | Сборка | Maven                      |
-| Документация | Markdown / OpenAPI |
+| Документация | Markdown / OpenAPI (Swagger UI) |
 | Логирование | SLF4J / Logback            |
-| Тестирование | JUnit 5 / Mockito |
+| Тестирование | JUnit 5 / Mockito / Testcontainers |
+| Безопасность | Spring Security / JWT      |
+| Мониторинг | Prometheus / Grafana       |
+| Контейнеризация | Docker / Docker Compose    |
 
 ---
 
+## 🚀 Запуск проекта
 
+### Предварительные требования
+- JDK 17+
+- Maven 3.8+
+- Docker & Docker Compose (для запуска БД и мониторинга)
+
+
+### Документация API
+После запуска приложения документация Swagger UI доступна по адресу:
+`http://85.202.192.39:8081//swagger-ui.html`
+
+---
+
+## 📂 Структура модулей
+Проект разделен на функциональные модули внутри `staffflow-server`:
+
+- **auth / security** — Аутентификация и авторизация (JWT).
+- **organization** — Управление организациями.
+- **employee** — Учет сотрудников.
+- **position** — Управление должностями.
+- **department** — Структура департаментов.
+- **hiring** — Процесс найма.
+- **laborContract** — Трудовые договоры.
+- **timesheet** — Табели учета рабочего времени.
+- **payroll** — Расчет заработной платы.
+- **vacation** — Учет отпусков.
+- **sickLeave** — Учет больничных.
+- **bonus** — Система премирования.
+- **resignation** — Процесс увольнения.
+- **excelReport** — Генерация отчетов в Excel.
+
+---
+
+## 🛠 CI/CD и качество кода
+- Настроены GitHub Actions для CI/CD.
+- Интеграция с Codecov для отслеживания покрытия тестами.
+- Используется JaCoCo для генерации отчетов о покрытии кода.
+
+---

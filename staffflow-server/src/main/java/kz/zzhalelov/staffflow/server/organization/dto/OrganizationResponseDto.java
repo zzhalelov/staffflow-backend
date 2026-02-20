@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrganizationResponseDto {
@@ -16,4 +18,12 @@ public class OrganizationResponseDto {
     Boolean hasBranches;
     Boolean isBranch;
     String address;
+
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
+    String createdBy;
+    String updatedBy;
+    boolean deleted;
+    LocalDateTime deletedAt;
+    String deletedBy;
 }
