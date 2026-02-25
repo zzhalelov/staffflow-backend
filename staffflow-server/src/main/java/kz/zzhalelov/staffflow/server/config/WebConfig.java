@@ -30,15 +30,6 @@ public class WebConfig {
                         .allowedHeaders("*")
                         .maxAge(3600);
             }
-
-            @Override
-            public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry.addResourceHandler("/swagger-ui/**")
-                        .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/");
-
-                registry.addResourceHandler("/**")
-                        .addResourceLocations("classpath:/static/");
-            }
         };
     }
 }
