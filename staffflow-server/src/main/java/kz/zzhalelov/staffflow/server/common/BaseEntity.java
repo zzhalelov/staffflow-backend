@@ -34,7 +34,9 @@ public abstract class BaseEntity {
 
     @Column(nullable = false)
     protected boolean deleted = false;
+    @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
+    @Column(name = "deleted_by")
     protected String deletedBy;
 
     public void markAsDeleted(String username) {

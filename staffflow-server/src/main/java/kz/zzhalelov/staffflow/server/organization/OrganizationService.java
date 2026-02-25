@@ -1,18 +1,20 @@
 package kz.zzhalelov.staffflow.server.organization;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface OrganizationService {
     Organization create(Organization organization);
 
-    List<Organization> findAll();
+    Page<Organization> findAll(Pageable pageable);
 
     Organization findById(long organizationId);
 
-    Organization update(long organizationId, Organization updatedOrganization);
+    Organization update(long id, Organization organization);
 
     void delete(long organizationId);
 
     Organization findByIdNumber(String idNumber);
+
+    void restore(long organizationId);
 }

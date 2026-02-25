@@ -8,6 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +62,7 @@ class OrganizationServiceImplTest {
                 BadRequestException.class,
                 () -> organizationService.create(organization)
         );
-        assertEquals("ИИН должен быть заполнен и составлять 12 знаков", ex.getMessage());
+        assertEquals("БИН должен быть заполнен и составлять 12 знаков", ex.getMessage());
     }
 
     @Test
@@ -70,7 +74,7 @@ class OrganizationServiceImplTest {
                 BadRequestException.class,
                 () -> organizationService.create(organization)
         );
-        assertEquals("ИИН должен быть заполнен и составлять 12 знаков", ex.getMessage());
+        assertEquals("БИН должен быть заполнен и составлять 12 знаков", ex.getMessage());
     }
 
     @Test
@@ -82,11 +86,13 @@ class OrganizationServiceImplTest {
                 BadRequestException.class,
                 () -> organizationService.create(organization)
         );
-        assertEquals("ИИН должен быть заполнен и составлять 12 знаков", ex.getMessage());
+        assertEquals("БИН должен быть заполнен и составлять 12 знаков", ex.getMessage());
     }
 
     @Test
     void findAll_shouldReturnList() {
+        Pageable pageable = PageRequest.of(0, 10);
+
         Organization organization1 = new Organization();
         organization1.setId(1L);
         organization1.setShortName("Test");
@@ -107,16 +113,16 @@ class OrganizationServiceImplTest {
         organization2.setIdNumber("123456789012");
         organization2.setOrganizationType(OrganizationType.LEGAL_PERSON);
 
-        List<Organization> existingOrganizations = List.of(organization1, organization2);
+        Page<Organization> page = new PageImpl<>(List.of(organization1, organization2), pageable, 2);
 
         Mockito
-                .when(organizationRepository.findAll())
-                .thenReturn(existingOrganizations);
+                .when(organizationRepository.findAllByDeletedFalse(pageable))
+                .thenReturn(page);
 
-        List<Organization> savedOrganizations = organizationService.findAll();
-        assertEquals(2, savedOrganizations.size());
-        assertEquals(organization1.getId(), savedOrganizations.get(0).getId());
-        assertEquals(organization2.getId(), savedOrganizations.get(1).getId());
+        Page<Organization> savedOrganizations = organizationService.findAll(pageable);
+        assertEquals(2, savedOrganizations.getContent().size());
+        assertEquals(organization1.getId(), savedOrganizations.getContent().get(0).getId());
+        assertEquals(organization2.getId(), savedOrganizations.getContent().get(1).getId());
     }
 
     @Test
@@ -132,7 +138,7 @@ class OrganizationServiceImplTest {
         existingOrganization.setOrganizationType(OrganizationType.LEGAL_PERSON);
 
         Mockito
-                .when(organizationRepository.findById(1L))
+                .when(organizationRepository.findByIdAndDeletedFalse(1L))
                 .thenReturn(Optional.of(existingOrganization));
 
         Organization savedOrganization = organizationService.findById(1L);
@@ -150,7 +156,7 @@ class OrganizationServiceImplTest {
     @Test
     void findById_shouldThrow_whenNoExists() {
         Mockito
-                .when(organizationRepository.findById(1L))
+                .when(organizationRepository.findByIdAndDeletedFalse(1L))
                 .thenReturn(Optional.empty());
 
         assertThrows(
@@ -158,7 +164,7 @@ class OrganizationServiceImplTest {
                 () -> organizationService.findById(1L));
         Mockito
                 .verify(organizationRepository)
-                .findById(1L);
+                .findByIdAndDeletedFalse(1L);
     }
 
     @Test
@@ -265,11 +271,20 @@ class OrganizationServiceImplTest {
 
     @Test
     void delete_shouldThrow_whenNotFound() {
+        Mockito
+                .when(organizationRepository.findById(1L))
+                .thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> organizationService.delete(1L));
+        Mockito.verify(organizationRepository, Mockito.never()).save(Mockito.any());
+    }
+
+    @Test
+    void delete_shouldMarkAsDeleted_whenExists() {
         Organization organization = new Organization();
         organization.setId(1L);
         organization.setShortName("Test");
         organization.setFullName("Test Inc.");
-        organization.setAddress("Beverly Hills");
+        organization.setAddress("Test address");
         organization.setIsBranch(false);
         organization.setHasBranches(false);
         organization.setIdNumber("123456789012");
@@ -277,38 +292,22 @@ class OrganizationServiceImplTest {
 
         Mockito
                 .when(organizationRepository.findById(1L))
-                .thenReturn(Optional.empty());
-
-        NotFoundException ex = assertThrows(
-                NotFoundException.class,
-                () -> organizationService.update(1L, organization));
-        assertEquals("Organization not found", ex.getMessage());
-    }
-
-    @Test
-    void delete_shouldDelete_whenExists() {
-        Mockito
-                .when(organizationRepository.existsById(1L))
-                .thenReturn(true);
+                .thenReturn(Optional.of(organization));
 
         organizationService.delete(1L);
 
-        Mockito
-                .verify(organizationRepository).deleteById(1L);
+        assertTrue(organization.isDeleted());
+        assertNotNull(organization.getDeletedAt());
+        assertEquals("system", organization.getDeletedBy());
     }
 
     @Test
     void delete_shouldDelete_whenNotExists() {
         Mockito
-                .when(organizationRepository.existsById(1L))
-                .thenReturn(false);
-
-        NotFoundException ex = assertThrows(
-                NotFoundException.class,
-                () -> organizationService.delete(1L)
-        );
-
-        assertEquals("Организация не найдена", ex.getMessage());
+                .when(organizationRepository.findById(1L))
+                .thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> organizationService.delete(1L));
+        Mockito.verify(organizationRepository, Mockito.never()).save(Mockito.any());
     }
 
     @Test
