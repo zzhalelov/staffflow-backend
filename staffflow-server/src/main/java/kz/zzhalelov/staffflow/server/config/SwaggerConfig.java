@@ -13,7 +13,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .servers(List.of(
-                        new Server().url("http://staffflow.kz").description("Production server"),
+                        new Server().url("https://staffflow.kz").description("Production server"),
                         new Server().url("http://localhost:8081").description("Local development")
                 ));
     }

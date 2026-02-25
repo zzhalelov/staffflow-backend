@@ -1,5 +1,6 @@
 server:
   port: 8081
+  forward-headers-strategy: framework
 
 jwt:
   secret: ${JWT_SECRET}
@@ -51,3 +52,5 @@ springdoc:
     path: /swagger-ui.html
     disable-swagger-default-url: true
     config-url: /v3/api-docs/swagger-config
+    use-management-port: false
+    show-actuator: false
