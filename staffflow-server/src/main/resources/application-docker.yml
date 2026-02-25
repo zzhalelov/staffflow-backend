@@ -50,7 +50,6 @@ springdoc:
     path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html
-    disable-swagger-default-url: true
+    url: /v3/api-docs
     config-url: /v3/api-docs/swagger-config
-    use-management-port: false
-    show-actuator: false
+    disable-swagger-default-url: true
