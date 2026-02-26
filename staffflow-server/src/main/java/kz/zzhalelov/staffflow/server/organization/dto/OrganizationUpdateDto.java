@@ -1,6 +1,7 @@
 package kz.zzhalelov.staffflow.server.organization.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import kz.zzhalelov.staffflow.server.organization.OrganizationType;
 import lombok.AccessLevel;
@@ -11,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrganizationUpdateDto {
     Long id;
-    @NotBlank(message = "Organization type os required")
+    @NotNull(message = "Organization type os required")
     OrganizationType organizationType;
     @NotBlank(message = "Full name is required")
     @Pattern(regexp = "^[A-Za-zА-Яа-я].*",

@@ -3,6 +3,7 @@ package kz.zzhalelov.staffflow.server.organization;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import kz.zzhalelov.staffflow.server.common.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,7 @@ public class Organization extends BaseEntity {
     @Column(name = "organization_type")
     @Schema(description = "Тип организации",
             example = "LEGAL_PERSON")
+    @NotNull(message = "Тип организации должен быть заполнен")
     private OrganizationType organizationType;
     @NotBlank(message = "Полное наименование не заполнено")
     @Column(name = "full_name")

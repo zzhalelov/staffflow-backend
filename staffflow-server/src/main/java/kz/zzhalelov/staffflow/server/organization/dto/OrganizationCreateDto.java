@@ -3,6 +3,7 @@ package kz.zzhalelov.staffflow.server.organization.dto;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import kz.zzhalelov.staffflow.server.organization.OrganizationType;
 import lombok.AccessLevel;
@@ -13,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrganizationCreateDto {
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "Organization type is required")
+    @NotNull(message = "Organization type is required")
     OrganizationType organizationType;
     @NotBlank(message = "Full name is required")
     @Pattern(regexp = "^[A-Za-zА-Яа-я].*",

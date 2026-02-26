@@ -1,12 +1,17 @@
 package kz.zzhalelov.staffflow.server.department;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentCreateDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentResponseDto;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentMapper;
 import kz.zzhalelov.staffflow.server.department.dto.DepartmentUpdateDto;
+import kz.zzhalelov.staffflow.server.exception.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +22,11 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/departments")
 @Tag(name = "Departments", description = "Управление подразделениями организации")
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "400", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "409", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+})
 public class DepartmentController {
     private final DepartmentMapper departmentMapper;
     private final DepartmentService departmentService;

@@ -21,12 +21,29 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public Organization create(Organization organization) {
-        log.info("Creating organization: {}", organization.getFullName());
+        log.info("Creating organization: {}", organization.getIdNumber());
         organizationRepository.findByIdNumber(organization.getIdNumber())
                 .ifPresent(o -> {
-                    log.warn("Organization with name {} already exists", organization.getFullName());
+                    log.warn("Organization with idNumber {} already exists", organization.getIdNumber());
                     throw new ConflictException("Организация с таким БИН уже существует: " + organization.getIdNumber());
                 });
+
+        log.info("Creating organization; {}", organization.getFullName());
+        organizationRepository.findByFullNameIgnoreCase(organization.getFullName())
+                .ifPresent((o -> {
+                    log.warn("Organization with full name {} already exists", organization.getFullName());
+                    throw new ConflictException("Организация с таким полным наименованием уже существует: "
+                            + organization.getFullName());
+                }));
+
+        log.info("Creating organization; {}", organization.getShortName());
+        organizationRepository.findByShortNameIgnoreCase(organization.getShortName())
+                .ifPresent((o -> {
+                    log.warn("Organization with short name {} already exists", organization.getShortName());
+                    throw new ConflictException("Организация с таким кратким наименованием уже существует: "
+                            + organization.getShortName());
+                }));
+
         if (organization.getIdNumber() == null
                 || organization.getIdNumber().isBlank()
                 || organization.getIdNumber().length() != 12) {

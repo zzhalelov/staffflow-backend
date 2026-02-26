@@ -49,6 +49,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department update(long id, Department updated) {
+        log.info("Attempt to update department's name={}", updated.getName());
+        departmentRepository.findByNameIgnoreCase(updated.getName().trim())
+                .ifPresent(d -> {
+                    log.warn("Department with name {} already exists", updated.getName());
+                    throw new ConflictException("Подразделение с таким названием уже существует: " + updated.getName());
+                });
+
         log.info("Attempt to update department id={}", id);
         Department existing = departmentRepository.findById(id)
                 .orElseThrow(() -> {
