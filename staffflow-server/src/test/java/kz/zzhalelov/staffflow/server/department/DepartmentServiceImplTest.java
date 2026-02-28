@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class DepartmentServiceImplTest {
@@ -36,7 +37,7 @@ class DepartmentServiceImplTest {
                 .thenReturn(Optional.empty());
 
         Mockito
-                .when(departmentRepository.save(Mockito.any(Department.class)))
+                .when(departmentRepository.save(any(Department.class)))
                 .thenReturn(department);
 
         Department savedDepartment = departmentService.create(department);
@@ -129,7 +130,7 @@ class DepartmentServiceImplTest {
                 .thenReturn(Optional.of(department));
 
         Mockito
-                .when(departmentRepository.save(Mockito.any(Department.class)))
+                .when(departmentRepository.save(any(Department.class)))
                 .thenReturn(department);
 
         Department savedDepartment = departmentService.update(1L, department);
@@ -139,19 +140,31 @@ class DepartmentServiceImplTest {
 
     @Test
     void update_shouldThrow_whenDepartmentNotFound() {
+        long id = 1L;
+        Department updatedDto = new Department();
+        updatedDto.setName("New Name");
+
         Mockito
-                .when(departmentRepository.findById(1L))
+                .when(departmentRepository.findByNameIgnoreCase("New Name"))
+                .thenReturn(Optional.empty());
+
+        Mockito
+                .when(departmentRepository.findById(id))
                 .thenReturn(Optional.empty());
 
         NotFoundException ex = assertThrows(
                 NotFoundException.class,
-                () -> departmentService.update(1L, new Department())
-        );
+                () -> departmentService.update(id, updatedDto));
         assertEquals("Отдел не найден", ex.getMessage());
 
         Mockito
                 .verify(departmentRepository)
-                .findById(1L);
+                .findByNameIgnoreCase("New Name");
+        Mockito
+                .verify(departmentRepository)
+                .findById(id);
+        Mockito
+                .verify(departmentRepository, Mockito.never()).save(any());
     }
 
     @Test
@@ -176,6 +189,6 @@ class DepartmentServiceImplTest {
                 .when(departmentRepository.findById(1L))
                 .thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> departmentService.delete(1L));
-        Mockito.verify(departmentRepository, Mockito.never()).save(Mockito.any());
+        Mockito.verify(departmentRepository, Mockito.never()).save(any());
     }
 }
