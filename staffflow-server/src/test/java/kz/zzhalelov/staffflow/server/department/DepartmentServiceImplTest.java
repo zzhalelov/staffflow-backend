@@ -155,7 +155,7 @@ class DepartmentServiceImplTest {
         NotFoundException ex = assertThrows(
                 NotFoundException.class,
                 () -> departmentService.update(id, updatedDto));
-        assertEquals("Отдел не найден", ex.getMessage());
+        assertEquals("Department not found", ex.getMessage());
 
         Mockito
                 .verify(departmentRepository)

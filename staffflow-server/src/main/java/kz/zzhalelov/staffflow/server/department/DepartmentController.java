@@ -67,6 +67,7 @@ public class DepartmentController {
         return departmentMapper.toResponse(departmentService.update(id, department));
     }
 
+    //delete by id (soft delete)
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Удалить подразделение (в архив)")
@@ -74,6 +75,7 @@ public class DepartmentController {
         departmentService.delete(id);
     }
 
+    //restore department from archive
     @PostMapping("/{id}/restore")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Восстановить удаленное подразделение (из архива)")

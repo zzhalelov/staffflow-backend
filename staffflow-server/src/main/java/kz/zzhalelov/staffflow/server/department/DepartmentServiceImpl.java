@@ -18,49 +18,53 @@ import org.springframework.transaction.annotation.Transactional;
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
 
+    //create
     @Override
     public Department create(Department department) {
         log.info("Creating department: {}", department.getName());
         departmentRepository.findByNameIgnoreCase(department.getName().trim())
                 .ifPresent(d -> {
-                    log.warn("Department with name {} already exists", department.getName());
-                    throw new ConflictException("Подразделение с таким названием уже существует: " + department.getName());
+                    log.warn("Creating: Department with name {} already exists", department.getName());
+                    throw new ConflictException("Department with this name already exists: " + department.getName());
                 });
         Department saved = departmentRepository.save(department);
         log.info("Department created id={} name='{}'", saved.getId(), saved.getName());
         return saved;
     }
 
+    //find all with pagination
     @Override
     public Page<Department> findAll(Pageable pageable) {
         log.debug("Fetching departments page={} size={}", pageable.getPageNumber(), pageable.getPageSize());
         return departmentRepository.findAllByDeletedFalse(pageable);
     }
 
+    //find department by id
     @Override
     public Department findById(long departmentId) {
         log.debug("Fetching department id={}", departmentId);
         return departmentRepository.findByIdAndDeletedFalse(departmentId)
                 .orElseThrow(() -> {
                     log.warn("Department not found id={}", departmentId);
-                    return new NotFoundException("Отдел не найден");
+                    return new NotFoundException("Department not found");
                 });
     }
 
+    //update department
     @Override
     public Department update(long id, Department updated) {
         log.info("Attempt to update department's name={}", updated.getName());
         departmentRepository.findByNameIgnoreCase(updated.getName().trim())
                 .ifPresent(d -> {
                     log.warn("Department with name {} already exists", updated.getName());
-                    throw new ConflictException("Подразделение с таким названием уже существует: " + updated.getName());
+                    throw new ConflictException("Department with name already exists: " + updated.getName());
                 });
 
         log.info("Attempt to update department id={}", id);
         Department existing = departmentRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Updating failed: department not found id={}", id);
-                    return new NotFoundException("Отдел не найден");
+                    return new NotFoundException("Department not found");
                 });
         existing.setName(updated.getName());
         Department saved = departmentRepository.save(existing);
@@ -68,6 +72,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return saved;
     }
 
+    //soft delete
     @Override
     @Transactional
     public void delete(long departmentId) {
@@ -93,6 +98,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         log.info("Department id={} soft deleted by {}", departmentId, username);
     }
 
+    //restore department
     @Transactional
     public void restore(long id) {
         log.info("Attempt to restore department id={}", id);
@@ -105,7 +111,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         if (!department.isDeleted()) {
             log.warn("Restore failed: department id={} is not deleted", id);
-            throw new ConflictException("Подразделение не удалено");
+            throw new ConflictException("Department not deleted");
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
