@@ -29,7 +29,7 @@ public class PersonCreateDto {
     @Pattern(regexp = "^[A-Za-zА-Яа-яЁё].*", message = "Фамилия должна начинаться с буквы")
     String lastName;
 
-    @Schema(description = "Дата рождения", example = "1990-01-01")
+    @Schema(description = "Дата рождения", example = "1990-01-01", pattern = "yyyy-MM-dd")
     @NotNull(message = "Birth date is required")
     LocalDate birthdate;
 

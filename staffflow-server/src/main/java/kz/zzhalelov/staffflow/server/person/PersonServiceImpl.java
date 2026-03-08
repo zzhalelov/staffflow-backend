@@ -21,6 +21,10 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person create(Person person) {
         log.info("Creating person: {} {}", person.getFirstName(), person.getLastName());
+        if (repository.existsByIin(person.getIin().trim())) {
+            log.warn("Creating: Person with IIN {} already exists", person.getIin());
+            throw new ConflictException("Person with this IIN already exists: " + person.getIin());
+        }
         Person saved = repository.save(person);
         log.info("Person created id={} name={}", saved.getId(), saved.getFirstName());
         return saved;
@@ -45,6 +49,12 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person update(long id, Person updated) {
         log.info("Attempt to update person id={}", updated.getId());
+        if (repository.existsByIin(updated.getIin().trim())) {
+            log.warn("Updating: Person with IIN {} already exists", updated.getIin());
+            throw new ConflictException("Person with this IIN already exists: " + updated.getIin());
+        }
+
+        log.info("Attempt to update person id={}", id);
         Person existing = repository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Updating failed: person not found id={}", id);

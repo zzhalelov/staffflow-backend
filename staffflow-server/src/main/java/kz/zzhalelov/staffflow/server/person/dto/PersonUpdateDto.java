@@ -16,49 +16,44 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Schema(description = "Обновление физического лица")
 public class PersonUpdateDto {
-    @NotBlank(message = "First name cannot be blank")
-    @Size(min = 2, max = 50, message = "Имя должно содержать от 2 до 50 символов")
-    @Schema(description = "Имя", example = "John")
+    @Schema(description = "Имя", example = "Джонни")
+    @NotBlank(message = "Firstname is required")
+    @Pattern(regexp = "^[A-Za-zА-Яа-яЁё].*", message = "Имя должно начинаться с буквы")
     String firstName;
 
-    @NotBlank(message = "Last name cannot be blank")
-    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
-    @Schema(description = "Фамилия", example = "Doe")
+    @Schema(description = "Фамилия", example = "Депп")
+    @NotBlank(message = "Lastname is required")
+    @Pattern(regexp = "^[A-Za-zА-Яа-яЁё].*", message = "Фамилия должна начинаться с буквы")
     String lastName;
 
-    @NotNull(message = "Birthdate cannot be null")
-    @Past(message = "Birthdate must be in the past")
-    @Schema(description = "Дата рождения", example = "1990-01-01")
+    @Schema(description = "Дата рождения", example = "1990-01-01", pattern = "yyyy-MM-dd")
+    @NotNull(message = "Birth date is required")
     LocalDate birthdate;
 
-    @NotBlank(message = "IIN cannot be blank")
-    @Size(min = 12, max = 12, message = "IIN must be 12 characters long")
-    @Schema(description = "ИИН", example = "900101123456")
+    @Schema(description = "ИИН (12 цифр)", example = "900101123456")
+    @NotBlank(message = "Iin is required")
+    @Pattern(regexp = "^\\d{12}$", message = "ИИН должен состоять ровно из 12 цифр")
     String iin;
 
-    @NotNull(message = "Gender cannot be null")
-    @Schema(description = "Пол", example = "MALE")
+    @Schema(description = "Пол", implementation = GenderType.class)
+    @NotNull(message = "Gender is required")
     GenderType gender;
 
-    @NotBlank(message = "Citizenship cannot be blank")
-    @Size(min = 2, max = 50, message = "Citizenship must be between 2 and 50 characters")
     @Schema(description = "Страна гражданства", example = "Kazakhstan")
+    @NotBlank(message = "Citizenship is required")
     String citizenship;
 
-    @NotBlank(message = "Phone number cannot be blank")
-    @Size(min = 10, max = 20, message = "Phone number must be between 10 and 20 characters")
-    @Schema(description = "Телефон", example = "+77011234567")
+    @Schema(description = "Телефон", example = "+77071234567")
+    @NotBlank(message = "Phone is required")
     String phone;
 
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Email should be valid")
-    @Size(max = 100, message = "Email must not exceed 100 characters")
-    @Schema(description = "Электронная почта", example = "john.doe@example.com")
+    @Schema(description = "Email", example = "example@mail.com")
+    @NotBlank(message = "Email is required")
+    @Email(message = "Некорректный формат email")
     String email;
 
-    @NotBlank(message = "Address cannot be blank")
-    @Size(max = 255, message = "Address must not exceed 255 characters")
-    @Schema(description = "Адрес", example = "Almaty, Abay Ave 1")
+    @Schema(description = "Адрес проживания", example = "ул. Абая 10, кв 5")
+    @NotBlank(message = "Address is required")
     String address;
 
     @Schema(description = "Список документов, связанных с физлицом")

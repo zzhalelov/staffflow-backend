@@ -10,4 +10,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Optional<Person> findByIdAndDeletedFalse(Long id);
 
     Page<Person> findAllByDeletedFalse(Pageable pageable);
+
+    boolean existsByIin(String iin);
 }
