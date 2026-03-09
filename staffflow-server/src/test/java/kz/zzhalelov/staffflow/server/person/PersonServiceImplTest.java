@@ -1,6 +1,7 @@
 package kz.zzhalelov.staffflow.server.person;
 
 import kz.zzhalelov.staffflow.server.exception.ConflictException;
+import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,13 +14,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import static org.mockito.ArgumentMatchers.any;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PersonServiceImplTest {
@@ -43,12 +50,10 @@ class PersonServiceImplTest {
         person.setPhone("+7 777 123 45 67");
         person.setDocuments(List.of());
 
-        Mockito
-                .when(personRepository.existsByIin(Mockito.anyString()))
+        when(personRepository.existsByIin(Mockito.anyString()))
                 .thenReturn(false);
 
-        Mockito
-                .when(personRepository.save(any(Person.class)))
+        when(personRepository.save(any(Person.class)))
                 .thenReturn(person);
 
         Person saved = personService.create(person);
@@ -75,8 +80,7 @@ class PersonServiceImplTest {
         Person newPerson = new Person();
         newPerson.setIin("123456789012");
 
-        Mockito
-                .when(personRepository.existsByIin("123456789012"))
+        when(personRepository.existsByIin("123456789012"))
                 .thenReturn(true);
 
         assertThrows(ConflictException.class, () ->
@@ -115,8 +119,7 @@ class PersonServiceImplTest {
 
         Page<Person> page = new PageImpl<>(List.of(existing1, existing2), pageable, 2);
 
-        Mockito
-                .when(personRepository.findAllByDeletedFalse(pageable))
+        when(personRepository.findAllByDeletedFalse(pageable))
                 .thenReturn(page);
 
         Page<Person> savedPersons = personService.findAll(pageable);
@@ -129,17 +132,404 @@ class PersonServiceImplTest {
 
     @Test
     void findById() {
+        Person existing = new Person();
+        existing.setId(1L);
+        existing.setIin("123456789012");
+        existing.setFirstName("John");
+        existing.setLastName("Doe");
+        existing.setBirthdate(LocalDate.of(1990, 1, 1));
+        existing.setGender(GenderType.MALE);
+        existing.setAddress("LA, USA");
+        existing.setCitizenship("USA");
+        existing.setEmail("test@gmail.com");
+        existing.setPhone("+7 777 123 45 67");
+        existing.setDocuments(List.of());
+
+        when(personRepository.findByIdAndDeletedFalse(1L))
+                .thenReturn(Optional.of(existing));
+
+        Person saved = personService.findById(1L);
+        assertEquals(existing.getId(), saved.getId());
+        assertEquals(existing.getIin(), saved.getIin());
+        assertEquals(existing.getFirstName(), saved.getFirstName());
+        assertEquals(existing.getLastName(), saved.getLastName());
+        assertEquals(existing.getBirthdate(), saved.getBirthdate());
+        assertEquals(existing.getGender(), saved.getGender());
+        assertEquals(existing.getAddress(), saved.getAddress());
+        assertEquals(existing.getCitizenship(), saved.getCitizenship());
+        assertEquals(existing.getEmail(), saved.getEmail());
+        assertEquals(existing.getPhone(), saved.getPhone());
+        assertEquals(existing.getDocuments(), saved.getDocuments());
     }
 
     @Test
-    void update() {
+    void findById_shouldThrow_whenPersonNotFound() {
+        when(personRepository.findByIdAndDeletedFalse(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                NotFoundException.class,
+                () -> personService.findById(1L)
+        );
+        Mockito
+                .verify(personRepository)
+                .findByIdAndDeletedFalse(1L);
     }
 
     @Test
-    void delete() {
+    void update_shouldSavePerson() {
+        Person existing = new Person();
+        existing.setId(1L);
+        existing.setIin("111111111111");
+        existing.setFirstName("OldName");
+
+        Person updated = new Person();
+        updated.setIin("123456789012");
+        updated.setFirstName("John");
+        updated.setLastName("Doe");
+
+        when(personRepository.existsByIin("123456789012"))
+                .thenReturn(false);
+
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(existing));
+
+        when(personRepository.save(any(Person.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Person result = personService.update(1L, updated);
+
+        assertEquals("John", result.getFirstName());
+        assertEquals("123456789012", result.getIin());
+        Mockito.verify(personRepository).save(existing);
     }
 
     @Test
-    void restore() {
+    void update_shouldThrow_whenPersonNotFound() {
+        long id = 1L;
+        Person updated = new Person();
+        updated.setIin("123456789012");
+
+        when(personRepository.existsByIin("123456789012"))
+                .thenReturn(false);
+
+        when(personRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(
+                NotFoundException.class,
+                () -> personService.update(id, updated));
+        assertEquals("Person not found", ex.getMessage());
+
+        Mockito
+                .verify(personRepository)
+                .existsByIin("123456789012");
+
+        Mockito
+                .verify(personRepository)
+                .findById(id);
+
+        Mockito
+                .verify(personRepository, Mockito.never()).save(any());
+    }
+
+    @Test
+    void update_shouldThrowConflictException_whenIinAlreadyExists() {
+        long id = 1L;
+        Person updated = new Person();
+        updated.setIin("123456789012");
+        updated.setFirstName("NewName");
+
+        when(personRepository.existsByIin("123456789012"))
+                .thenReturn(true);
+
+        ConflictException ex = assertThrows(
+                ConflictException.class,
+                () -> personService.update(id, updated)
+        );
+
+        assertEquals("Person with this IIN already exists: 123456789012", ex.getMessage());
+
+        Mockito
+                .verify(personRepository)
+                .existsByIin("123456789012");
+
+        Mockito
+                .verify(personRepository, Mockito.never())
+                .findById(anyLong());
+
+        Mockito
+                .verify(personRepository, Mockito.never())
+                .save(any(Person.class));
+    }
+
+    @Test
+    void delete_shouldThrowNotFound_withCorrectMessage_whenPersonNotFound() {
+        long id = 999L;
+
+        when(personRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
+                () -> personService.delete(id),
+                "Метод должен выбросить NotFoundException, если ID не найден"
+        );
+
+        assertEquals("Person not found", exception.getMessage());
+
+        Mockito.verify(personRepository).findById(id);
+
+        Mockito.verifyNoMoreInteractions(personRepository);
+    }
+
+    @Test
+    void delete_shouldMarkAsDeleted_withUsername_whenAuthenticated() {
+        long id = 1L;
+        Person person = new Person();
+        person.setId(id);
+        String mockUsername = "active_admin_ivanov"; // Используем уникальное имя
+
+        when(personRepository.findById(id)).thenReturn(Optional.of(person));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn(mockUsername);
+
+        try {
+            personService.delete(id);
+            assertTrue(person.isDeleted(), "Флаг deleted должен быть true");
+            assertEquals(mockUsername, person.getDeletedBy(), "Имя удалившего должно быть взято из SecurityContext");
+            assertNotNull(person.getDeletedAt(), "Дата удаления должна быть проставлена");
+            Mockito.verify(personRepository).findById(id);
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
+    }
+
+    @Test
+    void delete_shouldMarkAsDeleted_withSystem_whenUserIsAnonymous() {
+        long id = 1L;
+        Person person = new Person();
+        person.setId(id);
+
+        when(personRepository.findById(id)).thenReturn(Optional.of(person));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        AnonymousAuthenticationToken anonymousToken = mock(AnonymousAuthenticationToken.class);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(securityContext.getAuthentication()).thenReturn(anonymousToken);
+
+        try {
+            personService.delete(id);
+            assertTrue(person.isDeleted());
+            assertEquals("system", person.getDeletedBy(), "Для анонимного входа должен использоваться 'system'");
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
+    }
+
+    @Test
+    void delete_shouldUseSystem_whenAuthIsNull() {
+        long id = 1L;
+        Person person = new Person();
+        person.setId(id);
+
+        when(personRepository.findById(id)).thenReturn(Optional.of(person));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(null);
+
+        try {
+            personService.delete(id);
+            assertTrue(person.isDeleted());
+            assertEquals("system", person.getDeletedBy());
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
+    }
+
+    @Test
+    void delete_shouldUseSystem_whenAnonymousToken() {
+        long id = 1L;
+        Person person = new Person();
+        person.setId(id);
+
+        when(personRepository.findById(id)).thenReturn(Optional.of(person));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        AnonymousAuthenticationToken auth = mock(AnonymousAuthenticationToken.class);
+
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(auth);
+        when(auth.isAuthenticated()).thenReturn(true);
+
+        try {
+            personService.delete(id);
+            assertEquals("system", person.getDeletedBy());
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
+    }
+
+    @Test
+    void restore_shouldThrowNotFound_whenPersonDoesNotExist() {
+        long id = 1L;
+        when(personRepository.findById(id)).thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(
+                NotFoundException.class,
+                () -> personService.restore(id)
+        );
+
+        assertEquals("Person not found", ex.getMessage());
+
+        Mockito.verify(personRepository).findById(id);
+        Mockito.verifyNoMoreInteractions(personRepository);
+    }
+
+    @Test
+    void restore_shouldThrowConflict_whenPersonIsNotInDeletedState() {
+        long id = 1L;
+        Person person = new Person();
+        person.setId(id);
+
+        when(personRepository.findById(id)).thenReturn(Optional.of(person));
+
+        ConflictException ex = assertThrows(
+                ConflictException.class,
+                () -> personService.restore(id)
+        );
+
+        assertEquals("Person not deleted", ex.getMessage());
+
+        Mockito.verify(personRepository).findById(id);
+
+        assertNull(person.getDeletedAt());
+    }
+
+    @Test
+    void restore_shouldRestoreWithActualUsername_whenAuthenticated() {
+        long id = 1L;
+        Person person = new Person();
+        person.setId(id);
+        person.markAsDeleted("system");
+
+        String mockUsername = "system";
+
+        when(personRepository.findById(id))
+                .thenReturn(Optional.of(person));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getName()).thenReturn(mockUsername);
+
+        try {
+            personService.restore(id);
+            assertFalse(person.isDeleted(), "Флаг deleted должен стать false после restore");
+            Mockito.verify(personRepository).findById(id);
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
+    }
+
+    @Test
+    void restore_shouldRestoreWithSystemUsername_whenNotAuthenticated() {
+        long id = 1L;
+        Person person = new Person();
+        person.setId(id);
+        person.markAsDeleted("system");
+
+        when(personRepository.findById(id))
+                .thenReturn(Optional.of(person));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(null);
+
+        try {
+            personService.restore(id);
+            assertFalse(person.isDeleted());
+            Mockito.verify(personRepository).findById(id);
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
+    }
+
+    @Test
+    void restore_shouldThrowNotFound_whenIdNotExists() {
+        long id = 999L;
+        when(personRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> personService.restore(id));
+    }
+
+    @Test
+    void restore_shouldThrowConflict_whenPersonIsNotDeleted() {
+        long id = 1L;
+        Person activePerson = new Person();
+        activePerson.setId(id);
+        activePerson.restore("system");
+
+        when(personRepository.findById(id)).thenReturn(Optional.of(activePerson));
+
+        assertThrows(ConflictException.class, () -> personService.restore(id));
+    }
+
+    @Test
+    void restore_shouldUseSystem_whenAnonymousToken() {
+        long id = 1L;
+        Person person = new Person();
+        person.setId(id);
+        person.markAsDeleted("old-user");
+
+        when(personRepository.findById(id)).thenReturn(Optional.of(person));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        AnonymousAuthenticationToken anonymousToken = mock(AnonymousAuthenticationToken.class);
+
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(anonymousToken);
+
+        try {
+            personService.restore(id);
+            assertFalse(person.isDeleted());
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
+    }
+
+    @Test
+    void restore_shouldUseSystem_whenAuthenticationIsNotAuthenticated() {
+        long id = 1L;
+        Person person = new Person();
+        person.setId(id);
+        person.markAsDeleted("old-user");
+
+        when(personRepository.findById(id)).thenReturn(Optional.of(person));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication auth = mock(Authentication.class);
+
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(auth);
+        when(auth.isAuthenticated()).thenReturn(false);
+
+        try {
+            personService.restore(id);
+            assertFalse(person.isDeleted());
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
     }
 }
