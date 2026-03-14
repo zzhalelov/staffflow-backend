@@ -1,7 +1,6 @@
 package kz.zzhalelov.staffflow.server.laborContract.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import kz.zzhalelov.staffflow.server.laborContract.LaborContractStatus;
 import lombok.AccessLevel;

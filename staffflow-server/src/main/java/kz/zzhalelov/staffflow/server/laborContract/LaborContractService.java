@@ -3,7 +3,8 @@ package kz.zzhalelov.staffflow.server.laborContract;
 import java.util.List;
 
 public interface LaborContractService {
-    LaborContract create(LaborContract laborContract);
+    LaborContract create(Long organizationId, Long departmentId, Long employeeId, Long positionId,
+                         LaborContract laborContract);
 
     List<LaborContract> findAll();
 

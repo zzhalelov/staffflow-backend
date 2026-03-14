@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import kz.zzhalelov.staffflow.server.department.dto.DepartmentCreateDto;
-import kz.zzhalelov.staffflow.server.department.dto.DepartmentResponseDto;
-import kz.zzhalelov.staffflow.server.department.dto.DepartmentMapper;
-import kz.zzhalelov.staffflow.server.department.dto.DepartmentUpdateDto;
+import kz.zzhalelov.staffflow.server.department.dto.*;
 import kz.zzhalelov.staffflow.server.exception.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,36 +32,36 @@ public class DepartmentController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создать новое подразделение")
-    public DepartmentResponseDto create(@Valid @RequestBody DepartmentCreateDto dto) {
+    public DepartmentFullResponseDto create(@Valid @RequestBody DepartmentCreateDto dto) {
         Department department = departmentMapper.fromCreate(dto);
-        return departmentMapper.toResponse(departmentService.create(department));
+        return departmentMapper.toFullResponse(departmentService.create(department));
     }
 
     //find all
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Вывести список всех подразделений")
-    public Page<DepartmentResponseDto> findAll(Pageable pageable) {
+    public Page<DepartmentFullResponseDto> findAll(Pageable pageable) {
         return departmentService.findAll(pageable)
-                .map(departmentMapper::toResponse);
+                .map(departmentMapper::toFullResponse);
     }
 
     //find by id
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Найти подразделение по Id")
-    public DepartmentResponseDto findById(@PathVariable long id) {
-        return departmentMapper.toResponse(departmentService.findById(id));
+    public DepartmentFullResponseDto findById(@PathVariable long id) {
+        return departmentMapper.toFullResponse(departmentService.findById(id));
     }
 
     //update
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Обновить сведения о подразделении")
-    public DepartmentResponseDto update(@PathVariable long id,
-                                        @Valid @RequestBody DepartmentUpdateDto dto) {
+    public DepartmentFullResponseDto update(@PathVariable long id,
+                                            @Valid @RequestBody DepartmentUpdateDto dto) {
         Department department = departmentMapper.fromUpdate(dto);
-        return departmentMapper.toResponse(departmentService.update(id, department));
+        return departmentMapper.toFullResponse(departmentService.update(id, department));
     }
 
     //delete by id (soft delete)

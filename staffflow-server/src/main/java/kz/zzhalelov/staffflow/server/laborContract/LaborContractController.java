@@ -3,15 +3,10 @@ package kz.zzhalelov.staffflow.server.laborContract;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import kz.zzhalelov.staffflow.server.exception.NotFoundException;
 import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractCreateDto;
 import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractMapper;
 import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractResponseDto;
 import kz.zzhalelov.staffflow.server.laborContract.dto.LaborContractUpdateDto;
-import kz.zzhalelov.staffflow.server.organization.OrganizationRepository;
-import kz.zzhalelov.staffflow.server.department.DepartmentRepository;
-import kz.zzhalelov.staffflow.server.employee.EmployeeRepository;
-import kz.zzhalelov.staffflow.server.position.PositionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,28 +18,19 @@ import java.util.List;
 @RequestMapping("/api/contracts")
 @Tag(name = "Labor Contracts", description = "Управление трудовыми договорами сотрудников")
 public class LaborContractController {
-    private final EmployeeRepository employeeRepository;
-    private final DepartmentRepository departmentRepository;
-    private final PositionRepository positionRepository;
     private final LaborContractService laborContractService;
     private final LaborContractMapper laborContractMapper;
-    private final OrganizationRepository organizationRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создание нового трудового договора")
-    public LaborContractResponseDto create(@Valid @RequestBody LaborContractCreateDto dto) {
-        organizationRepository.findById(dto.getOrganizationId())
-                .orElseThrow(() -> new NotFoundException("Organization not found"));
-        employeeRepository.findById(dto.getEmployeeId())
-                .orElseThrow(() -> new NotFoundException("Employee not found"));
-        departmentRepository.findById(dto.getDepartmentId())
-                .orElseThrow(() -> new NotFoundException("Department not found"));
-        positionRepository.findById(dto.getPositionId())
-                .orElseThrow(() -> new NotFoundException("Position not found"));
-
+    public LaborContractResponseDto create(@RequestParam Long organizationId,
+                                           @RequestParam Long departmentId,
+                                           @RequestParam Long employeeId,
+                                           @RequestParam Long positionId,
+                                           @Valid @RequestBody LaborContractCreateDto dto) {
         LaborContract contract = laborContractMapper.fromCreate(dto);
-        return laborContractMapper.toResponse(laborContractService.create(contract));
+        return laborContractMapper.toResponse(laborContractService.create(organizationId, departmentId, employeeId, positionId, contract));
     }
 
     @GetMapping

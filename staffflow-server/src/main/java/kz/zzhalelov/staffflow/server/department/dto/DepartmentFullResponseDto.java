@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DepartmentResponseDto {
+public class DepartmentFullResponseDto {
     Long id;
     String name;
 

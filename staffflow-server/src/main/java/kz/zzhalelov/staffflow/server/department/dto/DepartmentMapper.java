@@ -17,8 +17,8 @@ public class DepartmentMapper {
         return department;
     }
 
-    public DepartmentResponseDto toResponse(Department department) {
-        DepartmentResponseDto dto = new DepartmentResponseDto();
+    public DepartmentFullResponseDto toFullResponse(Department department) {
+        DepartmentFullResponseDto dto = new DepartmentFullResponseDto();
         dto.setId(department.getId());
         dto.setName(department.getName());
         dto.setCreatedAt(department.getCreatedAt());
@@ -28,6 +28,13 @@ public class DepartmentMapper {
         dto.setDeleted(department.isDeleted());
         dto.setDeletedAt(department.getDeletedAt());
         dto.setDeletedBy(department.getDeletedBy());
+        return dto;
+    }
+
+    public DepartmentShortResponseDto toShortResponse(Department department) {
+        DepartmentShortResponseDto dto = new DepartmentShortResponseDto();
+        dto.setId(department.getId());
+        dto.setName(department.getName());
         return dto;
     }
 }

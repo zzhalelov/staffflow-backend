@@ -1,8 +1,16 @@
 package kz.zzhalelov.staffflow.server.laborContract;
 
+import kz.zzhalelov.staffflow.server.department.Department;
+import kz.zzhalelov.staffflow.server.department.DepartmentRepository;
 import kz.zzhalelov.staffflow.server.email.EmailService;
+import kz.zzhalelov.staffflow.server.employee.Employee;
+import kz.zzhalelov.staffflow.server.employee.EmployeeRepository;
 import kz.zzhalelov.staffflow.server.event.ContractSignedEvent;
 import kz.zzhalelov.staffflow.server.exception.NotFoundException;
+import kz.zzhalelov.staffflow.server.organization.Organization;
+import kz.zzhalelov.staffflow.server.organization.OrganizationRepository;
+import kz.zzhalelov.staffflow.server.position.Position;
+import kz.zzhalelov.staffflow.server.position.PositionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -18,9 +26,26 @@ public class LaborContractServiceImpl implements LaborContractService {
     private final LaborContractHistoryRepository laborContractHistoryRepository;
     private final EmailService emailService;
     private final ApplicationEventPublisher eventPublisher;
+    private final OrganizationRepository organizationRepository;
+    private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
+    private final PositionRepository positionRepository;
 
     @Override
-    public LaborContract create(LaborContract laborContract) {
+    public LaborContract create(Long organizationId, Long departmentId, Long employeeId, Long positionId,
+                                LaborContract laborContract) {
+        Organization organization = organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new NotFoundException("Organization not found"));
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new NotFoundException("Employee not found"));
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new NotFoundException("Department not found"));
+        Position position = positionRepository.findById(positionId)
+                .orElseThrow(() -> new NotFoundException("Position not found"));
+        laborContract.setOrganization(organization);
+        laborContract.setEmployee(employee);
+        laborContract.setDepartment(department);
+        laborContract.setPosition(position);
         return laborContractRepository.save(laborContract);
     }
 

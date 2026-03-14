@@ -1,7 +1,7 @@
 package kz.zzhalelov.staffflow.server.laborContract.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import kz.zzhalelov.staffflow.server.department.Department;
+import kz.zzhalelov.staffflow.server.department.dto.DepartmentShortResponseDto;
 import kz.zzhalelov.staffflow.server.employee.dto.EmployeeShortResponseDto;
 import kz.zzhalelov.staffflow.server.laborContract.LaborContractStatus;
 import kz.zzhalelov.staffflow.server.organization.dto.OrganizationShortResponseDto;
@@ -20,7 +20,7 @@ public class LaborContractResponseDto {
     EmployeeShortResponseDto employee;
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate hireDate;
-    Department department;
+    DepartmentShortResponseDto department;
     PositionResponseDto position;
     LaborContractStatus laborContractStatus;
 }

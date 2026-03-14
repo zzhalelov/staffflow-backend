@@ -26,6 +26,9 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
   mail:
     host: smtp.gmail.com
     port: 465
