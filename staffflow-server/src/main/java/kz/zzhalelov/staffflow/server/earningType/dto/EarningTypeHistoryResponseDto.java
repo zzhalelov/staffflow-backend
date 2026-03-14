@@ -16,6 +16,6 @@ public class EarningTypeHistoryResponseDto {
     LocalDate endDate;
     Boolean includeInFot;
     Boolean includeInAverageSalaryCalc;
-    Boolean isIndexable;
+    Boolean indexable;
     String comment;
 }

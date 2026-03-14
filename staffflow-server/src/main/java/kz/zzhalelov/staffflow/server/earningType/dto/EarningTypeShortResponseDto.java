@@ -6,12 +6,12 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EarningTypeResponseDto {
+public class EarningTypeShortResponseDto {
     Long id;
     String name;
     String code;
     Boolean includeInFot;
     Boolean includeInAverageSalaryCalc;
-    Boolean isIndexable;
+    Boolean indexable;
     String description;
 }

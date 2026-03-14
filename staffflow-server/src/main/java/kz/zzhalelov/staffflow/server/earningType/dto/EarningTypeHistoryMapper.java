@@ -13,7 +13,7 @@ public class EarningTypeHistoryMapper {
         dto.setEndDate(entity.getEndDate());
         dto.setIncludeInFot(entity.getIncludeInFot());
         dto.setIncludeInAverageSalaryCalc(entity.getIncludeInAverageSalaryCalc());
-        dto.setIsIndexable(entity.getIsIndexable());
+        dto.setIndexable(entity.getIsIndexable());
         dto.setComment(entity.getComment());
         return dto;
     }
