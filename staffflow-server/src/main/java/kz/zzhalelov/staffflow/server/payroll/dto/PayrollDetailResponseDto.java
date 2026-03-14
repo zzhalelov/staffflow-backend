@@ -1,7 +1,7 @@
 package kz.zzhalelov.staffflow.server.payroll.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import kz.zzhalelov.staffflow.server.earningType.dto.EarningTypeResponseDto;
+import kz.zzhalelov.staffflow.server.earningType.dto.EarningTypeShortResponseDto;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class PayrollDetailResponseDto {
     @Schema(description = "Идентификатор", example = "32")
     Long id;
-    EarningTypeResponseDto earningType;
+    EarningTypeShortResponseDto earningType;
     BigDecimal amount;
     Long workedDays;
     Long plannedDays;

@@ -1,7 +1,7 @@
 package kz.zzhalelov.staffflow.server.payroll.dto;
 
 import kz.zzhalelov.staffflow.server.earningType.EarningType;
-import kz.zzhalelov.staffflow.server.earningType.dto.EarningTypeResponseDto;
+import kz.zzhalelov.staffflow.server.earningType.dto.EarningTypeShortResponseDto;
 import kz.zzhalelov.staffflow.server.employee.dto.EmployeeShortResponseDto;
 import kz.zzhalelov.staffflow.server.organization.Organization;
 import kz.zzhalelov.staffflow.server.organization.dto.OrganizationShortResponseDto;
@@ -79,13 +79,14 @@ public class PayrollMapper {
 
         if (detail.getEarningType() != null) {
             EarningType type = detail.getEarningType();
-            EarningTypeResponseDto typeDto = new EarningTypeResponseDto();
+            EarningTypeShortResponseDto typeDto = new EarningTypeShortResponseDto();
+            typeDto.setId(type.getId());
             typeDto.setId(type.getId());
             typeDto.setName(type.getName());
             typeDto.setCode(type.getCode());
             typeDto.setIncludeInFot(type.getIncludeInFot());
             typeDto.setIncludeInAverageSalaryCalc(type.getIncludeInAverageSalaryCalc());
-            typeDto.setIsIndexable(type.getIsIndexable());
+            typeDto.setIndexable(type.getIndexable());
             typeDto.setDescription(type.getDescription());
             dto.setEarningType(typeDto);
         }
